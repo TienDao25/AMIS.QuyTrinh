@@ -1,0 +1,48 @@
+#process-permission .body-custom {
+  width: 100%;
+  overflow: auto;
+}
+
+#process-permission .header-custom {
+  margin: 0;
+}
+
+.content-main {
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bg-white {
+  background: #fff;
+}
+
+#process-permission .body-custom .grid-no-paging {
+  height: calc(100% - 60px);
+}
+
+.grid-container .dx-widget.dx-visibility-change-handler {
+  max-width: none !important;
+}
+
+.grid-container {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  text-indent: 0;
+  border: none;
+}
+
+.grid-container .paging {
+  border-top: none;
+  padding: 10px 0 !important;
+  height: 56px;
+  z-index: 8;
+  position: relative;
+  margin: 0 10px 8px 10px;
+  background-color: #f9fafc !important;
+}
