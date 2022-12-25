@@ -5,8 +5,19 @@
       <b style="padding: 0px 6px">12</b>
     </div>
     <div class="page-size-selector flex items-center">
+      <div style="width: 80px;">
+        <MsComboBoxVue
+        :Value="'Value'"
+        :Text="'Text'"
+        v-model="textNumberRecord"
+        :dataList="listPaging"
+        :className="'page-size-list'"
+        :readonly="true"
+      />
+      </div>
       <div class="page-info">Từ <b>1</b> đến <b>12</b> bản ghi</div>
       <div class="page-next-preview">
+        <div></div>
         <div
           class="
             ms-icon-container
@@ -44,10 +55,38 @@
 
 <script>
 import MsButtonIconVue from "@/components/base/MsButton/MsButtonIcon.vue";
-
+import MsComboBoxVue from "@/components/base/MsComboBox/MsComboBox.vue";
 export default {
   components: {
     MsButtonIconVue,
+    MsComboBoxVue,
+  },
+  data() {
+    return {
+      listPaging: [
+        {
+          Text: 10,
+          Value: 10,
+        },
+        {
+          Text: 20,
+          Value: 20,
+        },
+        {
+          Text: 30,
+          Value: 30,
+        },
+        {
+          Text: 50,
+          Value: 50,
+        },
+        {
+          Text: 100,
+          Value: 100,
+        },
+      ],
+      textNumberRecord:10
+    };
   },
 };
 </script>
@@ -59,7 +98,7 @@ export default {
 .grid-navigation {
   display: flex;
   color: var(--text-primary-color);
-  border-top: 1px solid #e2e8f0 ;
+  border-top: 1px solid #e2e8f0;
   height: 48px;
   box-sizing: border-box;
 }
@@ -67,7 +106,6 @@ export default {
   flex: 1;
   /* line-height: 48px; */
   margin-left: 16px;
-  
 }
 .page-size-selector {
   display: flex;

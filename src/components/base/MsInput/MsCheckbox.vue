@@ -181,7 +181,7 @@ export default {
 
 <style scoped>
 @import url(@/css/base.css);
-@import url(./MsCheckbos.css);
+@import url(./MsCheckbox.css);
 .custom-checkbox {
   margin-top: -25px;
 }

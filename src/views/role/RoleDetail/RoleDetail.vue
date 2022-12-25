@@ -14,6 +14,8 @@
                 ms-icon-
                 btn-icon-1
               "
+              title="Quay lại"
+              @click="onClickReturnViewMain"
             >
               <div class="tooltip-container">
                 <div class="con-ms-tooltip">
@@ -186,6 +188,15 @@ export default {
     // Trường hợp của popup
     modeForm: Number,
   },
+  methods:{
+    /**
+     * Click quay lại màn hình chính
+     * Author: TienDao (25/12/2022)
+     */
+    onClickReturnViewMain(){
+      this.$emit("closeFormDetail")
+    }
+  },
   data() {
     return {
       // withShadingOptionsVisible: false,
@@ -225,6 +236,10 @@ export default {
   border-radius: 50% !important;
   border: none !important;
   outline: none !important;
+}
+
+.btn-icon-1:hover {
+  background-color: #eff1f6 !important;
 }
 .content-main {
   overflow-x: hidden;

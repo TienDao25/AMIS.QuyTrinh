@@ -21,15 +21,16 @@
         @keydown.tab="isShowList = false"
         @keyup.down="arrowDown"
         ref="input"
-        
+        style="padding: 8px;"
       />
+
       <button
         :tabindex="-1"
         type="button"
         class="combobox-button d-flex-auto"
         @click.stop="showList"
       >
-        <div class="icon icon--arrow-up-black"></div>
+        <i class="mi-chevron-down" style="margin: auto;"></i>
       </button>
       <span v-if="errorMess" class="msg-input-error" :title="errorMess">
         {{ errorMess }}
@@ -170,29 +171,6 @@ export default {
       }
     },
 
-    /**
-    //  * Kiểm tra giá trị input => show item
-    //  * @param {*} item
-    //  * @param {*} index
-    //  */
-    // checkItem(item, index) {
-    //   index;
-    //   if (!this.modelValue) {
-    //     return true;
-    //   } else {
-    //     if (
-    //       item[this.Text].toLowerCase().match(this.modelValue.toLowerCase())
-    //     ) {
-    //       return true;
-    //     }
-    //     return false;
-    //   }
-    // },
-
-    arrowDown() {
-      console.log(this.$refs.itemData[0]);
-      this.$refs.itemData[0].focus();
-    },
   },
   data() {
     return {
@@ -213,5 +191,6 @@ export default {
 </script>
 
 <style>
+@import url(@/css/base.css);
 @import url(./MsComboBox.css);
 </style>

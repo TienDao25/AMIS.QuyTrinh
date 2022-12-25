@@ -1,5 +1,5 @@
 <template>
-  <div id="process-permission">
+  <div id="process-permission" style="height: 100%">
     <div
       v-if="!isRoleDetail"
       class="h-full container body-custom"
@@ -19,7 +19,7 @@
 
       <div
         class="content-main"
-        style="background: transparent; height: calc(100vh - 148px + 16px)"
+        style="background: transparent; height: calc(100vh - 140px)"
       >
         <div class="h-full w-full">
           <div class="flex items-center w-full bg-white" style="height: 60px">
@@ -34,8 +34,12 @@
           </div>
 
           <div class="w-full grid-no-paging bg-white">
-            <div class="grid-container" style="height: calc(100% - 48px );">
-              <RoleTable @onClickBtnEdit="onClickBtnEdit" />
+            <div class="grid-container" style="height: calc(100% - 48px)">
+              <RoleTable
+                @onClickBtnEdit="onClickBtnEdit"
+                @onClickBtnDulicate="onClickBtnDulicate"
+                @onClickBtnDelete="onClickBtnDelete"
+              />
             </div>
             <div class="paging">
               <RolePaging />
@@ -45,7 +49,15 @@
       </div>
     </div>
 
-    <RoleDetail v-if="isRoleDetail" :role="role" />
+    <RoleDetail
+      v-if="isRoleDetail"
+      :role="role"
+      @closeFormDetail="closeFormDetail"
+    />
+    <MsDialogVue
+      :descriptionDialog="'Bạn có chắc chắn muốn xóa vai trò này không?'"
+      :titleDialog="'Xóa vai trò'"
+    />
   </div>
 </template>
   
@@ -55,10 +67,12 @@ import MsInputSreach from "@/components/base/MsInput/MsInputSreach.vue";
 import RoleTable from "@/views/role/RoleTable/RoleTable.vue";
 import RoleDetail from "@/views/role/RoleDetail/RoleDetail.vue";
 import RolePaging from "@/views/role/RolePaging/RolePaging.vue";
+import MsDialogVue from "@/components/base/MsDialog/MsDialog.vue";
 
 export default {
   components: {
     MsButtonVue,
+    MsDialogVue,
     MsInputSreach,
     RoleTable,
     RoleDetail,
@@ -67,10 +81,39 @@ export default {
   methods: {
     /**
      * Sự kiện click nút sửa từ table
+     * @param {Object} role obj vai trò
+     * Author: TienDao (25/12/2022)
      */
     onClickBtnEdit(role) {
       this.isRoleDetail = true;
       this.role = role;
+    },
+
+    /**
+     * Sự kiện click nút sửa từ table
+     * @param {Object} role obj vai trò
+     * Author: TienDao (25/12/2022)
+     */
+    onClickBtnDulicate(role) {
+      this.isRoleDetail = true;
+      this.role = role;
+    },
+
+    /**
+     * Sự kiện click nút sửa từ table
+     * @param {Object} role obj vai trò
+     * Author: TienDao (25/12/2022)
+     */
+    onClickBtnDelete(role) {
+      this.isRoleDetail = true;
+      this.role = role;
+    },
+
+    /**
+     * Đóng form chi tiết
+     */
+    closeFormDetail() {
+      this.isRoleDetail = false;
     },
   },
   data() {

@@ -1,68 +1,75 @@
 <template>
-
-    <div class="h-full">
+  <div class="h-full">
     <!-- <div style="height: calc(100% - 60px - 40px);"> -->
-      <DxDataGrid
-        id="dataGrid"
-        height="100%"
-        :data-source="dataSource"
-        key-expr="ID"
-        :allow-column-resizing="true"
-        :show-column-lines="false"
-        :show-row-lines="true"
-        :show-borders="false"
-        @selection-changed="onSelectionChanged"
-    
-        :hover-state-enabled="true"
-        alignment="center"
-      >
+    <DxDataGrid
+      id="dataGrid"
+      height="100%"
+      :data-source="dataSource"
+      key-expr="ID"
+      :allow-column-resizing="true"
+      :show-column-lines="false"
+      :show-row-lines="true"
+      :show-borders="false"
+      @selection-changed="onSelectionChanged"
+      :hover-state-enabled="true"
+      alignment="center"
+    >
       <!-- :selection="{ mode: 'single' }" -->
-        <DxColumn
-          data-field="CompanyName"
-          data-type="text"
-          caption="Tên vai trò"
-          :width="250"
-        />
-        <DxColumn
-          :columnAutoWidth="true"
-          data-field="Address"
-          data-type="text"
-          caption="Mô tả"
-          :min-width="136"
-          :width="'inherit'"
-        />
+      <DxColumn
+        data-field="CompanyName"
+        data-type="text"
+        caption="Tên vai trò"
+        :width="250"
+      />
+      <DxColumn
+        :columnAutoWidth="true"
+        data-field="Address"
+        data-type="text"
+        caption="Mô tả"
+        :min-width="136"
+        :width="'inherit'"
+      />
 
-        <!-- <DxColumn type="buttons" :width="110">
+      <!-- <DxColumn type="buttons" :width="110">
           <DxButton text="sửa" icon="icon-copy" @click="onClickBtnEdit" />
           <DxButton text="xóa" @click="onClickBtnDelete" />
           <DxButton text="nhân bản" @click="onClickBtnDulicate" />
         </DxColumn> -->
-        <DxColumn
-          :allow-sorting="false"
-          cell-template="cellButton"
-          :min-width="136"
-          :width="'auto'"
-          alignment="left"
-          :allow-resizing="false"
-        />
-        <template #cellButton="{}">
-          <div
-            class="flex justify-flexend m-x-8"
-            style="width: max-content !important; height: 100%"
-            v-show="isShowButtons"
-          >
-            <MsButtonIconVue :classIcon="'icon-copy'" :titleIcon="'Nhân bản'" />
-            <MsButtonIconVue :classIcon="'mi-pencil'" :titleIcon="'Sửa'" />
-            <MsButtonIconVue
-              :classIcon="'icon-delete-custom'"
-              :titleIcon="'Xóa'"
-            />
-          </div>
-        </template>
-      </DxDataGrid>
+      <DxColumn
+        :allow-sorting="false"
+        cell-template="cellButton"
+        :min-width="136"
+        :width="'auto'"
+        alignment="left"
+        :allow-resizing="false"
+      />
+      <template #cellButton="{data}">
+        <div
+          class="flex justify-flexend m-x-8"
+          style="width: max-content !important; height: 100%"
+          v-show="isShowButtons"
+        >
+          <MsButtonIconVue
+            :classIcon="'icon-copy'"
+            :titleIcon="'Nhân bản'"
+            @click="onClickBtnDulicate(data)"
+          />
+          <MsButtonIconVue
+            :classIcon="'mi-pencil'"
+            :titleIcon="'Sửa'"
+            @click="onClickBtnEdit(data)"
+          />
+          <MsButtonIconVue
+            :classIcon="'icon-delete-custom'"
+            :titleIcon="'Xóa'"
+            @click="onClickBtnDelete(data)"
+          />
+        </div>
+      </template>
+    </DxDataGrid>
 
-      <!-- <DxButton text="Click me" @click="sayHelloWorld" /> -->
-    </div>
+    <!-- <DxButton text="Click me" @click="sayHelloWorld" /> -->
+  </div>
 </template>
 
 <script>
@@ -96,13 +103,34 @@ export default {
 
     /**
      * Sự kiện click nút sửa
-     * @param {*} param0
+     * @param {*} e
+     * Author: TienDao (25/12/2022)
      */
     onClickBtnEdit(e) {
-      e.event.preventDefault();
       console.log(e.row.data);
       this.$emit("onClickBtnEdit", e.row.data);
     },
+
+    /**
+     * Sự kiện click nút nhân bản
+     * @param {*} e
+     * Author: TienDao (25/12/2022)
+     */
+     onClickBtnDulicate(e) {
+      console.log(e.row.data);
+      this.$emit("onClickBtnDulicate", e.row.data);
+    },
+
+    /**
+     * Sự kiện click nút xóa
+     * @param {*} e
+     * Author: TienDao (25/12/2022)
+     */
+     onClickBtnDelete(e) {
+      console.log(e.row.data);
+      this.$emit("onClickBtnDelete", e.row.data);
+    },
+
 
   },
   data() {
@@ -242,14 +270,13 @@ export default {
         },
       ],
       columns: ["CompanyName", "City", "State", "Phone", "Fax"],
-      isShowButtons:true,
+      isShowButtons: true,
     };
   },
 };
 </script>
 
 <style>
-
 #dataGrid td {
   text-align: left;
   min-width: 80px;
@@ -286,7 +313,11 @@ export default {
   background-color: #fff !important;
   border-bottom: 1px solid #e2e8f0 !important;
 }
-.grid-container .dx-datagrid-headers .dx-datagrid-table .dx-row > td:not(:last-child) {
+.grid-container
+  .dx-datagrid-headers
+  .dx-datagrid-table
+  .dx-row
+  > td:not(:last-child, :first-child) {
   border-bottom: none;
   border-left: 1px solid #e2e8f0;
 }
