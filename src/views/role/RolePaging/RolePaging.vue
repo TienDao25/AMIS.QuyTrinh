@@ -2,20 +2,30 @@
   <div class="grid-navigation">
     <div class="page-total flex flex items-center">
       Tổng
-      <b style="padding: 0px 6px">12</b>
+      <b style="padding: 0px 6px">{{ totalRecords }}</b>
+      bản ghi
     </div>
     <div class="page-size-selector flex items-center">
-      <div style="width: 80px;">
+      <div style="width: 80px">
         <MsComboBoxVue
-        :Value="'Value'"
-        :Text="'Text'"
-        v-model="textNumberRecord"
-        :dataList="listPaging"
-        :className="'page-size-list'"
-        :readonly="true"
-      />
+          :Value="'Value'"
+          :Text="'Text'"
+          v-model="numberRecord"
+          :dataList="listPaging"
+          :className="'page-size-list'"
+          :readonly="true"
+        />
       </div>
-      <div class="page-info">Từ <b>1</b> đến <b>12</b> bản ghi</div>
+      <div class="page-info">
+        Từ
+        <b>{{ totalRecords==0 ? 0 : (pageCurrent - 1) * numberRecord + 1 }}</b> đến
+        <b>{{
+          pageCurrent * numberRecord > totalRecords
+            ? totalRecords
+            : pageCurrent * numberRecord
+        }}</b>
+        bản ghi
+      </div>
       <div class="page-next-preview">
         <div></div>
         <div
@@ -31,6 +41,7 @@
           <MsButtonIconVue
             :classIcon="'mi-chevron-left'"
             :titleIcon="'Trang trước'"
+            @click="onClickPrePage"
           />
         </div>
         <div
@@ -46,6 +57,7 @@
           <MsButtonIconVue
             :classIcon="'mi-chevron-right'"
             :titleIcon="'Trang sau'"
+            @click="onClickNextPage"
           />
         </div>
       </div>
@@ -61,8 +73,44 @@ export default {
     MsButtonIconVue,
     MsComboBoxVue,
   },
+  props: {
+    //Tổng số bản ghi
+    totalRecords: Number,
+
+    //Trang hiện tại
+    pageCurrent: Number,
+
+    //Tổng số trang
+    totalPages: Number,
+  },
+  created() {
+    this.numberRecord = 10;
+    this.numberStart = 1;
+  },
+  watch: {
+    numberRecord: function () {
+      this.$emit("changeNumberRecord", this.numberRecord);
+    },
+  },
+  methods: {
+    /**
+     * Click trang trước
+     * Author: TienDao (26/12/2022)
+     */
+    onClickPrePage() {
+      this.$emit("onClickPrePage");
+    },
+    /**
+     * Click trang trước
+     * Author: TienDao (26/12/2022)
+     */
+    onClickNextPage() {
+      this.$emit("onClickNextPage");
+    },
+  },
   data() {
     return {
+      //Danh sách số bản ghi
       listPaging: [
         {
           Text: 10,
@@ -85,7 +133,9 @@ export default {
           Value: 100,
         },
       ],
-      textNumberRecord:10
+
+      //Số bản ghi / 1 trang
+      numberRecord: 10,
     };
   },
 };

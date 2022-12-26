@@ -55,7 +55,7 @@
                   "
                 >
                   <div
-                    class="ms-col ms-xs- ms-sm- ms-lg- dx-field-value-static"
+                    class="ms-col ms-xs- ms-sm- ms-lg-"
                     style="margin-left: 0%; width: 48.3333%"
                   >
                     <MsInputVue
@@ -64,6 +64,7 @@
                       :maxLength="225"
                       :errorText="''"
                       :isRequired="true"
+                      v-model="roleDetail.RoleName"
                     />
                   </div>
                   <div
@@ -79,6 +80,7 @@
                       :placeholderText="'Nhập mô tả'"
                       :maxLength="225"
                       ::isRequired="false"
+                      v-model="roleDetail.RoleDescribe"
                     />
                   </div>
                 </div>
@@ -177,6 +179,11 @@
 import MsButtonVue from "@/components/base/MsButton/MsButton.vue";
 import MsInputVue from "@/components/base/MsInput/MsInput.vue";
 import MsCheckboxVue from "@/components/base/MsInput/MsCheckbox.vue";
+
+import axios from "axios";
+import API from "@/js/resource/API.js";
+import ENUM from "@/js/enum/enum";
+
 export default {
   components: {
     // DxTooltip,
@@ -187,18 +194,75 @@ export default {
   props: {
     // Trường hợp của popup
     modeForm: Number,
+
+    //ID vai trò cần sửa/nhân bản
+    roleID: String,
   },
-  methods:{
+  created() {
+    this.init();
+  },
+  methods: {
+    /**
+     * Khởi tạo form
+     * Author: TienDao (26/12/2022)
+     */
+    init() {
+      switch (this.modeForm) {
+        case ENUM.MODE_FORM.Add:
+          break;
+        case ENUM.MODE_FORM.Update:
+          this.getRoleDetail();
+          break;
+        case ENUM.MODE_FORM.Dulicate:
+          this.getRoleDetail();
+          break;
+      }
+    },
+
     /**
      * Click quay lại màn hình chính
      * Author: TienDao (25/12/2022)
      */
-    onClickReturnViewMain(){
-      this.$emit("closeFormDetail")
-    }
+    onClickReturnViewMain() {
+      this.$emit("closeFormDetail");
+    },
+
+    /**
+     * API lấy chi tiết vai trò
+     * Author: TienDao (26/12/2022)
+     */
+    getRoleDetail() {
+      console.log(`${API.BASE_API_ROLE}/${this.roleID}`);
+      axios
+        .get(`${API.BASE_API_ROLE}/${this.roleID}`)
+        .then((response) => {
+          console.log(response);
+          this.roleDetail = response.data;
+        })
+        .catch((error) => {
+          if (error.response) {
+            switch (error.response.status) {
+              case ENUM.StatusCode.BadRequest:
+                // console.log(error.response.data.moreInfo);
+                break;
+              case ENUM.StatusCode.InternalServerError:
+                // console.log(error.response.data.userMsg);
+                break;
+            }
+          } else {
+            // this.showDialogError(Resource.Dialog.Text.Error);
+          }
+        })
+        .finally(() => {
+          // this.isShowLoading();
+        });
+    },
   },
   data() {
     return {
+      //Chi tiết vai trò
+      roleDetail: {},
+
       // withShadingOptionsVisible: false,
       // animationConfig: {
       //   show: {

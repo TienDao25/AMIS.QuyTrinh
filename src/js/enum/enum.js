@@ -1,4 +1,15 @@
 export default {
+    MODE_FORM:{
+        Add:1, //Form thêm
+        Update:2, //Form sửa
+        Dulicate: 3 //Form xóa
+    },
+    ROLE:{
+        ROLE_STATUS:{
+            Active : 0, //Đang hoạt động
+            Deleted : 1 //Đã xóa
+        }
+    },
     CaseShowDialog: { //Trường hợp Dialog
         DeleteAsset: 1, //Xóa 1 bản ghi
         DeleteMoreAssets: 2, //Xóa nhiều bản ghi

@@ -100,7 +100,7 @@ export default {
   created() {
     /**
      * Đóng list combobox
-     * Author: TienDao (02/12/2022)
+     * Author: TienDao (26/12/2022)
      */
     window.addEventListener("click", () => {
       this.isShowList = false;
@@ -110,7 +110,7 @@ export default {
   watch: {
     /**
      * kiểm tra giá trị input => check màu
-     * Author: TienDao (02/12/2022)
+     * Author: TienDao (26/12/2022)
      */
     modelValue: function () {
       try {

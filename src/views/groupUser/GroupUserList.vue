@@ -1,5 +1,5 @@
 <template>
-    <div>Chức năng 3 đang xây dựng</div>
+    <div>Chức năng đang xây dựng</div>
   </template>
   
   <script>
