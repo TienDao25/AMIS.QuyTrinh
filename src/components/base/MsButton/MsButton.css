@@ -172,8 +172,29 @@ button {
    background-color: var(--button-primary-normal-bg-color);
    color: var(--button-primary-color);
    border: 1px solid var(--button-primary-normal-border-color);
+   box-sizing: border-box;
 }
+.ms-button.ms-button-filled.ms-button-primary:hover {
+   background-color: var(--button-primary-hover-bg-color);
+   color: var(--button-primary-color);
+   border: 1px solid var(--button-primary-hover-border-color);
+   box-sizing: border-box;
 
+}
+.ms-button.ms-button-filled.ms-button-primary:active {
+   background-color: var(--button-primary-active-bg-color);
+   color: var(--button-primary-color);
+   border: 1px solid var(--button-primary-active-border-color);
+   box-sizing: border-box;
+
+}
+.ms-button.ms-button-filled.ms-button-primary:focus {
+   background-color: var(--button-primary-focus-bg-color);
+   color: var(--button-primary-color);
+   border: 1px solid var(--button-primary-focus-border-color);
+   box-sizing: border-box;
+
+}
 .ms-button--background {
    border-radius: 50%;
    width: 10px;

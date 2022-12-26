@@ -13,8 +13,8 @@
           <MsButtonVue :isPrimary="true" :includeIcon="false" :title="'Xóa'" />
           <MsButtonVue :isSecondary="true" :includeIcon="false" :title="'Hủy'" />
         </div>
-        <div class="dialog__exit" style="display: none">
-          <div class="m-icon icon-exit" title="Đóng"></div>
+        <div class="dialog__exit">
+          <MsButtonIconVue :classIcon="'mi-close-2'" :titleIcon="'Đóng'" />
         </div>
       </div>
     </div>
@@ -23,9 +23,11 @@
 
 <script>
 import MsButtonVue from "@/components/base/MsButton/MsButton.vue";
+import MsButtonIconVue from "@/components/base/MsButton/MsButtonIcon.vue";
 export default {
   components: {
     MsButtonVue,
+    MsButtonIconVue
   },
   props: {
     //Icon Dialog
@@ -40,7 +42,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import url(@/css/base.css);
 @import url(./MsDialog.css);
 </style>

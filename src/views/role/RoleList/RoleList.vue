@@ -55,6 +55,7 @@
       @closeFormDetail="closeFormDetail"
     />
     <MsDialogVue
+    v-if="isDialog"
       :descriptionDialog="'Bạn có chắc chắn muốn xóa vai trò này không?'"
       :titleDialog="'Xóa vai trò'"
     />
@@ -69,6 +70,9 @@ import RoleDetail from "@/views/role/RoleDetail/RoleDetail.vue";
 import RolePaging from "@/views/role/RolePaging/RolePaging.vue";
 import MsDialogVue from "@/components/base/MsDialog/MsDialog.vue";
 
+// import axios from "axios";
+// import API from "@/js/resource/API.js";
+// import Enum from "@/js/enum/enum";
 export default {
   components: {
     MsButtonVue,
@@ -111,14 +115,72 @@ export default {
 
     /**
      * Đóng form chi tiết
+     * Author: TienDao (26/12/2022)
      */
     closeFormDetail() {
       this.isRoleDetail = false;
     },
+
+    /**
+     * Lấy danh sách vai trò theo tìm kiếm / phân trang
+     */
+    getListRoleBFindPaging(){
+      // this.params = {
+      //   keyword: this.keyword,
+      //   limit: this.numberRecord,
+      //   offset: (this.pageCurrent - 1) * this.numberRecord,
+      // };
+      // // Nối params
+      // var url = new URL(`${API.BASE_API_ROLE}/`);
+      // Object.keys(this.params).forEach((key) => {
+      //   return url.searchParams.append(key, this.params[key]);
+      // });
+      // //Gọi api
+      // axios
+      //   .get(url)
+      //   .then((response) => {
+      //     console.log(response);
+      //     this.listEmployee = response.data.ListEmployee;
+      //     this.totalRecords = response.data.TotalRecords;
+      //     if (this.totalRecords == 0) {
+      //       this.totalPages = 1;
+      //     } else {
+      //       var n = this.totalRecords / this.numberRecord;
+      //       if (n > Math.floor(n)) {
+      //         this.totalPages = Math.floor(n) + 1;
+      //       } else {
+      //         this.totalPages = n;
+      //       }
+      //     }
+
+      //     // this.loader();
+      //   })
+      //   .catch((error) => {
+      //     if (error.response) {
+      //       switch (error.response.status) {
+      //         case Enum.StatusCode.BadRequest:
+      //           console.log(error.response.data.moreInfo);
+      //           break;
+      //         case Enum.StatusCode.InternalServerError:
+      //           console.log(error.response.data.userMsg);
+      //           break;
+      //       }
+      //     } else {
+      //       this.showDialogError(Resource.Dialog.Text.Error);
+      //     }
+      //   })
+      //   .finally(() => {
+      //     // this.isShowLoading();
+      //   });
+    }
   },
   data() {
     return {
+      //Hiển thị form chi tiết
       isRoleDetail: false,
+
+      //Hiện thị Dialog
+      isDialog:false,
     };
   },
 };

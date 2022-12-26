@@ -385,3 +385,25 @@
     -o-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
 }
+.mi-close, .mi-close-2 {
+    background-color: var(--icon-deault-color)!important;
+}
+.mi-close, .mi-close-2, .mi-close-grey {
+    width: 24px;
+    height: 24px;
+    -webkit-mask-image: url(@/assets/img/IconControl.9280241f.svg);
+    -moz-mask-image: url(@/assets/img/IconControl.9280241f.svg);
+    -ms-mask-image: url(@/assets/img/IconControl.9280241f.svg);
+    -o-mask-image: url(@/assets/img/IconControl.9280241f.svg);
+    mask-image: url(@/assets/img/IconControl.9280241f.svg);
+    -webkit-mask-position: -216px -24px;
+    -moz-mask-position: -216px -24px;
+    -ms-mask-position: -216px -24px;
+    -o-mask-position: -216px -24px;
+    mask-position: -216px -24px;
+    -webkit-mask-repeat: no-repeat;
+    -moz-mask-repeat: no-repeat;
+    -ms-mask-repeat: no-repeat;
+    -o-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+}

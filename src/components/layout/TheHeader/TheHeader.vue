@@ -65,7 +65,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import url(@/css/base.css);
 @import url(./TheHeader.css);
 .btn-header {

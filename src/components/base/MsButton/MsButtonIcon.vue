@@ -2,7 +2,7 @@
   <div class="style-button">
     <div
       v-show="titleIcon"
-      class="button-comand-wrap btn-more"
+      class="button-comand-wrap btn-more abc"
       :title="titleIcon"
     >
       <div :class="classIcon"></div>
@@ -53,4 +53,9 @@ export default {
 .grid-container .btn-more:active, .grid-container .btn-more:hover {
     background-color: #dadce3;
 }
+.button-comand-wrap.btn-more.abc{
+  margin-right: 0px;
+    margin-left: 0px;
+}
+
 </style>
