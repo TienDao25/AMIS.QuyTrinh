@@ -67,6 +67,7 @@
       :modeForm="modeForm"
       :roleID="roleID"
       @closeFormDetail="closeFormDetail"
+      @showDialogError="showDialogError"
     />
     <RoleDialog
       v-if="isDialog"
@@ -75,6 +76,15 @@
       :descriptionDialog="descriptionDialog"
       :titleDialog="titleDialog"
       @closeDialog="closeDialog"
+      @closeDialogAndDeleteSuccess="closeDialogAndDeleteSuccess"
+      @showDialogError="showDialogError"
+    />
+    <MsNotificationVue
+      v-if="isNotification"
+      :bodyTextNotification="bodyTextNotification"
+      :tittleNotification="tittleNotification"
+      :classNotification="classNotification"
+      :iconNotification="iconNotification"
     />
   </div>
 </template>
@@ -83,6 +93,7 @@
 import MsButtonVue from "@/components/base/MsButton/MsButton.vue";
 import MsInputSreach from "@/components/base/MsInput/MsInputSreach.vue";
 import MsLoadingVue from "@/components/base/MsLoading/MsLoading.vue";
+import MsNotificationVue from "@/components/base/MsNotification/MsNotification.vue";
 
 import RoleTable from "../RoleTable/RoleTable.vue";
 import RoleDetail from "../RoleDetail/RoleDetail.vue";
@@ -91,16 +102,14 @@ import RoleDialog from "../RoleDialog/RoleDialog.vue";
 
 import RoleAPI from "@/apis/RoleAPI.js";
 
-// import axios from "axios";
-// import API from "@/js/resource/API.js";
-import ENUM from "@/js/enum/enum";
-import RESOURCE from "@/js/resource/resource.js";
-// import {Mode} from "@/js/resource/enum.js";
+import Enum from "@/js/enum/enum";
+import Resource from "@/js/resource/resource.js";
 export default {
   components: {
     MsLoadingVue,
     MsButtonVue,
     MsInputSreach,
+    MsNotificationVue,
     RoleTable,
     RoleDetail,
     RolePaging,
@@ -124,7 +133,7 @@ export default {
      * Author: TienDao (26/12/2022)
      */
     onClickBtnAdd() {
-      this.modeForm = ENUM.MODE_FORM.Add;
+      this.modeForm = Enum.ModeForm.Add;
       this.isRoleDetail = true;
     },
 
@@ -134,7 +143,7 @@ export default {
      * Author: TienDao (25/12/2022)
      */
     onClickBtnEdit(role) {
-      this.modeForm = ENUM.MODE_FORM.Update;
+      this.modeForm = Enum.ModeForm.Update;
       this.roleID = role.RoleID;
       this.isRoleDetail = true;
     },
@@ -145,7 +154,7 @@ export default {
      * Author: TienDao (25/12/2022)
      */
     onClickBtnDulicate(role) {
-      this.modeForm = ENUM.MODE_FORM.Dulicate;
+      this.modeForm = Enum.ModeForm.Dulicate;
       this.roleID = role.RoleID;
       this.isRoleDetail = true;
     },
@@ -157,9 +166,10 @@ export default {
      */
     onClickBtnDelete(role) {
       console.log(role.RoleID);
-      this.modeDialog = ENUM.DIALOG.MODE_DIALOG.Delete;
-      this.descriptionDialog = RESOURCE.DIALOG.DESCRIPTION.ROLE.Delete;
-      this.titleDialog = RESOURCE.DIALOG.TITLE.ROLE.Delete;
+      this.roleID = role.RoleID;
+      this.modeDialog = Enum.ModeDialog.Delete;
+      this.descriptionDialog = Resource.Dialog.Description.Role.Delete;
+      this.titleDialog = Resource.Dialog.Title.Role.Delete;
       this.isDialog = true;
     },
 
@@ -206,15 +216,15 @@ export default {
           this.isShowLoading();
           if (error.response) {
             switch (error.response.status) {
-              case ENUM.StatusCode.BadRequest:
-                // console.log(error.response.data.moreInfo);
+              case Enum.StatusCode.BadRequest:
+                this.showDialogError(error.response.data.UserMsg);
                 break;
-              case ENUM.StatusCode.InternalServerError:
-                // console.log(error.response.data.userMsg);
+              case Enum.StatusCode.InternalServerError:
+                this.showDialogError(error.response.data.UserMsg);
                 break;
             }
           } else {
-            // this.showDialogError(Resource.Dialog.Text.Error);
+            this.showDialogError(Resource.Dialog.TextError);
           }
         })
         .finally(() => {
@@ -268,6 +278,49 @@ export default {
     closeDialog() {
       this.isDialog = false;
     },
+    /**
+     * Đóng Dialog và thông báo xóa thành công
+     * Author: TienDao (27/12/2022)
+     */
+    closeDialogAndDeleteSuccess() {
+      this.closeDialog();
+      this.showNotificationDeleteSuccess();
+    },
+
+    /**
+     * Thông báo xóa thành công
+     * Author: TienDao (27/12/2022)
+     */
+    showNotificationDeleteSuccess() {
+      this.bodyTextNotification = Resource.Notification.Body.DeleteSuccess;
+      this.tittleNotification = Resource.Notification.Title.Success;
+      this.classNotification = "tittle-successful";
+      this.iconNotification = "icon-success";
+      this.isNotification = true;
+      this.getListRoleBFindPaging();
+      setTimeout(() => (this.isNotification = false), 3000);
+      // icon-success
+    },
+
+    /**
+     * Hiện Dialog lỗi
+     * @param {String / Array} message Thông tin hiển thị
+     * Author: TienDao (27/12/2022)
+     */
+    showDialogError(message) {
+      this.closeDialog();
+      this.modeDialog = Enum.ModeDialog.Error;
+      this.titleDialog = Resource.Dialog.TitleError;
+      if (typeof message == "string") {
+        this.descriptionDialog = message;
+      } else {
+        this.descriptionDialog = "";
+        for (const item of message) {
+          this.descriptionDialog += item + "</>";
+        }
+      }
+      this.isDialog = true;
+    },
   },
   data() {
     return {
@@ -318,6 +371,21 @@ export default {
 
       //Trạng thái hiện thị Loading
       isLoading: false,
+
+      //Nội dung thông báo
+      bodyTextNotification: "",
+
+      //Tiêu đề thông báo
+      tittleNotification: "",
+
+      //Class thông báo
+      classNotification: "",
+
+      //Icon thông báo
+      iconNotification: "",
+
+      //Hiển thị thông báo
+      isNotification: false,
     };
   },
 };

@@ -43,7 +43,6 @@ class EmployeeAPI {
      */
     deleteRoleByID(roleID){
         return BaseAPIConfig.delete(`${this.controller}/${roleID}`)
-
     }
 }
 

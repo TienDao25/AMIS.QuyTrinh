@@ -10,15 +10,11 @@
           <div class="dialog__description" v-html="descriptionDialog"></div>
         </div>
         <div class="dialog__button" v-if="modeDialog==ENUM.DIALOG.MODE_DIALOG.Delete">
-          <MsButtonVue :isDanger="true" :includeIcon="false" :title="'Xóa'" />
-          <MsButtonVue :isSecondary="true" :includeIcon="false" :title="'Hủy'" />
-        </div>
-        <div class="dialog__button" v-else>
-          <MsButtonVue :isPrimary="true" :includeIcon="false" :title="'Xóa'" />
-          <MsButtonVue :isSecondary="true" :includeIcon="false" :title="'Hủy'" />
+          <MsButtonVue :isDanger="true" :includeIcon="false" :title="Resource.Button.Delete" />
+          <MsButtonVue :isSecondary="true" :includeIcon="false" :title="Resource.Button.Cancel" />
         </div>
         <div class="dialog__exit">
-          <MsButtonIconVue :classIcon="'mi-close-2'" :titleIcon="'Đóng'" @click="closeDialog" />
+          <MsButtonIconVue :classIcon="'mi-close-2'" :titleIcon="Resource.Button.Close" @click="closeDialog" />
         </div>
       </div>
     </div>
@@ -29,7 +25,8 @@
 import MsButtonVue from "@/components/base/MsButton/MsButton.vue";
 import MsButtonIconVue from "@/components/base/MsButton/MsButtonIcon.vue";
 
-import ENUM from "@/js/enum/enum.js";
+import Enum from "@/js/enum/enum.js";
+import Resource from "@/js/resource/resource";
 export default {
   components: {
     MsButtonVue,
@@ -59,7 +56,8 @@ export default {
   },
   data(){
     return{
-      ENUM,
+      Enum,
+      Resource
     }
   }
 };

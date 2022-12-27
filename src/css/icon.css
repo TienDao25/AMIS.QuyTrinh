@@ -318,7 +318,8 @@
     background-color: #de1e1e !important;
 }
 
-.mi-chevron-left, .mi-direction {
+.mi-chevron-left,
+.mi-direction {
     width: 24px;
     height: 24px;
     -webkit-mask-image: url(@/assets/img/IconControl.9280241f.svg);
@@ -331,8 +332,9 @@
     -ms-mask-repeat: no-repeat;
     -o-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
-    background-color: var(--icon-deault-color)!important;
+    background-color: var(--icon-deault-color) !important;
 }
+
 .mi-chevron-left {
     -webkit-mask-position: -72px -24px;
     -moz-mask-position: -72px -24px;
@@ -341,7 +343,8 @@
     mask-position: -72px -24px;
 }
 
-.mi-chevron-right, .mi-chevron-up {
+.mi-chevron-right,
+.mi-chevron-up {
     width: 24px;
     height: 24px;
     -webkit-mask-image: url(@/assets/img/IconControl.9280241f.svg);
@@ -354,8 +357,9 @@
     -ms-mask-repeat: no-repeat;
     -o-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
-    background-color: var(--icon-deault-color)!important;
+    background-color: var(--icon-deault-color) !important;
 }
+
 .mi-chevron-right {
     -webkit-mask-position: -96px -24px;
     -moz-mask-position: -96px -24px;
@@ -363,10 +367,13 @@
     -o-mask-position: -96px -24px;
     mask-position: -96px -24px;
 }
+
 .mi-chevron-down {
-    background-color: var(--icon-deault-color)!important;
+    background-color: var(--icon-deault-color) !important;
 }
-.mi-chevron-down, .mi-chevron-down-black {
+
+.mi-chevron-down,
+.mi-chevron-down-black {
     width: 24px;
     height: 24px;
     -webkit-mask-image: url(@/assets/img/IconControl.9280241f.svg);
@@ -385,10 +392,15 @@
     -o-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
 }
-.mi-close, .mi-close-2 {
-    background-color: var(--icon-deault-color)!important;
+
+.mi-close,
+.mi-close-2 {
+    background-color: var(--icon-deault-color) !important;
 }
-.mi-close, .mi-close-2, .mi-close-grey {
+
+.mi-close,
+.mi-close-2,
+.mi-close-grey {
     width: 24px;
     height: 24px;
     -webkit-mask-image: url(@/assets/img/IconControl.9280241f.svg);
@@ -406,4 +418,21 @@
     -ms-mask-repeat: no-repeat;
     -o-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
+}
+
+.icon-success {
+    -webkit-mask-position:  -202px -179px;
+    mask-position:  -202px -179px;
+}
+
+.icon-error,
+.icon-warning,
+.icon-success {
+    width: 24px;
+    height: 24px;
+    -webkit-mask-image: url(@/assets/img/Icon_process.0a0cc28b.svg);
+    mask-image: url(@/assets/img/Icon_process.0a0cc28b.svg);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    background-color: green !important;
 }

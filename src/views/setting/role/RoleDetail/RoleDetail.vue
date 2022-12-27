@@ -171,6 +171,7 @@
         </div>
       </div>
     </div>
+    <MsLoadingVue v-show="isLoading" />
   </div>
 </template>
 
@@ -179,17 +180,18 @@
 import MsButtonVue from "@/components/base/MsButton/MsButton.vue";
 import MsInputVue from "@/components/base/MsInput/MsInput.vue";
 import MsCheckboxVue from "@/components/base/MsInput/MsCheckbox.vue";
-
+import MsLoadingVue from "@/components/base/MsLoading/MsLoading.vue";
 // import axios from "axios";
-import ENUM from "@/js/enum/enum";
+import Enum from "@/js/enum/enum";
 import RoleAPI from "@/apis/RoleAPI.js";
-
+import Resource from "@/js/resource/resource";
 export default {
   components: {
     // DxTooltip,
     MsButtonVue,
     MsInputVue,
     MsCheckboxVue,
+    MsLoadingVue,
   },
   props: {
     // Trường hợp của popup
@@ -208,12 +210,12 @@ export default {
      */
     init() {
       switch (this.modeForm) {
-        case ENUM.MODE_FORM.Add:
+        case Enum.ModeForm.Add:
           break;
-        case ENUM.MODE_FORM.Update:
+        case Enum.ModeForm.Update:
           this.getRoleDetail();
           break;
-        case ENUM.MODE_FORM.Dulicate:
+        case Enum.ModeForm.Dulicate:
           this.getRoleDetail();
           break;
       }
@@ -240,15 +242,17 @@ export default {
         .catch((error) => {
           if (error.response) {
             switch (error.response.status) {
-              case ENUM.StatusCode.BadRequest:
-                // console.log(error.response.data.moreInfo);
+              case Enum.StatusCode.BadRequest:
+                this.$emit("showDialogError", error.response.data.UerMsg);
                 break;
-              case ENUM.StatusCode.InternalServerError:
-                // console.log(error.response.data.userMsg);
+              case Enum.StatusCode.InternalServerError:
+                this.$emit("showDialogError", error.response.data.UserMsg);
                 break;
+              default:
+                this.$emit("showDialogError", Resource.Dialog.TextError);
             }
           } else {
-            // this.showDialogError(Resource.Dialog.Text.Error);
+            this.$emit("showDialogError", Resource.Dialog.TextError);
           }
         })
         .finally(() => {
@@ -261,6 +265,8 @@ export default {
       //Chi tiết vai trò
       roleDetail: {},
 
+      //Trạng thái hiện thị Loading
+      isLoading: false,
       // withShadingOptionsVisible: false,
       // animationConfig: {
       //   show: {

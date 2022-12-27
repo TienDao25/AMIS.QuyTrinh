@@ -68,7 +68,7 @@
 import MsButtonVue from "@/components/base/MsButton/MsButton.vue";
 import MsInputSreach from "@/components/base/MsInput/MsInputSreach.vue";
 
-import RESOURCE from "@/js/resource/resource";
+import Resource from "@/js/resource/resource";
 export default {
   components: {
     MsButtonVue,
@@ -78,29 +78,29 @@ export default {
     return {
       header: [
         {
-          Text: RESOURCE.HEADER.Process,
+          Text: Resource.Header.Process,
           route: "/process",
         },
         {
-          Text: RESOURCE.HEADER.Document,
+          Text: Resource.Header.Document,
           route: "/document",
         },
         {
-          Text: RESOURCE.HEADER.Definition,
+          Text: Resource.Header.Definition,
           route: "/definition",
         },
         {
-          Text: RESOURCE.HEADER.Report,
+          Text: Resource.Header.Report,
           route: "/report",
         },
       ],
       subHeader: [
         {
-          Text: RESOURCE.HEADER.Brief,
+          Text: Resource.Header.Brief,
           route: "/brief",
         },
         {
-          Text: RESOURCE.HEADER.Setting,
+          Text: Resource.Header.Setting,
           route: "/setting",
         },
       ],

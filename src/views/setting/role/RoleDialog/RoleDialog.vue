@@ -9,29 +9,26 @@
           </div>
           <div class="dialog__description" v-html="descriptionDialog"></div>
         </div>
-        <div
-          class="dialog__button"
-          v-if="modeDialog == ENUM.DIALOG.MODE_DIALOG.Delete"
-        >
+        <div class="dialog__button" v-if="modeDialog == Enum.ModeDialog.Delete">
           <MsButtonVue
             :isDanger="true"
             :includeIcon="false"
-            :title="'Xóa'"
+            :title="Resource.Button.Delete"
             @click="onClickBtnDanger"
           />
           <MsButtonVue
             :isSecondary="true"
             :includeIcon="false"
-            :title="'Hủy'"
+            :title="Resource.Button.Cancel"
             @click="onClickBtnSecondary"
           />
         </div>
-        <div class="dialog__button" v-else>
-          <MsButtonVue :isPrimary="true" :includeIcon="false" :title="'Xóa'" />
+        <div class="dialog__button" v-if="modeDialog == Enum.ModeDialog.Error">
           <MsButtonVue
-            :isSecondary="true"
+            :isPrimary="true"
             :includeIcon="false"
-            :title="'Hủy'"
+            :title="Resource.Button.Close"
+            @click="onClickBtnPrimary"
           />
         </div>
         <div class="dialog__exit">
@@ -42,6 +39,7 @@
           />
         </div>
       </div>
+      <MsLoadingVue v-show="isLoading"></MsLoadingVue>
     </div>
   </div>
 </template>
@@ -49,12 +47,16 @@
 <script>
 import MsButtonVue from "@/components/base/MsButton/MsButton.vue";
 import MsButtonIconVue from "@/components/base/MsButton/MsButtonIcon.vue";
+import MsLoadingVue from "@/components/base/MsLoading/MsLoading.vue";
 
-import ENUM from "@/js/enum/enum.js";
+import RoleAPI from "@/apis/RoleAPI.js";
+import Enum from "@/js/enum/enum.js";
+import Resource from "@/js/resource/resource";
 export default {
   components: {
     MsButtonVue,
     MsButtonIconVue,
+    MsLoadingVue,
   },
   props: {
     //Icon Dialog
@@ -70,7 +72,7 @@ export default {
     modeDialog: Number,
 
     //ID vai trò cần xóa
-    roleID:String,
+    roleID: String,
   },
   methods: {
     /**
@@ -87,34 +89,82 @@ export default {
      */
     onClickBtnDanger() {
       switch (this.modeDialog) {
-        case ENUM.DIALOG.MODE_DIALOG.Delete:
+        case Enum.ModeDialog.Delete:
           this.deleteRoleById();
           break;
       }
-    }
+    },
+
     /**
      * Click nút Secondary
      * Author: TienDao (27/12/2022)
-     */,
+     */
     onClickBtnSecondary() {
       switch (this.modeDialog) {
-        case ENUM.DIALOG.MODE_DIALOG.Delete:
+        case Enum.ModeDialog.Delete:
           this.$emit("closeDialog");
           break;
       }
     },
 
     /**
+     * Sự kiện click nút Primary
+     */
+    onClickBtnPrimary() {
+      switch (this.modeDialog) {
+        case Enum.ModeDialog.Error:
+          this.$emit("closeDialog");
+          break;
+      }
+    },
+    /**
+     * Ẩn/hiện loading
+     * Author: TienDao (27/12/20220)
+     */
+    isShowLoading() {
+      this.isLoading = !this.isLoading;
+    },
+
+    /**
      * Gọi API xóa vai trò
      * Author: TienDao (27/12/2022)
      */
-    deleteRoleById(){
-      
-    }
+    deleteRoleById() {
+      this.isShowLoading();
+      RoleAPI.deleteRoleByID(this.roleID)
+        .then((response) => {
+          console.log(response);
+          this.isShowLoading();
+          this.$emit("closeDialogAndDeleteSuccess");
+        })
+        .catch((error) => {
+          this.isShowLoading();
+          console.log(error);
+          if (error.response) {
+            switch (error.response.status) {
+              case Enum.StatusCode.BadRequest:
+                this.$emit("showDialogError", error.response.data.MoreInfo);
+                break;
+              case Enum.StatusCode.InternalServerError:
+                this.$emit("showDialogError", error.response.data.UserMsg);
+                break;
+              case Enum.StatusCode.NotFound:
+                this.$emit("showDialogError", error.response.data.UserMsg);
+                break;
+              default:
+                this.$emit("showDialogError", Resource.Dialog.TextError);
+            }
+          }
+        });
+    },
   },
   data() {
     return {
-      ENUM,
+      Enum,
+      Resource,
+
+      //Trạng thái hiện thị Loading
+      isLoading: false,
     };
   },
 };

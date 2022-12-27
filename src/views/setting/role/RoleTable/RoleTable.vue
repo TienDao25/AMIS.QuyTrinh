@@ -66,31 +66,39 @@
           @click.stop="onClickBtnEdit(data)"
         />
         <MsButtonIconVue
-        v-show="data.data.RoleStatus!=ENUM.ROLE.ROLE_STATUS.Deleted"
+          v-show="data.data.RoleStatus != Enum.Role.RoleStatus.Deleted"
           :classIcon="'icon-delete-custom'"
           :titleIcon="'Xóa'"
           @click.stop="onClickBtnDelete(data)"
         />
       </div>
     </template>
-    <template #RoleStatus="{ data }" >
+    <template #RoleStatus="{ data }">
       <div
-        v-if="data.value == ENUM.ROLE.ROLE_STATUS.Active"
+        v-if="data.value == Enum.Role.RoleStatus.Active"
         style="color: green; font-weight: bold"
         :title="formatStatus(data.value)"
       >
         {{ formatStatus(data.value) }}
       </div>
-      <div v-else style="color: red; font-weight: bold" :title="formatStatus(data.value)">
+      <div
+        v-else
+        style="color: red; font-weight: bold"
+        :title="formatStatus(data.value)"
+      >
         {{ formatStatus(data.value) }}
       </div>
       <!-- <div>{{ formatStatus(data.value) }}</div> -->
     </template>
     <template #Date="{ data }">
-      <div :title="formatString(formatDate(data.value))">{{ formatString(formatDate(data.value)) }}</div>
+      <div :title="formatString(formatDate(data.value))">
+        {{ formatString(formatDate(data.value)) }}
+      </div>
     </template>
     <template #Text="{ data }">
-      <div :title="formatString(data.value) ">{{ formatString(data.value) }}</div>
+      <div :title="formatString(data.value)">
+        {{ formatString(data.value) }}
+      </div>
     </template>
   </DxDataGrid>
   <!-- <DxButton text="Click me" @click="sayHelloWorld" /> -->
@@ -107,7 +115,9 @@ import {
 } from "devextreme-vue/data-grid";
 import MsButtonIconVue from "@/components/base/MsButton/MsButtonIcon.vue";
 
-import ENUM from "@/js/enum/enum";
+import Enum from "@/js/enum/enum";
+import Resource from "@/js/resource/resource";
+
 export default {
   components: {
     DxDataGrid,
@@ -189,12 +199,12 @@ export default {
      */
     formatStatus(status) {
       switch (status) {
-        case ENUM.ROLE.ROLE_STATUS.Active:
-          return "Đang hoạt động";
-        case ENUM.ROLE.ROLE_STATUS.Deleted:
-          return "Đã xóa";
+        case Enum.Role.RoleStatus.Active:
+          return Resource.Status.Role.Active;
+        case Enum.Role.RoleStatus.Deleted:
+          return Resource.Status.Role.Deleted;
         default:
-          return "_ _";
+          return Resource.StringEmptyOrNull;
       }
     },
 
@@ -224,17 +234,17 @@ export default {
      * Author: TienDao (26/12/2022)
      */
     formatString(string) {
-      return string ? string : "_ _";
+      return string ? string : Resource.StringEmptyOrNull;
     },
   },
   data() {
     return {
-      ENUM,
+      Enum,
       columns: [
         {
           field: "RoleName",
           width: "200",
-          caption: "Tên vai trò",
+          caption: Resource.Entity.Role.RoleName,
           type: "text",
           minWidth: "100",
           cellTemplate: "Text",
@@ -242,7 +252,7 @@ export default {
         {
           field: "RoleDescribe",
           width: "300",
-          caption: "Mô tả",
+          caption: Resource.Entity.Role.RoleDescribe,
           type: "text",
           minWidth: "100",
           cellTemplate: "Text",
@@ -250,7 +260,7 @@ export default {
         {
           field: "RoleStatus",
           width: "130",
-          caption: "Trạng thái",
+          caption: Resource.Entity.Role.RoleStatus,
           type: "text",
           minWidth: "100",
           cellTemplate: "RoleStatus",
@@ -258,7 +268,7 @@ export default {
         {
           field: "CreatedDate",
           width: "120",
-          caption: "Ngày tạo",
+          caption: Resource.Entity.Base.CreatedDate,
           type: "date",
           minWidth: "100",
           cellTemplate: "Date",
@@ -266,7 +276,7 @@ export default {
         {
           field: "CreatedBy",
           width: "120",
-          caption: "Người tạo",
+          caption: Resource.Entity.Base.CreatedBy,
           type: "text",
           minWidth: "100",
           cellTemplate: "Text",
@@ -274,7 +284,7 @@ export default {
         {
           field: "ModifiedDate",
           width: "120",
-          caption: "Ngày sửa cuối cùng",
+          caption: Resource.Entity.Base.ModifiedDate,
           type: "date",
           minWidth: "100",
           cellTemplate: "Date",
@@ -282,7 +292,7 @@ export default {
         {
           field: "ModifiedBy",
           width: "120",
-          caption: "Người sửa cuối cùng",
+          caption: Resource.Entity.Base.ModifiedBy,
           type: "text",
           minWidth: "100",
           cellTemplate: "Text",

@@ -229,14 +229,15 @@ export default {
   overflow: auto;
 }
 
-.page-size-list {
+.top {
   /* bottom: calc(100%); */
   bottom: calc(100%);
+  max-height: 200px;
 }
 
-.department-list {
+.bottom{
   /* top: calc(100% + 1px); */
-  top: calc(100% - 4px);
+  top: calc(100%);
   max-height: 200px;
 }
 

@@ -18,7 +18,7 @@
 </template> 
 
 <script>
-import RESOURCE from '@/js/resource/resource';
+import Resource from '@/js/resource/resource';
 export default {
   data() {
     return {
@@ -27,22 +27,22 @@ export default {
         {
           icon: "icon-employee",
           route: "/setting/user",
-          text: RESOURCE.SETTING.User, //resouce
+          text: Resource.Setting.User, //resouce
         },
         {
           icon: " icon-protect",
           route: "/setting/role",
-          text: RESOURCE.SETTING.Role,
+          text: Resource.Setting.Role,
         },
         {
           icon: "icon-multiple-user",
           route: "/setting/groupUser",
-          text: RESOURCE.SETTING.GroupUser,
+          text: Resource.Setting.GroupUser,
         },
         {
           icon: " icon-share-link",
           route: "/setting/connect",
-          text: RESOURCE.SETTING.Connect,
+          text: Resource.Setting.Connect,
         },
       ],
     };

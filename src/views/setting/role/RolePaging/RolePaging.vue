@@ -12,7 +12,7 @@
           :Text="'Text'"
           v-model="numberRecord"
           :dataList="listPaging"
-          :className="'page-size-list'"
+          :className="'top'"
           :readonly="true"
         />
       </div>
@@ -40,7 +40,7 @@
         >
           <MsButtonIconVue
             :classIcon="'mi-chevron-left'"
-            :titleIcon="'Trang trước'"
+            :titleIcon="Resource.Paging.PrePage"
             @click="onClickPrePage"
           />
         </div>
@@ -56,7 +56,7 @@
         >
           <MsButtonIconVue
             :classIcon="'mi-chevron-right'"
-            :titleIcon="'Trang sau'"
+            :titleIcon="Resource.Paging.NextPage"
             @click="onClickNextPage"
           />
         </div>
@@ -68,6 +68,8 @@
 <script>
 import MsButtonIconVue from "@/components/base/MsButton/MsButtonIcon.vue";
 import MsComboBoxVue from "@/components/base/MsComboBox/MsComboBox.vue";
+
+import Resource from "@/js/resource/resource";
 export default {
   components: {
     MsButtonIconVue,
@@ -110,6 +112,8 @@ export default {
   },
   data() {
     return {
+      Resource,
+
       //Danh sách số bản ghi
       listPaging: [
         {
