@@ -180,9 +180,9 @@ import MsButtonVue from "@/components/base/MsButton/MsButton.vue";
 import MsInputVue from "@/components/base/MsInput/MsInput.vue";
 import MsCheckboxVue from "@/components/base/MsInput/MsCheckbox.vue";
 
-import axios from "axios";
-import API from "@/js/resource/API.js";
+// import axios from "axios";
 import ENUM from "@/js/enum/enum";
+import RoleAPI from "@/apis/RoleAPI.js";
 
 export default {
   components: {
@@ -232,9 +232,7 @@ export default {
      * Author: TienDao (26/12/2022)
      */
     getRoleDetail() {
-      console.log(`${API.BASE_API_ROLE}/${this.roleID}`);
-      axios
-        .get(`${API.BASE_API_ROLE}/${this.roleID}`)
+      RoleAPI.getRoleDetailByID(this.roleID)
         .then((response) => {
           console.log(response);
           this.roleDetail = response.data;

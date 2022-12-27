@@ -42,9 +42,8 @@ export default {};
   stroke-dashoffset: 0;
   transform-origin: center;
   -webkit-animation: spin 1.4s ease-in-out infinite,
-  coler 5.6s ease-in-out infinite;
+    coler 5.6s ease-in-out infinite;
   animation: spin 1.4s ease-in-out infinite, coler 5.6s ease-in-out infinite;
-
 }
 .request-loading .overlay {
   position: absolute;

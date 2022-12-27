@@ -68,10 +68,13 @@
       :roleID="roleID"
       @closeFormDetail="closeFormDetail"
     />
-    <MsDialogVue
+    <RoleDialog
       v-if="isDialog"
-      :descriptionDialog="'Bạn có chắc chắn muốn xóa vai trò này không?'"
-      :titleDialog="'Xóa vai trò'"
+      :roleID="roleID"
+      :modeDialog="modeDialog"
+      :descriptionDialog="descriptionDialog"
+      :titleDialog="titleDialog"
+      @closeDialog="closeDialog"
     />
   </div>
 </template>
@@ -79,24 +82,29 @@
   <script>
 import MsButtonVue from "@/components/base/MsButton/MsButton.vue";
 import MsInputSreach from "@/components/base/MsInput/MsInputSreach.vue";
-import RoleTable from "@/views/role/RoleTable/RoleTable.vue";
-import RoleDetail from "@/views/role/RoleDetail/RoleDetail.vue";
-import RolePaging from "@/views/role/RolePaging/RolePaging.vue";
-import MsDialogVue from "@/components/base/MsDialog/MsDialog.vue";
 import MsLoadingVue from "@/components/base/MsLoading/MsLoading.vue";
 
-import axios from "axios";
-import API from "@/js/resource/API.js";
+import RoleTable from "../RoleTable/RoleTable.vue";
+import RoleDetail from "../RoleDetail/RoleDetail.vue";
+import RolePaging from "../RolePaging/RolePaging.vue";
+import RoleDialog from "../RoleDialog/RoleDialog.vue";
+
+import RoleAPI from "@/apis/RoleAPI.js";
+
+// import axios from "axios";
+// import API from "@/js/resource/API.js";
 import ENUM from "@/js/enum/enum";
+import RESOURCE from "@/js/resource/resource.js";
+// import {Mode} from "@/js/resource/enum.js";
 export default {
   components: {
     MsLoadingVue,
     MsButtonVue,
-    MsDialogVue,
     MsInputSreach,
     RoleTable,
     RoleDetail,
     RolePaging,
+    RoleDialog,
   },
   created() {
     this.getListRoleBFindPaging();
@@ -106,7 +114,7 @@ export default {
      * Sự kiện khi nhập ô tìm kiếm
      */
     keyword: function () {
-      this.pageCurrent=1;
+      this.pageCurrent = 1;
       this.getListRoleBFindPaging();
     },
   },
@@ -149,6 +157,10 @@ export default {
      */
     onClickBtnDelete(role) {
       console.log(role.RoleID);
+      this.modeDialog = ENUM.DIALOG.MODE_DIALOG.Delete;
+      this.descriptionDialog = RESOURCE.DIALOG.DESCRIPTION.ROLE.Delete;
+      this.titleDialog = RESOURCE.DIALOG.TITLE.ROLE.Delete;
+      this.isDialog = true;
     },
 
     /**
@@ -164,23 +176,14 @@ export default {
      * Author: TienDao (26/12/2022)
      */
     getListRoleBFindPaging() {
-      this.params = {
-        keyword: this.keyword,
-        limit: this.numberRecord,
-        offset: (this.pageCurrent - 1) * this.numberRecord,
-        fieldSort: this.fieldSort,
-        typeSort: this.typeSort,
-      };
-      // Nối params
-      var url = new URL(`${API.BASE_API_ROLE}/filter`);
-      Object.keys(this.params).forEach((key) => {
-        return url.searchParams.append(key, this.params[key]);
-      });
-
       this.isShowLoading();
-      //Gọi api
-      axios
-        .get(url)
+      RoleAPI.getListRolesByFilterPaging(
+        this.keyword,
+        this.numberRecord,
+        (this.pageCurrent - 1) * this.numberRecord,
+        this.fieldSort,
+        this.typeSort
+      )
         .then((response) => {
           this.isShowLoading();
           console.log(response);
@@ -226,6 +229,7 @@ export default {
      */
     changeNumberRecord(numberRecord) {
       this.numberRecord = numberRecord;
+      this.pageCurrent = 1;
       this.getListRoleBFindPaging();
     },
 
@@ -256,6 +260,14 @@ export default {
         this.getListRoleBFindPaging();
       }
     },
+
+    /**
+     * Đóng Dialog
+     * Author: TienDao (27/12/2022)
+     */
+    closeDialog() {
+      this.isDialog = false;
+    },
   },
   data() {
     return {
@@ -271,6 +283,15 @@ export default {
       //Hiện thị Dialog
       isDialog: false,
 
+      //Trường hợp Dialog
+      modeDialog: 0,
+
+      //Nội dung Dialog
+      descriptionDialog: "",
+
+      //Tiêu đề Dialog
+      titleDialog: "",
+
       //Danh sách vai trò
       listRole: [],
 
@@ -278,10 +299,10 @@ export default {
       keyword: "",
 
       //Trường sắp xếp
-      fieldSort:"",
+      fieldSort: "",
 
       //Kiểu sắp xếp
-      typeSort:"",
+      typeSort: "",
 
       //Trang hiện tại
       pageCurrent: 1,

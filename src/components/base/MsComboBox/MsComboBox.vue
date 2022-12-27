@@ -21,7 +21,7 @@
         @keydown.tab="isShowList = false"
         @keyup.down="arrowDown"
         ref="input"
-        style="padding: 8px;"
+        style="padding: 8px"
       />
 
       <button
@@ -30,7 +30,7 @@
         class="combobox-button d-flex-auto"
         @click.stop="showList"
       >
-        <i class="mi-chevron-down" style="margin: auto;"></i>
+        <i class="mi-chevron-down" style="margin: auto"></i>
       </button>
       <span v-if="errorMess" class="msg-input-error" :title="errorMess">
         {{ errorMess }}
@@ -85,15 +85,15 @@ export default {
 
     //Tiêu đề
     tooltip: String,
-    
+
     // Trường giá trị của dataList
     Value: String,
 
     //Trường hiện thị của dataList
-    Text: String, 
-    
+    Text: String,
+
     //Chỉ đọc
-    readonly: Boolean, 
+    readonly: Boolean,
   },
   computed: {},
   emits: [],
@@ -170,7 +170,6 @@ export default {
         alert(error);
       }
     },
-
   },
   data() {
     return {
@@ -192,5 +191,85 @@ export default {
 
 <style>
 @import url(@/css/base.css);
-@import url(./MsComboBox.css);
+.combobox {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.combobox-button {
+  height: 34px;
+  width: 36px;
+  border-left: 1px solid #e0e0e0;
+  position: absolute;
+  right: 1px;
+  top: 50%;
+  transform: translateY(10px);
+  transform: translateY(-50%);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.combobox-button:hover {
+  /* background-color: var(--input-hover-border-color); */
+}
+
+.combobox-button:focus {
+  /* background-color: var(--input-hover-border-color); */
+}
+
+.combobox-data {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  position: absolute;
+  z-index: 999;
+  background-color: white;
+  /* display:none; */
+  border-radius: 4px;
+  overflow: auto;
+}
+
+.page-size-list {
+  /* bottom: calc(100%); */
+  bottom: calc(100%);
+}
+
+.department-list {
+  /* top: calc(100% + 1px); */
+  top: calc(100% - 4px);
+  max-height: 200px;
+}
+
+.data-item {
+  height: 36px;
+  padding: 8px 0 8px 12px;
+  cursor: pointer;
+  /* font-size: 14px; */
+}
+
+.data-item:hover {
+  background-color: #dbf4ff;
+  /* color: #dbf4ff; */
+}
+
+.data-item:focus-within {
+  background-color: #dbf4ff;
+  /* color: #dbf4ff; */
+}
+
+.input {
+  width: 100%;
+  height: 36px;
+  padding: 8px 12px;
+  border: 1px solid #babec5;
+  font-size: 13px;
+  line-height: 20px;
+  text-align: left;
+  border-radius: var(--border-radius);
+  outline: none;
+}
+
+.input :hover() {
+  border: 1px solid var(--input-hover-border-color);
+}
 </style>

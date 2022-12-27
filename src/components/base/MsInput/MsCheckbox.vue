@@ -181,52 +181,51 @@ export default {
 
 <style scoped>
 @import url(@/css/base.css);
-@import url(./MsCheckbox.css);
 .custom-checkbox {
-  margin-top: -25px;
-}
-.ms-checkbox--input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-.ms-checkbox .ms-checkbox--input {
-  height: inherit;
-}
-input:disabled {
-  color: #d7dce3 !important;
-}
-.checkmark {
-  position: absolute;
-  left: 0;
-  height: 26px;
-  width: 22px;
-}
-.disabled {
-  opacity: 0.5 !important;
-}
-.ms-checkbox .checkmark {
-  top: 0;
-}
-.container {
-  display: flex;
-  align-items: center;
-  position: relative;
-  padding: 1px 0 0 32px;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  height: 100%;
-}
-.ms-checkbox:focus .checkmark:not(.disabled),
-.ms-checkbox:focus .icon-square-check-primary.checkmark,
-.ms-checkbox:hover .checkmark:not(.disabled),
-.ms-checkbox:hover .icon-square-check-primary.checkmark {
-  border-radius: 50%;
-  background-color: var(--primary) !important;
-}
+    margin-top: -25px;
+  }
+  .ms-checkbox--input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  .ms-checkbox .ms-checkbox--input {
+    height: inherit;
+  }
+  input:disabled {
+    color: #d7dce3 !important;
+  }
+  .checkmark {
+    position: absolute;
+    left: 0;
+    height: 26px;
+    width: 22px;
+  }
+  .disabled {
+    opacity: 0.5 !important;
+  }
+  .ms-checkbox .checkmark {
+    top: 0;
+  }
+  .container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 1px 0 0 32px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    height: 100%;
+  }
+  .ms-checkbox:focus .checkmark:not(.disabled),
+  .ms-checkbox:focus .icon-square-check-primary.checkmark,
+  .ms-checkbox:hover .checkmark:not(.disabled),
+  .ms-checkbox:hover .icon-square-check-primary.checkmark {
+    border-radius: 50%;
+    background-color: var(--primary) !important;
+  }
 </style>

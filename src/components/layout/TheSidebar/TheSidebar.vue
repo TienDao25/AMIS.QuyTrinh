@@ -18,6 +18,7 @@
 </template> 
 
 <script>
+import RESOURCE from '@/js/resource/resource';
 export default {
   data() {
     return {
@@ -25,23 +26,23 @@ export default {
       tabItems: [
         {
           icon: "icon-employee",
-          route: "/user",
-          text: "Người dùng", //resouce
+          route: "/setting/user",
+          text: RESOURCE.SETTING.User, //resouce
         },
         {
           icon: " icon-protect",
-          route: "/role",
-          text: "Vai trò",
+          route: "/setting/role",
+          text: RESOURCE.SETTING.Role,
         },
         {
           icon: "icon-multiple-user",
-          route: "/groupUser",
-          text: "Nhóm người dùng",
+          route: "/setting/groupUser",
+          text: RESOURCE.SETTING.GroupUser,
         },
         {
           icon: " icon-share-link",
-          route: "/connect",
-          text: "Kết nối",
+          route: "/setting/connect",
+          text: RESOURCE.SETTING.Connect,
         },
       ],
     };
@@ -51,11 +52,21 @@ export default {
 
 <style>
 @import url(@/css/base.css);
-@import url(./TheSidebar.css);
+/* @import url(./TheSidebar.css); */
 .item-activated .icon-tab {
   background-color: #0c9cdd !important;
 }
 .item-activated {
   background-color: #f3fbfd;
+}
+.setting-tab-item {
+    height: 44px;
+    padding-left: 24px;
+}
+.setting-tab-item .icon-tab {
+    margin-right: 8px;
+}
+.setting-tab-item .name-tab {
+    line-height: 44px;
 }
 </style>

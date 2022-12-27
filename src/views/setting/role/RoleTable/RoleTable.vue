@@ -66,29 +66,31 @@
           @click.stop="onClickBtnEdit(data)"
         />
         <MsButtonIconVue
+        v-show="data.data.RoleStatus!=ENUM.ROLE.ROLE_STATUS.Deleted"
           :classIcon="'icon-delete-custom'"
           :titleIcon="'Xóa'"
           @click.stop="onClickBtnDelete(data)"
         />
       </div>
     </template>
-    <template #RoleStatus="{ data }">
+    <template #RoleStatus="{ data }" >
       <div
         v-if="data.value == ENUM.ROLE.ROLE_STATUS.Active"
         style="color: green; font-weight: bold"
+        :title="formatStatus(data.value)"
       >
         {{ formatStatus(data.value) }}
       </div>
-      <div v-else style="color: red; font-weight: bold">
+      <div v-else style="color: red; font-weight: bold" :title="formatStatus(data.value)">
         {{ formatStatus(data.value) }}
       </div>
       <!-- <div>{{ formatStatus(data.value) }}</div> -->
     </template>
     <template #Date="{ data }">
-      <div>{{ formatString(formatDate(data.value)) }}</div>
+      <div :title="formatString(formatDate(data.value))">{{ formatString(formatDate(data.value)) }}</div>
     </template>
     <template #Text="{ data }">
-      <div>{{ formatString(data.value) }}</div>
+      <div :title="formatString(data.value) ">{{ formatString(data.value) }}</div>
     </template>
   </DxDataGrid>
   <!-- <DxButton text="Click me" @click="sayHelloWorld" /> -->
@@ -121,7 +123,6 @@ export default {
   },
   created() {},
   methods: {
-
     /**
      * Sự kiện chọn hàng
      * @param {*} param0
@@ -165,7 +166,7 @@ export default {
      * Author: TienDao (26/12/2022)
      */
     customizeText(cellInfo) {
-      console.log(cellInfo);
+      // console.log(cellInfo);
       return cellInfo.value;
     },
     // customizeText(cellInfo) {
@@ -177,7 +178,7 @@ export default {
      * @param {*} e
      * Author: TienDao (26/12/2022)
      */
-     onDbClickRow(e) {
+    onDbClickRow(e) {
       // console.log(e.data);
       this.$emit("onClickBtnEdit", e.data);
     },
@@ -205,16 +206,16 @@ export default {
       if (date) {
         date = new Date(date);
         return (
+          (date.getDate() > 9 ? date.getDate() : "0" + date.getDate()) +
+          "/" +
           (date.getMonth() > 8
             ? date.getMonth() + 1
             : "0" + (date.getMonth() + 1)) +
           "/" +
-          (date.getDate() > 9 ? date.getDate() : "0" + date.getDate()) +
-          "/" +
           date.getFullYear()
         );
-      }else{
-        return ""
+      } else {
+        return "";
       }
     },
 
@@ -222,9 +223,9 @@ export default {
      * Format chuỗi
      * Author: TienDao (26/12/2022)
      */
-     formatString(string){
-      return string ? string : "_ _"
-     }
+    formatString(string) {
+      return string ? string : "_ _";
+    },
   },
   data() {
     return {
@@ -248,7 +249,7 @@ export default {
         },
         {
           field: "RoleStatus",
-          width: "120",
+          width: "130",
           caption: "Trạng thái",
           type: "text",
           minWidth: "100",
@@ -294,5 +295,6 @@ export default {
 </script>
 
 <style>
+@import url(@/css/base.css);
 @import url(./RoleTable.css);
 </style>

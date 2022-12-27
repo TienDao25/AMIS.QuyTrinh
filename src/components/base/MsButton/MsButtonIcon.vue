@@ -2,8 +2,9 @@
   <div class="style-button">
     <div
       v-show="titleIcon"
-      class="button-comand-wrap btn-more abc"
+      class="button-comand-wrap btn-more flex flex-c-m"
       :title="titleIcon"
+      style="cursor: pointer"
     >
       <div :class="classIcon"></div>
     </div>
@@ -23,7 +24,6 @@ export default {
 </script>
 
 <style>
-@import url(./MsButtonIcon.css);
 @import url(@/css/base.css);
 .grid-container .style-button {
   width: 40px;
@@ -41,6 +41,11 @@ export default {
   width: 32px;
   border-radius: 50%;
 }
+.btn-more{
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+}
 .grid-container td.custom-column .button-comand-wrap {
   height: 30px;
   width: 30px;
@@ -50,12 +55,19 @@ export default {
   align-items: center;
 }
 
-.grid-container .btn-more:active, .grid-container .btn-more:hover {
-    background-color: #dadce3;
+.grid-container .btn-more:active,
+.grid-container .btn-more:hover {
+  background-color: #dadce3;
 }
-.button-comand-wrap.btn-more.abc{
+.btn-more:active,
+.btn-more:hover {
+  background-color: #dadce3;
+}
+.button-comand-wrap.btn-more.abc {
   margin-right: 0px;
-    margin-left: 0px;
+  margin-left: 0px;
 }
-
+/* .grid-container .btn-more:hover {
+  background-color: #dadce3;
+} */
 </style>
