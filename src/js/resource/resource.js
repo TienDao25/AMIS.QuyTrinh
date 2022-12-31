@@ -21,15 +21,15 @@ export default {
             Role: {
                 Delete: "Xóa vai trò"
             },
-            
+
         },
         Description: {
             Role: {
                 Delete: "Bạn có chắc chắn muốn xóa vai trò này không?"
             }
         },
-        TextError:"Có lỗi xảy ra. Vui lòng liên hệ MISA.",
-        TitleError:"Thông báo lỗi"
+        TextError: "Có lỗi xảy ra. Vui lòng liên hệ MISA.",
+        TitleError: "Thông báo lỗi"
     },
     Button: { //Nội dung nút
         Close: "Đóng",
@@ -38,7 +38,8 @@ export default {
         Delete: "Xóa",
         NoThing: "Không",
         NoSave: "Không lưu",
-        None: ""
+        None: "",
+        Edit: "Sửa"
     },
     Action: {
         Undo: "Hoàn tác"
@@ -53,27 +54,33 @@ export default {
             Deleted: "Đã xóa"
         }
     },
-    StringEmptyOrNull:"_ _",
-    Entity:{
-        Base:{
-            CreatedDate:"Ngày tạo",
-            CreatedBy:"Người tạo",
-            ModifiedDate:"Ngày chỉnh sửa cuối cùng",
-            ModifiedBy:"Người chỉnh sửa cuối cùng",
+    StringEmptyOrNull: "_ _",
+    NoData: "Không tìm thấy kết quả phù hợp",
+    Entity: {
+        Base: {
+            CreatedDate: "Ngày tạo",
+            CreatedBy: "Người tạo",
+            ModifiedDate: "Ngày chỉnh sửa cuối cùng",
+            ModifiedBy: "Người chỉnh sửa cuối cùng",
         },
-        Role:{
-            RoleName:"Tên vai trò",
-            RoleDescribe:"Mô tả",
-            RoleStatus:"Status",
+        Role: {
+            RoleName: "Tên vai trò",
+            RoleDescribe: "Mô tả",
+            RoleStatus: "Trạng thái",
 
         }
     },
-    Notification:{
-        Body:{
-            DeleteSuccess:"Xóa thành công"
+    Notification: {
+        Body: {
+            DeleteSuccess: "Xóa thành công"
         },
-        Title:{
-            Success:"Thành công",
+        Title: {
+            Success: "Thành công",
         },
+    },
+    SubSystemType: {
+        None: "",
+        Subjects: "Phân quyền phân hệ", //Phân hệ
+        Establish: "Phân quyền thiết lập", //Thiết lập
     }
 }

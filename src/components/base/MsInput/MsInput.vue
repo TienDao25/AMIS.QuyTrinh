@@ -19,6 +19,7 @@
             class="ms-input-item"
             :value="modelValue"
             @input="$emit('update:modelValue', $event.target.value)"
+            ref="input"
           />
         </div>
       </div>
@@ -46,6 +47,15 @@ export default {
 
     //Bắt buộc
     isRequired: Boolean,
+  },
+  methods: {
+    /**
+     * focus input
+     * Author: TienDao (28/12/2022)
+     */
+    focusInput() {
+      this.$refs.input.focus();
+    },
   },
 };
 </script>

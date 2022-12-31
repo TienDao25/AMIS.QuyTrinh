@@ -11,18 +11,22 @@
               v-for="(item, index) in header"
               :key="index"
               :to="item.route"
+              @click="active = index"
+              @mouseenter="indexClick = index"
+              @mouseleave="indexClick = -1"
             >
-              <div class="menu-item-name">{{ item.Text }}</div>
+              <div
+                class="menu-item-name"
+                :class="{ 'cl-blue': active == index }"
+              >
+                {{ item.Text }}
+              </div>
+              <div
+                :class="{
+                  'menu-item-active': indexClick == index || active == index,
+                }"
+              ></div>
             </router-link>
-            <!-- <div class="menu-item">
-              <div class="menu-item-name">Tài liệu quy trình</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-item-name">Thiết kế quy trình</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-item-name">Báo cáo</div>
-            </div> -->
             <button type="button" class="ms-con-dropdown parent-dropdown">
               <div class="button-comand-wrap btn-more m-r-20">
                 <div class="mi-threedot"></div>
@@ -42,7 +46,12 @@
       </div>
       <div class="flex-m">
         <div class="check-license-expired">
-          <MsInputSreach :placeholderText="'Tìm kiếm'" :iconPre="'mi-search'" />
+          <MsInputSreach
+            :placeholderText="'Tìm kiếm'"
+            :iconPre="'mi-search'"
+            :isGlobal="true"
+            v-model="sreachGlobal"
+          />
         </div>
 
         <div
@@ -104,6 +113,12 @@ export default {
           route: "/setting",
         },
       ],
+
+      //Text tìm kiếm
+      sreachGlobal: "",
+
+      //index click
+      indexClick: -1,
     };
   },
 };
@@ -179,7 +194,7 @@ export default {
 
 .menu-item-name {
   margin-top: 20px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .ms-con-dropdown.parent-dropdown {
@@ -261,5 +276,16 @@ export default {
   background-repeat: no-repeat;
   margin-top: 2px;
   background-image: url(@/assets/img/icon-notification-dark-thick.svg);
+}
+.menu-item:hover > .menu-item-name {
+  color: #0c9cdd !important;
+}
+.menu-item-active {
+  background-color: #0c9cdd;
+  height: 3px;
+  width: 100%;
+}
+.cl-blue {
+  color: #0c9cdd !important;
 }
 </style>

@@ -147,7 +147,6 @@ export default {
 
 <style scoped>
 @import url(@/css/base.css);
-@import url(./RolePaging.css);
 
 .grid-navigation {
   display: flex;

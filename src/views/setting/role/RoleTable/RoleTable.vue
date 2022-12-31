@@ -12,8 +12,11 @@
     @selection-changed="onSelectionChanged"
     :hover-state-enabled="true"
     alignment="center"
-    :noDataText="''"
+    :noDataText="Resource.NoData"
+    :wordWrapEnabled="true"
     @rowDblClick="onDbClickRow"
+    css-class="css-header"
+    :onCellHoverChanged="onCellHoverChanged"
   >
     <DxPager enabled="false" />
     <DxPaging enabled="false" :page-size="100" />
@@ -27,13 +30,11 @@
       :data-type="item.type"
       :caption="item.caption"
       :width="item.width"
-      :format="customizeText"
+      :wordWrapEnabled="true"
+      :cellHintEnabled="false"
       :cell-template="item.cellTemplate"
     />
-    <!-- <template #toolTip="{ data }">
-      <div :title="data">{{ data.row.data }}</div>
-      </template -->
-    >
+    <!-- -->
     <!-- :min-width="item.minWidth" -->
 
     <!-- <DxColumn type="buttons" :width="110">
@@ -49,11 +50,13 @@
       alignment="left"
       :allow-resizing="false"
     />
+    <!-- :fixed="true"
+      fixed-position="right" -->
     <template #cellButton="{ data }">
       <div
         class="flex justify-flexend m-x-8"
         style="width: max-content !important; height: 100%"
-        v-show="isShowButtons"
+        v-show="isShowButtons == data.rowIndex"
       >
         <MsButtonIconVue
           :classIcon="'icon-copy'"
@@ -91,7 +94,10 @@
       <!-- <div>{{ formatStatus(data.value) }}</div> -->
     </template>
     <template #Date="{ data }">
-      <div :title="formatString(formatDate(data.value))">
+      <div
+        :title="formatString(formatDate(data.value))"
+        style="text-align: center"
+      >
         {{ formatString(formatDate(data.value)) }}
       </div>
     </template>
@@ -132,6 +138,7 @@ export default {
     listRole: Array,
   },
   created() {},
+  computed: {},
   methods: {
     /**
      * Sự kiện chọn hàng
@@ -167,18 +174,10 @@ export default {
      * Author: TienDao (25/12/2022)
      */
     onClickBtnDelete(e) {
-      // console.log(e.row.data);
+      // console.log(e);
       this.$emit("onClickBtnDelete", e.row.data);
     },
 
-    /**
-     * Format/Check dữ liệu khi thêm vào bảng
-     * Author: TienDao (26/12/2022)
-     */
-    customizeText(cellInfo) {
-      // console.log(cellInfo);
-      return cellInfo.value;
-    },
     // customizeText(cellInfo) {
     //   return cellInfo.value ? cellInfo.value : "_ _";
     // },
@@ -215,14 +214,27 @@ export default {
     formatDate(date) {
       if (date) {
         date = new Date(date);
+        // return (
+        //   (date.getDate() > 9 ? date.getDate() : "0" + date.getDate()) +
+        //   "/" +
+        //   (date.getMonth() > 8
+        //     ? date.getMonth() + 1
+        //     : "0" + (date.getMonth() + 1)) +
+        //   "/" +
+        //   date.getFullYear()
+        // );
         return (
-          (date.getDate() > 9 ? date.getDate() : "0" + date.getDate()) +
+          ("00" + (date.getMonth() + 1)).slice(-2) +
           "/" +
-          (date.getMonth() > 8
-            ? date.getMonth() + 1
-            : "0" + (date.getMonth() + 1)) +
+          ("00" + date.getDate()).slice(-2) +
           "/" +
-          date.getFullYear()
+          date.getFullYear() +
+          " " +
+          ("00" + date.getHours()).slice(-2) +
+          ":" +
+          ("00" + date.getMinutes()).slice(-2) +
+          ":" +
+          ("00" + date.getSeconds()).slice(-2)
         );
       } else {
         return "";
@@ -236,10 +248,23 @@ export default {
     formatString(string) {
       return string ? string : Resource.StringEmptyOrNull;
     },
+
+    /**
+     * Hover vào hàng
+     * Author: TienDao (30/12/2022)
+     */
+    onCellHoverChanged(data) {
+      if (data.eventType == "mouseover") {
+        this.isShowButtons = data.rowIndex;
+      } else {
+        this.isShowButtons = -1;
+      }
+    },
   },
   data() {
     return {
       Enum,
+      Resource,
       columns: [
         {
           field: "RoleName",
@@ -251,7 +276,7 @@ export default {
         },
         {
           field: "RoleDescribe",
-          width: "300",
+          width: "250",
           caption: Resource.Entity.Role.RoleDescribe,
           type: "text",
           minWidth: "100",
@@ -259,7 +284,7 @@ export default {
         },
         {
           field: "RoleStatus",
-          width: "130",
+          width: "150",
           caption: Resource.Entity.Role.RoleStatus,
           type: "text",
           minWidth: "100",
@@ -267,7 +292,7 @@ export default {
         },
         {
           field: "CreatedDate",
-          width: "120",
+          width: "130",
           caption: Resource.Entity.Base.CreatedDate,
           type: "date",
           minWidth: "100",
@@ -283,7 +308,7 @@ export default {
         },
         {
           field: "ModifiedDate",
-          width: "120",
+          width: "130",
           caption: Resource.Entity.Base.ModifiedDate,
           type: "date",
           minWidth: "100",
@@ -298,7 +323,7 @@ export default {
           cellTemplate: "Text",
         },
       ],
-      isShowButtons: true,
+      isShowButtons: -1,
     };
   },
 };

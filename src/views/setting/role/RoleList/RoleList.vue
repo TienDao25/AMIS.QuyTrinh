@@ -30,6 +30,7 @@
                   :placeholderText="'Tìm kiếm vai trò'"
                   :iconPre="'mi-search'"
                   v-model="keyword"
+                
                 />
               </div>
             </div>
@@ -66,6 +67,7 @@
       v-if="isRoleDetail"
       :modeForm="modeForm"
       :roleID="roleID"
+      :listSubsytemAndPermission="listSubsytemAndPermission"
       @closeFormDetail="closeFormDetail"
       @showDialogError="showDialogError"
     />
@@ -101,7 +103,7 @@ import RolePaging from "../RolePaging/RolePaging.vue";
 import RoleDialog from "../RoleDialog/RoleDialog.vue";
 
 import RoleAPI from "@/apis/RoleAPI.js";
-
+import SusSystemAPI from "@/apis/SusSystemAPI";
 import Enum from "@/js/enum/enum";
 import Resource from "@/js/resource/resource.js";
 export default {
@@ -117,6 +119,7 @@ export default {
   },
   created() {
     this.getListRoleBFindPaging();
+    this.getListSubSystem();
   },
   watch: {
     /**
@@ -222,6 +225,8 @@ export default {
               case Enum.StatusCode.InternalServerError:
                 this.showDialogError(error.response.data.UserMsg);
                 break;
+              default:
+                this.showDialogError(Resource.Dialog.TextError);
             }
           } else {
             this.showDialogError(Resource.Dialog.TextError);
@@ -321,6 +326,40 @@ export default {
       }
       this.isDialog = true;
     },
+
+    /**
+     * Api lấy danh sách phân quyền
+     * Author: TienDao (28/12/2022)
+     */
+    getListSubSystem() {
+      this.isShowLoading();
+      SusSystemAPI.getListSubSystem()
+        .then((response) => {
+          this.isShowLoading();
+          this.listSubsytemAndPermission = response.data;
+          // this.loader();
+        })
+        .catch((error) => {
+          this.isShowLoading();
+          if (error.response) {
+            switch (error.response.status) {
+              case Enum.StatusCode.BadRequest:
+                this.showDialogError(error.response.data.UserMsg);
+                break;
+              case Enum.StatusCode.InternalServerError:
+                this.showDialogError(error.response.data.UserMsg);
+                break;
+              default:
+                this.showDialogError(Resource.Dialog.TextError);
+            }
+          } else {
+            this.showDialogError(Resource.Dialog.TextError);
+          }
+        })
+        .finally(() => {
+          // this.isShowLoading();
+        });
+    },
   },
   data() {
     return {
@@ -386,6 +425,9 @@ export default {
 
       //Hiển thị thông báo
       isNotification: false,
+
+      //Toàn bộ Danh sách phân quyền và quyền
+      listSubsytemAndPermission: [],
     };
   },
 };

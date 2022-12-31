@@ -12,13 +12,13 @@
       @click="indexZ = index"
     >
       <div :class="['icon-tab', item.icon]"></div>
-      <div class="name-tab">{{ item.text }}</div>
+      <div class="name-tab" :class="[{ 'item-activated': indexZ == index }]">{{ item.text }}</div>
     </router-link>
   </div>
 </template> 
 
 <script>
-import Resource from '@/js/resource/resource';
+import Resource from "@/js/resource/resource";
 export default {
   data() {
     return {
@@ -56,17 +56,20 @@ export default {
 .item-activated .icon-tab {
   background-color: #0c9cdd !important;
 }
+.item-activated .name-tab {
+  color: #0c9cdd !important;
+}
 .item-activated {
   background-color: #f3fbfd;
 }
 .setting-tab-item {
-    height: 44px;
-    padding-left: 24px;
+  height: 44px;
+  padding-left: 24px;
 }
 .setting-tab-item .icon-tab {
-    margin-right: 8px;
+  margin-right: 8px;
 }
 .setting-tab-item .name-tab {
-    line-height: 44px;
+  line-height: 44px;
 }
 </style>

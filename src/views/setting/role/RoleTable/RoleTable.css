@@ -1,57 +1,98 @@
 #dataGrid td {
-    text-align: left;
-    /* min-width: 80px; */
-    /* max-width: 250px; */
-    /* width: 250px; */
-  }
-  .dx-data-row.dx-state-hover > td {
-    cursor: pointer;
-    background-color: #dbf4ff !important;
-  }
-  
-  .dx-selection > td {
-    cursor: pointer;
-    background-color: #dbf4ff !important;
-  }
-  .dx-datagrid .dx-row > td,
-  .dx-datagrid .dx-row > tr > td {
-    height: 48px !important;
-  }
-  .grid-container .dx-datagrid .dx-row > td {
-    padding: 0 16px;
-    height: 48px !important;
-    vertical-align: middle !important;
-  }
-  
-  .dx-datagrid-text-content.dx-text-content-alignment-left {
-    font-weight: 700;
-    color: #000 !important;
-  }
-  .grid-container .dx-datagrid .dx-row-lines > td {
-    border-bottom: 1px solid var(--border-color) !important;
-  }
-  .grid-container .dx-datagrid-headers .dx-row.dx-header-row {
-    background-color: #fff !important;
-    border-bottom: 1px solid #e2e8f0 !important;
-  }
-  .grid-container
-    .dx-datagrid-headers
-    .dx-datagrid-table
-    .dx-row
-    > td:not(:last-child, :first-child) {
-    border-bottom: none;
-    border-left: 1px solid #e2e8f0;
-  }
-  /* .grid-container .dx-datagrid-headers .dx-datagrid-table .dx-row > td:not(:last-child):before {
-    content: "" !important;
-    position: absolute !important;
-    top: 30% !important;
-    left: 0 !important;
-    background-color: red !important;
-    width: 1px !important;
-    height: 20px !important;
-    z-index: 23 !important;
-  } */
-  .grid-container .dx-scrollable-simulated {
-    overflow: auto !important;
-  }
+  text-align: left;
+  /* min-width: 80px; */
+  /* max-width: 250px; */
+  /* width: 250px; */
+}
+
+.dx-data-row.dx-state-hover>td {
+  cursor: pointer;
+  background-color: #dbf4ff !important;
+}
+
+.dx-selection>td {
+  cursor: pointer;
+  background-color: #dbf4ff !important;
+}
+
+.dx-datagrid-headers {
+  border-bottom: none;
+}
+
+.dx-datagrid .dx-row>td,
+.dx-datagrid .dx-row>tr>td {
+  max-height: 48px !important;
+  height: 48px !important;
+
+}
+
+.grid-container .dx-datagrid .dx-row>td {
+  padding: 0 16px;
+  height: 48px !important;
+  max-height: 48px !important;
+  vertical-align: middle !important;
+
+}
+
+.dx-datagrid-text-content.dx-text-content-alignment-left {
+  font-weight: 700;
+  color: #000 !important;
+}
+
+.grid-container .dx-datagrid .dx-row-lines>td {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.grid-container .dx-datagrid-headers .dx-row.dx-header-row {
+  background-color: #fff !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+.grid-container .dx-datagrid-headers .dx-datagrid-table .dx-row>td:not(:last-child, :first-child) {
+  border-bottom: none;
+  border-left: 1px solid #e2e8f0;
+}
+
+.grid-container .dx-scrollable-simulated {
+  overflow: auto !important;
+}
+
+/* .dx-datagrid-headers .dx-row.dx-data-row.dx-row-lines>td>.dx-template-wrapper {
+  white-space: none !important;
+  overflow: hidden !important;
+  text-overflow: none !important;
+} */
+.dx-datagrid-rowsview .dx-row.dx-data-row.dx-row-lines>td>* {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.dx-datagrid-headers .dx-datagrid-content {
+  margin-bottom: -1px !important;
+}
+
+.grid-container .dx-datagrid-headers .dx-datagrid-table .dx-row>td {
+  border-bottom: none !important;
+}
+
+.grid-container .dx-datagrid-headers .dx-datagrid-table .dx-row>td {
+  position: relative !important;
+}
+
+.grid-container .dx-datagrid-headers .dx-datagrid-table .dx-row>*:not(:first-child,:last-child):before {
+  content: "" !important;
+  position: absolute !important;
+  top: 30% !important;
+  left: 0px !important;
+  background-color: #e2e8f0 !important;
+  width: 1px !important;
+  height: 20px !important;
+  z-index: 23 !important;
+}
+
+.grid-container .dx-datagrid-content .dx-datagrid-table .dx-row>td:first-child,
+.grid-container .dx-datagrid-content .dx-datagrid-table .dx-row>tr>td:first-child,
+.grid-container .dx-datagrid .dx-datagrid-headers .dx-header-row>td {
+  border-left: none !important; 
+}

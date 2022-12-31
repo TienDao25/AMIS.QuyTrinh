@@ -200,6 +200,7 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16);
+  border-radius: 8px;
 }
 
 .dialog__title {

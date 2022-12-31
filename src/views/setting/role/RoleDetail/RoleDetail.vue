@@ -23,12 +23,24 @@
                 </div>
               </div>
             </div>
-            <span class="font-20 bold">Nhân viên</span>
+            <span class="font-20 bold">{{
+              modeForm == Enum.ModeForm.Add ? "Thêm mới" : titleForm
+            }}</span>
           </div>
-          <div class="flex">
-            <MsButtonVue :isPrimary="true" :title="'Sửa'" />
-            <MsButtonVue :isSecondary="true" :title="'Hủy bỏ'" />
-            <MsButtonVue :isPrimary="true" :title="'Lưu'" />
+          <div class="flex" v-if="modeForm == Enum.ModeForm.None">
+            <MsButtonVue :isPrimary="true" :title="Resource.Button.Edit" />
+          </div>
+          <div class="flex" v-else>
+            <MsButtonVue
+              :isSecondary="true"
+              :title="Resource.Button.Cancel"
+              @click="onClickReturnViewMain"
+            />
+            <MsButtonVue
+              :isPrimary="true"
+              :title="Resource.Button.Save"
+              @click="onClickBtnSave"
+            />
           </div>
         </div>
       </div>
@@ -65,6 +77,7 @@
                       :errorText="''"
                       :isRequired="true"
                       v-model="roleDetail.RoleName"
+                      ref="roleName"
                     />
                   </div>
                   <div
@@ -79,7 +92,7 @@
                       :label="'Mô tả'"
                       :placeholderText="'Nhập mô tả'"
                       :maxLength="225"
-                      ::isRequired="false"
+                      :isRequired="false"
                       v-model="roleDetail.RoleDescribe"
                     />
                   </div>
@@ -89,39 +102,29 @@
 
                 <div class="m-b-24">
                   <div class="title-block font-20 bold" style="margin-top: 0px">
-                    PHÂN QUYỀN PHÂN HỆ
+                    {{ Resource.SubSystemType.Subjects.toUpperCase() }}
                   </div>
-                  <div style="margin-top: 20px">
-                    <div>
-                      <MsCheckboxVue
-                        :rowName="'Tổng quan'"
-                        :isRow="'a2'"
-                        :isDisabled="false"
-                      />
-                    </div>
-                  </div>
-                  <div style="margin-top: 20px">
-                    <div>
-                      <MsCheckboxVue
-                        :rowName="'Tổng quan'"
-                        :isRow="'a1'"
-                        :isDisabled="false"
-                      />
-                    </div>
-                  </div>
-                  <div style="margin-top: 20px">
-                    <div>
-                      <MsCheckboxVue
-                        :rowName="'Tổng quan'"
-                        :isDisabled="false"
-                      />
-                    </div>
-                  </div>
-                  <div style="margin-top: 20px">
-                    <div>
-                      <MsCheckboxVue
-                        :rowName="'Tổng quan'"
-                        :isDisabled="false"
+                  <div
+                    style="margin-top: 20px"
+                    v-for="(item, index) in listSubsytemAndPermission"
+                    :key="index"
+                  >
+                    <div
+                      v-if="item.SubSystemType == Enum.SubSystemType.Subjects"
+                    >
+                      <CheckboxPermission
+                        :rowName="item.SubSystemName"
+                        :isRow="item.SubSystemCode"
+                        :isDisabled="
+                          item.SubSystemCode == 'Dashboard' ||
+                          item.SubSystemCode == 'Process'
+                            ? true
+                            : false
+                        "
+                        :subSystem="item"
+                        :subSystemDetail="getSubSystemInObj(item.SubSystemCode)"
+                        v-model="listCheckbox[index]"
+                        :ref="'subSystem' + index"
                       />
                     </div>
                   </div>
@@ -129,38 +132,24 @@
 
                 <div class="">
                   <div class="title-block font-20 bold" style="margin-top: 0px">
-                    PHÂN QUYỀN THIẾT LẬP
+                    {{ Resource.SubSystemType.Establish.toUpperCase() }}
                   </div>
-                  <div style="margin-top: 20px">
-                    <div>
-                      <MsCheckboxVue
-                        :rowName="'Tổng quan'"
+                  <div
+                    style="margin-top: 20px"
+                    v-for="(item, index) in listSubsytemAndPermission"
+                    :key="index"
+                  >
+                    <div
+                      v-if="item.SubSystemType == Enum.SubSystemType.Establish"
+                    >
+                      <CheckboxPermission
+                        :rowName="item.SubSystemName"
+                        :isRow="item.SubSystemCode"
                         :isDisabled="false"
-                      />
-                    </div>
-                  </div>
-                  <div style="margin-top: 20px">
-                    <div>
-                      <MsCheckboxVue
-                        :rowName="'Tổng quan'"
-                        :isDisabled="false"
-                      />
-                    </div>
-                  </div>
-                  <div style="margin-top: 20px">
-                    <div>
-                      <MsCheckboxVue
-                        :rowName="'Tổng quan'"
-                        :isDisabled="false"
-                      />
-                    </div>
-                  </div>
-                  <div style="margin-top: 20px">
-                    <div>
-                      <MsCheckboxVue
-                        id="link4"
-                        :rowName="'Tổng quan'"
-                        :isDisabled="false"
+                        :subSystem="item"
+                        :subSystemDetail="getSubSystemInObj(item.SubSystemCode)"
+                        v-model="listCheckbox[index]"
+                        :ref="'subSystem' + index"
                       />
                     </div>
                   </div>
@@ -179,10 +168,12 @@
 // import { DxTooltip } from "devextreme-vue/tooltip";
 import MsButtonVue from "@/components/base/MsButton/MsButton.vue";
 import MsInputVue from "@/components/base/MsInput/MsInput.vue";
-import MsCheckboxVue from "@/components/base/MsInput/MsCheckbox.vue";
 import MsLoadingVue from "@/components/base/MsLoading/MsLoading.vue";
+
+import CheckboxPermission from "./CheckboxPermission.vue";
+
 // import axios from "axios";
-import Enum from "@/js/enum/enum";
+import Enum from "@/js/enum/enum.js";
 import RoleAPI from "@/apis/RoleAPI.js";
 import Resource from "@/js/resource/resource";
 export default {
@@ -190,8 +181,8 @@ export default {
     // DxTooltip,
     MsButtonVue,
     MsInputVue,
-    MsCheckboxVue,
     MsLoadingVue,
+    CheckboxPermission,
   },
   props: {
     // Trường hợp của popup
@@ -199,10 +190,17 @@ export default {
 
     //ID vai trò cần sửa/nhân bản
     roleID: String,
+
+    //Toàn bộ Danh sách phân quyền và quyền
+    listSubsytemAndPermission: Array,
   },
   created() {
     this.init();
   },
+  mounted() {
+    this.focusInputRoleName();
+  },
+
   methods: {
     /**
      * Khởi tạo form
@@ -211,6 +209,7 @@ export default {
     init() {
       switch (this.modeForm) {
         case Enum.ModeForm.Add:
+          this.bindingData({});
           break;
         case Enum.ModeForm.Update:
           this.getRoleDetail();
@@ -237,7 +236,8 @@ export default {
       RoleAPI.getRoleDetailByID(this.roleID)
         .then((response) => {
           console.log(response);
-          this.roleDetail = response.data;
+          // this.roleDetail = response.data;
+          this.bindingData(response.data);
         })
         .catch((error) => {
           if (error.response) {
@@ -259,31 +259,86 @@ export default {
           // this.isShowLoading();
         });
     },
+
+    /**
+     * Focus Input tên vai trò
+     * Author: TienDao (28/12/2022)
+     */
+    focusInputRoleName() {
+      this.$refs.roleName.focusInput();
+    },
+
+    /**
+     * Truyền dữ liệu vào form
+     */
+    bindingData(data) {
+      this.roleDetail = data;
+      this.titleForm = this.roleDetail.RoleName;
+      if (this.modeForm == Enum.ModeForm.Dulicate) {
+        this.roleDetail.RoleName += " - Copy";
+      }
+      console.log(this.roleDetail);
+      console.log(this.listSubsytemAndPermission);
+    },
+
+    /**
+     * Lấy phân quyền tương ứng
+     * Author: TienDao 30/12/2022
+     */
+    getSubSystemInObj(subSystemCode) {
+      var subSystem = {};
+      this.roleDetail.ListSubsytemAndPermission?.forEach((item) => {
+        if (item.SubSystemCode == subSystemCode) {
+          subSystem = item;
+          return false;
+        }
+      });
+      // console.log(subSystem);
+      return subSystem;
+    },
+
+    /**
+     * Click nút lưu
+     * Author: TienDao (31/12/2022)
+     */
+    onClickBtnSave() {
+      console.log(this.$refs);
+      var listSubSystemID = [];
+      var listPremissionID = [];
+      this.listSubsytemAndPermission.forEach((subSystem, subSystemIndex) => {
+        this.$refs["subSystem" + subSystemIndex][0].clickOnBtnSave();
+        subSystem.ListPermissions.forEach((permission, permissionsIndex) => {
+          if (this.listCheckbox[subSystemIndex][permissionsIndex] == true) {
+            listSubSystemID.push(subSystem.SubSystemID);
+            listPremissionID.push(permission.PermissionID);
+          }
+        });
+      });
+      console.log(this.roleDetail);
+      console.log("listSubSystemID: " + listSubSystemID);
+      console.log("listPremissionID: " + listPremissionID);
+
+      
+    },
   },
   data() {
     return {
+      Enum,
+      Resource,
       //Chi tiết vai trò
       roleDetail: {},
 
+      //Danh sách xử lý so sánh 2 mảng phân quyền
+      newList: [],
+
       //Trạng thái hiện thị Loading
       isLoading: false,
-      // withShadingOptionsVisible: false,
-      // animationConfig: {
-      //   show: {
-      //     type: 'pop',
-      //     from: {
-      //       scale: 0,
-      //     },
-      //     to: {
-      //       scale: 1,
-      //     },
-      //   },
-      //   hide: {
-      //     type: 'fade',
-      //     from: 1,
-      //     to: 0,
-      //   },
-      // },
+
+      //tiêu đề form
+      titleForm: "",
+
+      //Danh sách trạng thái phân quyền - quyền tương ứng đã chọn
+      listCheckbox: [],
     };
   },
 };

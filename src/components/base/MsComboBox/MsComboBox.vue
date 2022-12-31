@@ -43,7 +43,7 @@
         :key="index"
         class="data-item"
         :class="{
-          checked:
+          selected:
             numberRecord == item[Value] ||
             modelValue == item[Value] ||
             index == indexInit,
@@ -53,7 +53,15 @@
         ref="itemData"
       >
         <!-- v-show="checkItem(item, index)" -->
-        {{ item[Text] }}
+        <div>{{ item[Text] }}</div>
+        <div
+          v-show="
+            numberRecord == item[Value] ||
+            modelValue == item[Value] ||
+            index == indexInit
+          "
+          class="mi-check icon-check"
+        ></div>
       </div>
     </div>
   </div>
@@ -191,6 +199,10 @@ export default {
 
 <style>
 @import url(@/css/base.css);
+.icon-check {
+  width: 20px;
+  margin-left: 8px;
+}
 .combobox {
   position: relative;
   display: flex;
@@ -235,7 +247,7 @@ export default {
   max-height: 200px;
 }
 
-.bottom{
+.bottom {
   /* top: calc(100% + 1px); */
   top: calc(100%);
   max-height: 200px;
@@ -243,8 +255,11 @@ export default {
 
 .data-item {
   height: 36px;
-  padding: 8px 0 8px 12px;
+  line-height: 24px;
+  padding: 6px 12px 6px 12px;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
   /* font-size: 14px; */
 }
 
@@ -272,5 +287,9 @@ export default {
 
 .input :hover() {
   border: 1px solid var(--input-hover-border-color);
+}
+.combobox .selected {
+  background: var(--primary-bg) !important;
+  color: var(--primary-bg) !important;
 }
 </style>

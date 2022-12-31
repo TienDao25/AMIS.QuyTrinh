@@ -6,9 +6,11 @@
       :placeholder="placeholderText"
       type="text"
       class="flex-1 m-l-4"
+      :class="{ 'm-l-4': isGlobal, 'm-l-12': !isGlobal }"
       :value="modelValue"
-      @change="$emit('update:modelValue', $event.target.value)"
+      @input="$emit('update:modelValue', $event.target.value)"
     />
+    <div v-if="isGlobal && modelValue" class="after-icon mi-close-small" @click="$emit('update:modelValue', null)"></div>
   </div>
 </template>
 <script>
@@ -25,12 +27,25 @@ export default {
 
     //giá trị input
     modelValue: String,
+
+    //Tìm kiếm toàn bộ
+    isGlobal: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
 
 <style scoped>
 @import url(@/css/base.css);
+.global-search .after-icon {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 14px;
+}
 .global-search {
   position: relative;
   padding: 4px 8px;

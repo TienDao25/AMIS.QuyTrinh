@@ -1,7 +1,7 @@
 import BaseAPIConfig from '@/apis/BaseAPIConfig.js';
 
 class EmployeeAPI {
-    controller = "role";
+    controller = "roles";
     /**
      * Lấy chi tiết 1 vai trò theo ID
      * @param {String} roleID ID vai trò

@@ -436,3 +436,28 @@
     mask-repeat: no-repeat;
     background-color: green !important;
 }
+.icon-remove, .mi-close-small {
+    width: 14px!important;
+    height: 14px!important;
+    background: url(@/assets/img/Icon_process.0a0cc28b.svg) -430px -1px no-repeat!important;
+}
+.mi-check {
+    width: 24px;
+    height: 24px;
+    -webkit-mask-image: url(@/assets/img/IconControl.9280241f.svg);
+    -moz-mask-image: url(@/assets/img/IconControl.9280241f.svg);
+    -ms-mask-image: url(@/assets/img/IconControl.9280241f.svg);
+    -o-mask-image: url(@/assets/img/IconControl.9280241f.svg);
+    mask-image: url(@/assets/img/IconControl.9280241f.svg);
+    -webkit-mask-position: -48px -96px;
+    -moz-mask-position: -48px -96px;
+    -ms-mask-position: -48px -96px;
+    -o-mask-position: -48px -96px;
+    mask-position: -48px -96px;
+    -webkit-mask-repeat: no-repeat;
+    -moz-mask-repeat: no-repeat;
+    -ms-mask-repeat: no-repeat;
+    -o-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    background-color: var(--primary)!important;
+}

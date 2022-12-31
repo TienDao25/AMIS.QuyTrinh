@@ -46,5 +46,10 @@ export default {
         BadRequest: 400, //Lỗi dữ liệu đầu vào
         NotFound: 404, //Không tìm thầy tài nguyên
         InternalServerError: 500, //Lỗi server
+    },
+    SubSystemType: {
+        None: 0,
+        Subjects: 1, //Phân hệ
+        Establish: 2, //Thiết lập
     }
 }
