@@ -97,8 +97,8 @@ export default {
     //id row
     isRow: String,
 
-    //Giá trị checkbox
-    modelValue:Array,
+    //indexList
+    indexList:Number
   },
   watch: {
     subSystemDetail: {
@@ -228,9 +228,10 @@ export default {
 
     /**
      * Click nút Lưu trên form
+     * Author: TienDao (02/01/2023)
      */
     clickOnBtnSave(){
-      this.$emit("update:modelValue", this.checkbox);
+      this.$emit("valueCheckbox", this.checkbox,this.indexList);
     }
   },
   data() {

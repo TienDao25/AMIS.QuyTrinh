@@ -70,7 +70,7 @@
                     class="ms-col ms-xs- ms-sm- ms-lg-"
                     style="margin-left: 0%; width: 48.3333%"
                   >
-                    <MsInputVue 
+                    <MsInputVue
                       :label="'Tên vai trò'"
                       :placeholderText="'Nhập tên vai trò'"
                       :maxLength="225"
@@ -123,8 +123,9 @@
                         "
                         :subSystem="item"
                         :subSystemDetail="getSubSystemInObj(item.SubSystemCode)"
-                        v-model="listCheckbox[index]"
                         :ref="'subSystem' + index"
+                        @valueCheckbox="takeValueCheckbox"
+                        :indexList="index"
                       />
                     </div>
                   </div>
@@ -148,8 +149,9 @@
                         :isDisabled="false"
                         :subSystem="item"
                         :subSystemDetail="getSubSystemInObj(item.SubSystemCode)"
-                        v-model="listCheckbox[index]"
                         :ref="'subSystem' + index"
+                        @valueCheckbox="takeValueCheckbox"
+                        :indexList="index"
                       />
                     </div>
                   </div>
@@ -176,6 +178,7 @@ import CheckboxPermission from "./CheckboxPermission.vue";
 import Enum from "@/js/enum/enum.js";
 import RoleAPI from "@/apis/RoleAPI.js";
 import Resource from "@/js/resource/resource";
+
 export default {
   components: {
     // DxTooltip,
@@ -303,44 +306,48 @@ export default {
      */
     onClickBtnSave() {
       console.log(this.$refs);
-      var listSubSystemID = [];
-      var listPermissionID = [];
+      console.log(this.listSubsytemAndPermission);
+      console.log(this.listCheckbox);
+      this.listSubSystemID = [];
+      this.listPermissionID = [];
       this.listSubsytemAndPermission.forEach((subSystem, subSystemIndex) => {
         this.$refs["subSystem" + subSystemIndex][0].clickOnBtnSave();
         subSystem.ListPermissions.forEach((permission, permissionsIndex) => {
-          if (this.listCheckbox[subSystemIndex][permissionsIndex] == true) {
-            listSubSystemID.push(subSystem.SubSystemID);
-            listPermissionID.push(permission.PermissionID);
+          if (this.listCheckbox[subSystemIndex]) {
+            if (this.listCheckbox[subSystemIndex][permissionsIndex] == true) {
+              this.listSubSystemID.push(subSystem.SubSystemID);
+              this.listPermissionID.push(permission.PermissionID);
+            }
           }
         });
       });
       console.log(this.modeForm);
       console.log(this.roleDetail);
-      console.log("listSubSystemID: " + listSubSystemID);
-      console.log("listPremissionID: " + listPermissionID);
+      console.log("listSubSystemID: " + this.listSubSystemID);
+      console.log("listPremissionID: " + this.listPermissionID);
 
       //Validate
-      if(this.validateData()==true){
+      if (this.validateData() == true) {
         this.callAPI();
-      }
-      else{
+        // return;
+      } else {
         //Thông báo lỗi
         // this.$emit("");
+        // return;
       }
-      
     },
 
     /**
-     * Validate 
+     * Validate
      * Author: TienDao (01/01/2023)
      */
-    validateData(){
+    validateData() {
       let isValid = true;
-      if(!this.roleDetail.RoleName){
-        this.error.RoleName="dsadsdasdasdasdasdas"
-        isValid= false
-      }else{
-        this.error.RoleName=""
+      if (!this.roleDetail.RoleName) {
+        this.error.RoleName = "Tên vai trò không được để trống";
+        isValid = false;
+      } else {
+        this.error.RoleName = "";
       }
       return isValid;
     },
@@ -351,11 +358,71 @@ export default {
         this.modeForm == Enum.ModeForm.Add ||
         this.modeForm == Enum.ModeForm.Dulicate
       ) {
-        //
+        this.addRole();
       }
       if (this.modeForm == Enum.ModeForm.Update) {
         //
       }
+    },
+
+    /**
+     * Gọi API thêm mới vai trò
+     * Author: TienDao (02/01/2023)
+     */
+    addRole() {
+      this.isShowLoading();
+      RoleAPI.addRole(
+        this.modeForm,
+        this.roleDetail,
+        this.listSubSystemID,
+        this.listPermissionID
+      )
+        .then((response) => {
+          this.isShowLoading();
+          console.log(response);
+          this.$emit("closeFormAndAddSuccess");
+        })
+        .catch((error) => {
+          this.isShowLoading();
+          console.log(error);
+          if (error.response) {
+            switch (error.response.status) {
+              case Enum.StatusCode.BadRequest:
+                this.$emit("showDialogError", error.response.data.MoreInfo);
+                break;
+              case Enum.StatusCode.InternalServerError:
+                this.$emit("showDialogError", error.response.data.UserMsg);
+                break;
+              case Enum.StatusCode.NotFound:
+                this.$emit("showDialogError", error.response.data.UserMsg);
+                break;
+              default:
+                this.$emit("showDialogError", Resource.Dialog.TextError);
+            }
+          } else {
+            this.$emit("showDialogError", Resource.Dialog.TextError);
+          }
+        });
+    },
+
+    /**
+     * Nhận giá trị checkbox
+     * @param {*} value
+     * @param {*} index
+     * Author: TienDao (02/01/2023)
+     */
+    takeValueCheckbox(value, index) {
+      console.log("index: " + index);
+      console.log("value: " + value);
+      this.listCheckbox[index] = value;
+    },
+
+    /**
+     * Ẩn/hiện loading
+     * Author: TienDao (02/01/20220)
+     */
+    isShowLoading() {
+      this.isLoading = !this.isLoading;
     },
   },
   data() {
@@ -364,8 +431,8 @@ export default {
       Resource,
       //Chi tiết vai trò
       roleDetail: {
-        RoleName:"",
-        RoleDescription:"",
+        RoleName: "",
+        RoleDescription: "",
       },
 
       //Danh sách xử lý so sánh 2 mảng phân quyền
@@ -381,9 +448,15 @@ export default {
       listCheckbox: [],
 
       //Lỗi
-      error:{
-        RoleName:"Tên vai trò không được để trống"
-      }
+      error: {
+        RoleName: "Tên vai trò không được để trống",
+      },
+
+      //Danh sách ID phân quyền
+      listSubSystemID: [],
+
+      //Danh sách quyền tương ứng
+      listPermissionID: [],
     };
   },
 };

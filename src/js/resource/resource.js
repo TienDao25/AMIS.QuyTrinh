@@ -72,7 +72,8 @@ export default {
     },
     Notification: {
         Body: {
-            DeleteSuccess: "Xóa thành công"
+            DeleteSuccess: "Xóa thành công",
+            AddSuccess:"Thêm thành công"
         },
         Title: {
             Success: "Thành công",

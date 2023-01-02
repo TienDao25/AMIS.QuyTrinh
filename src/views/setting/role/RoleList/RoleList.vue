@@ -30,7 +30,6 @@
                   :placeholderText="'Tìm kiếm vai trò'"
                   :iconPre="'mi-search'"
                   v-model="keyword"
-                
                 />
               </div>
             </div>
@@ -70,6 +69,7 @@
       :listSubsytemAndPermission="listSubsytemAndPermission"
       @closeFormDetail="closeFormDetail"
       @showDialogError="showDialogError"
+      @closeFormAndAddSuccess="closeFormAndAddSuccess"
     />
     <RoleDialog
       v-if="isDialog"
@@ -359,6 +359,31 @@ export default {
         .finally(() => {
           // this.isShowLoading();
         });
+    },
+
+    /**
+     * Đóng form và thông báo thêm thành công
+     * Author: TienDao (02/01/2023)
+     */
+    closeFormAndAddSuccess() {
+      this.closeFormDetail();
+      this.showAddSuccess();
+      this.getListRoleBFindPaging();
+    },
+
+    /**
+     * Thông báo thêm thành công
+     * Author: TienDao (02/01/2022)
+     */
+    showAddSuccess() {
+      this.bodyTextNotification = Resource.Notification.Body.AddSuccess;
+      this.tittleNotification = Resource.Notification.Title.Success;
+      this.classNotification = "tittle-successful";
+      this.iconNotification = "icon-success";
+      this.isNotification = true;
+      this.getListRoleBFindPaging();
+      setTimeout(() => (this.isNotification = false), 3000);
+      // icon-success
     },
   },
   data() {

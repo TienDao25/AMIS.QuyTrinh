@@ -154,6 +154,8 @@ export default {
               default:
                 this.$emit("showDialogError", Resource.Dialog.TextError);
             }
+          } else {
+            this.$emit("showDialogError", Resource.Dialog.TextError);
           }
         });
     },

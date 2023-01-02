@@ -10,7 +10,7 @@
       <div class="flex items-center w-full h-full">
         <div
           class="ms-input flex w-full"
-          :class="{ isValid: errorText && isRequired && showError }"
+          :class="{ isValid: errorText && showError }"
         >
           <input
             type="text"
@@ -25,7 +25,7 @@
         </div>
       </div>
     </div>
-    <p v-if="errorText && isRequired && showError" class="text-error">
+    <p v-if="errorText && showError" class="text-error">
       {{ errorText }}
     </p>
   </div>
