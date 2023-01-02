@@ -70,11 +70,11 @@
                     class="ms-col ms-xs- ms-sm- ms-lg-"
                     style="margin-left: 0%; width: 48.3333%"
                   >
-                    <MsInputVue
+                    <MsInputVue 
                       :label="'Tên vai trò'"
                       :placeholderText="'Nhập tên vai trò'"
                       :maxLength="225"
-                      :errorText="''"
+                      :errorText="error.RoleName"
                       :isRequired="true"
                       v-model="roleDetail.RoleName"
                       ref="roleName"
@@ -304,21 +304,58 @@ export default {
     onClickBtnSave() {
       console.log(this.$refs);
       var listSubSystemID = [];
-      var listPremissionID = [];
+      var listPermissionID = [];
       this.listSubsytemAndPermission.forEach((subSystem, subSystemIndex) => {
         this.$refs["subSystem" + subSystemIndex][0].clickOnBtnSave();
         subSystem.ListPermissions.forEach((permission, permissionsIndex) => {
           if (this.listCheckbox[subSystemIndex][permissionsIndex] == true) {
             listSubSystemID.push(subSystem.SubSystemID);
-            listPremissionID.push(permission.PermissionID);
+            listPermissionID.push(permission.PermissionID);
           }
         });
       });
+      console.log(this.modeForm);
       console.log(this.roleDetail);
       console.log("listSubSystemID: " + listSubSystemID);
-      console.log("listPremissionID: " + listPremissionID);
+      console.log("listPremissionID: " + listPermissionID);
 
+      //Validate
+      if(this.validateData()==true){
+        this.callAPI();
+      }
+      else{
+        //Thông báo lỗi
+        // this.$emit("");
+      }
       
+    },
+
+    /**
+     * Validate 
+     * Author: TienDao (01/01/2023)
+     */
+    validateData(){
+      let isValid = true;
+      if(!this.roleDetail.RoleName){
+        this.error.RoleName="dsadsdasdasdasdasdas"
+        isValid= false
+      }else{
+        this.error.RoleName=""
+      }
+      return isValid;
+    },
+
+    //Gọi API
+    callAPI() {
+      if (
+        this.modeForm == Enum.ModeForm.Add ||
+        this.modeForm == Enum.ModeForm.Dulicate
+      ) {
+        //
+      }
+      if (this.modeForm == Enum.ModeForm.Update) {
+        //
+      }
     },
   },
   data() {
@@ -326,7 +363,10 @@ export default {
       Enum,
       Resource,
       //Chi tiết vai trò
-      roleDetail: {},
+      roleDetail: {
+        RoleName:"",
+        RoleDescription:"",
+      },
 
       //Danh sách xử lý so sánh 2 mảng phân quyền
       newList: [],
@@ -339,6 +379,11 @@ export default {
 
       //Danh sách trạng thái phân quyền - quyền tương ứng đã chọn
       listCheckbox: [],
+
+      //Lỗi
+      error:{
+        RoleName:"Tên vai trò không được để trống"
+      }
     };
   },
 };

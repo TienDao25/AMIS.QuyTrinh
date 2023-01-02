@@ -10,7 +10,7 @@
       <div class="flex items-center w-full h-full">
         <div
           class="ms-input flex w-full"
-          :class="{ isValid: errorText && isRequired }"
+          :class="{ isValid: errorText && isRequired && showError }"
         >
           <input
             type="text"
@@ -18,13 +18,16 @@
             :placeholder="placeholderText"
             class="ms-input-item"
             :value="modelValue"
-            @input="$emit('update:modelValue', $event.target.value)"
+            @input="keyOnInput($event.target.value)"
+            @focusout="focusOutInput($event.target.value)"
             ref="input"
           />
         </div>
       </div>
     </div>
-    <p v-if="errorText && isRequired" class="text-error">{{ errorText }}</p>
+    <p v-if="errorText && isRequired && showError" class="text-error">
+      {{ errorText }}
+    </p>
   </div>
 </template>
 <script>
@@ -55,6 +58,36 @@ export default {
      */
     focusInput() {
       this.$refs.input.focus();
+    },
+
+    /**
+     * Sự kiện nhập input
+     * Author: TienDao (01/01/2023)
+     */
+    keyOnInput(value) {
+      this.$emit("update:modelValue", value);
+      if (this.isRequired) {
+        if (!value) {
+          this.showError = true;
+        } else {
+          this.showError = false;
+        }
+      }
+    },
+
+    /**
+     * Focus ra khỏi input
+     * Author: TienDao (02/01/2023)
+     */
+    focusOutInput(value) {
+      // console.log(value);
+      if (this.isRequired) {
+        if (!value) {
+          this.showError = true;
+        } else {
+          this.showError = false;
+        }
+      }
     },
   },
 };

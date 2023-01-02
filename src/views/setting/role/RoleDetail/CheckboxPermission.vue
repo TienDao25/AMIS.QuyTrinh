@@ -190,7 +190,7 @@ export default {
         permission.PermissionCode == "FullPermission"
       ) {
         this.checkbox[index] = true;
-        // return true;
+        return true;
         // FullPermission
       }
       if (
@@ -198,7 +198,7 @@ export default {
         permission.PermissionCode == "MyProcess"
       ) {
         this.checkbox[index] = true;
-        // return true;
+        return true;
       }
     },
 
