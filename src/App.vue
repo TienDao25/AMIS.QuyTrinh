@@ -5,7 +5,7 @@
       <div class="main-view flex flex-column">
         <div class="flex" style="height: 100%; margin-left: -6px">
           <TheSidebar />
-          <div class="content-setting w-full">
+          <div class="content-setting w-full" style="max-width: calc(100% - 200px);">
             <TheMain />
           </div>
         </div>

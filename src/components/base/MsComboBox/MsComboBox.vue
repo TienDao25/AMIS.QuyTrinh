@@ -212,7 +212,7 @@ export default {
 .combobox-button {
   height: 34px;
   width: 36px;
-  border-left: 1px solid #e0e0e0;
+  /* border-left: 1px solid #e0e0e0; */
   position: absolute;
   right: 1px;
   top: 50%;
@@ -277,7 +277,7 @@ export default {
   width: 100%;
   height: 36px;
   padding: 8px 12px;
-  border: 1px solid #babec5;
+  border: 1px solid #ddd;
   font-size: 13px;
   line-height: 20px;
   text-align: left;
@@ -286,7 +286,7 @@ export default {
 }
 
 .input :hover() {
-  border: 1px solid var(--input-hover-border-color);
+  border: 1px solid var(--input-hover-border-color) !important;
 }
 .combobox .selected {
   background: var(--primary-bg) !important;

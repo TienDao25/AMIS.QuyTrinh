@@ -17,10 +17,12 @@
     @rowDblClick="onDbClickRow"
     css-class="css-header"
     :onCellHoverChanged="onCellHoverChanged"
+    :column-resizing-mode="'widget'"
   >
-    <DxPager enabled="false" />
-    <DxPaging enabled="false" :page-size="100" />
+    <DxPager :enabled="false" />
+    <DxPaging :enabled="true" :page-size="100" />
     <!-- @row-click="onClickRow" -->
+    <!-- <DxScrolling column-rendering-mode="virtual" mode="infinite" /> -->
 
     <!-- :selection="{ mode: 'single' }" -->
     <DxColumn
@@ -29,10 +31,12 @@
       :data-field="item.field"
       :data-type="item.type"
       :caption="item.caption"
-      :width="item.width"
       :wordWrapEnabled="true"
       :cellHintEnabled="false"
       :cell-template="item.cellTemplate"
+      :allow-fixing="true"
+      :min-width="item.minWidth"
+      :width="item.width"
     />
     <!-- -->
     <!-- :min-width="item.minWidth" -->
@@ -45,16 +49,18 @@
     <DxColumn
       :allow-sorting="false"
       cell-template="cellButton"
-      :min-width="136"
-      :width="'auto'"
+      :min-width="140"
       alignment="left"
       :allow-resizing="false"
+      css-class="row-action"
+      :fixed="fixedColumn" fixed-position="right" 
+      :showBorders="false"
     />
     <!-- :fixed="true"
       fixed-position="right" -->
     <template #cellButton="{ data }">
       <div
-        class="flex justify-flexend m-x-8"
+        class="flex justify-flexend m-x-8 template-cell"
         style="width: max-content !important; height: 100%"
         v-show="isShowButtons == data.rowIndex"
       >
@@ -79,16 +85,12 @@
     <template #RoleStatus="{ data }">
       <div
         v-if="data.value == Enum.Role.RoleStatus.Active"
-        style="color: green; font-weight: bold"
+        style="color: rgb(102, 209, 129)"
         :title="formatStatus(data.value)"
       >
         {{ formatStatus(data.value) }}
       </div>
-      <div
-        v-else
-        style="color: red; font-weight: bold"
-        :title="formatStatus(data.value)"
-      >
+      <div v-else style="color: red" :title="formatStatus(data.value)">
         {{ formatStatus(data.value) }}
       </div>
       <!-- <div>{{ formatStatus(data.value) }}</div> -->
@@ -136,6 +138,9 @@ export default {
   props: {
     //Danh sách vai trò
     listRole: Array,
+
+    //trạng thái fixed của column
+    fixedColumn:Boolean,
   },
   created() {},
   computed: {},
@@ -214,30 +219,22 @@ export default {
     formatDate(date) {
       if (date) {
         date = new Date(date);
-        // return (
-        //   (date.getDate() > 9 ? date.getDate() : "0" + date.getDate()) +
-        //   "/" +
-        //   (date.getMonth() > 8
-        //     ? date.getMonth() + 1
-        //     : "0" + (date.getMonth() + 1)) +
-        //   "/" +
-        //   date.getFullYear()
-        // );
         return (
-          ("00" + (date.getMonth() + 1)).slice(-2) +
-          "/" +
           ("00" + date.getDate()).slice(-2) +
           "/" +
-          date.getFullYear() +
-          " " +
-          ("00" + date.getHours()).slice(-2) +
-          ":" +
-          ("00" + date.getMinutes()).slice(-2) +
-          ":" +
-          ("00" + date.getSeconds()).slice(-2)
+          ("00" + (date.getMonth() + 1)).slice(-2) +
+          "/" +
+          date.getFullYear()
+          //  +
+          // " " +
+          // ("00" + date.getHours()).slice(-2) +
+          // ":" +
+          // ("00" + date.getMinutes()).slice(-2) +
+          // ":" +
+          // ("00" + date.getSeconds()).slice(-2)
         );
       } else {
-        return "";
+        return ""; 
       }
     },
 
@@ -276,7 +273,7 @@ export default {
         },
         {
           field: "RoleDescribe",
-          width: "250",
+          width: "200",
           caption: Resource.Entity.Role.RoleDescribe,
           type: "text",
           minWidth: "100",
@@ -300,7 +297,7 @@ export default {
         },
         {
           field: "CreatedBy",
-          width: "120",
+          width: "150",
           caption: Resource.Entity.Base.CreatedBy,
           type: "text",
           minWidth: "100",
@@ -308,7 +305,7 @@ export default {
         },
         {
           field: "ModifiedDate",
-          width: "130",
+          width: "200",
           caption: Resource.Entity.Base.ModifiedDate,
           type: "date",
           minWidth: "100",
@@ -316,7 +313,7 @@ export default {
         },
         {
           field: "ModifiedBy",
-          width: "120",
+          width: "200",
           caption: Resource.Entity.Base.ModifiedBy,
           type: "text",
           minWidth: "100",
@@ -324,6 +321,8 @@ export default {
         },
       ],
       isShowButtons: -1,
+
+    
     };
   },
 };
@@ -332,4 +331,38 @@ export default {
 <style>
 @import url(@/css/base.css);
 @import url(./RoleTable.css);
+/* .template-cell{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+    overflow: hidden;
+} */
+.row-action {
+  /* border-left: none !important; */
+  padding-right: 8px;
+  z-index: 2;
+}
+.dx-pointer-events-none.dx-first-cell{
+  border-right: none !important;
+
+}
+/* .dx-row.dx-data-row.dx-row-lines{
+  position:  relative !important;
+} */
+/* .grid-container .custom-column.custom-button {
+    visibility: hidden ;
+} */
+/* .dx-datagrid .dx-datagrid-content-fixed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+} */
 </style>

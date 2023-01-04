@@ -50,6 +50,7 @@ export default {
     },
     Status: {
         Role: {
+            All: "Tất cả",
             Active: "Đang hoạt động",
             Deleted: "Đã xóa"
         }

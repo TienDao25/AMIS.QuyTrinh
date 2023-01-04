@@ -31,9 +31,15 @@ export default {
     },
     Role: {
         RoleStatus: {
+            All: -1, //Dùng để tìm kiếm tất cả trạng thái
             Active: 0, //Đang hoạt động
             Deleted: 1 //Đã xóa
         }
+    },
+    State: {
+        None: 0,
+        Add: 1,
+        Detele: 2,
     },
     ModeDialog: {
         None: 0,
@@ -41,10 +47,10 @@ export default {
         Error: 2
     },
     StatusCode: {
-        OK: 200, //Thành công
-        Created: 201, //Tạo mới  thành công
-        BadRequest: 400, //Lỗi dữ liệu đầu vào
-        NotFound: 404, //Không tìm thầy tài nguyên
+        OK: 200, // Thành công
+        Created: 201, // Tạo mới thành công
+        BadRequest: 400, // Lỗi dữ liệu đầu vào
+        NotFound: 404, // Không tìm thầy tài nguyên
         InternalServerError: 500, //Lỗi server
     },
     SubSystemType: {

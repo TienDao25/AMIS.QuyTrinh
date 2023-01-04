@@ -3,6 +3,7 @@
   /* min-width: 80px; */
   /* max-width: 250px; */
   /* width: 250px; */
+  position: relative;
 }
 
 .dx-data-row.dx-state-hover>td {
@@ -88,7 +89,6 @@
   background-color: #e2e8f0 !important;
   width: 1px !important;
   height: 20px !important;
-  z-index: 23 !important;
 }
 
 .grid-container .dx-datagrid-content .dx-datagrid-table .dx-row>td:first-child,

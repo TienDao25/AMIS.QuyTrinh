@@ -27,6 +27,9 @@ export default {
 
     //Giá trị checkbox
     modelValue:Boolean,
+
+    //index
+    indexPermission:Number,
   },
   watch:{
     modelValue:function(){
@@ -41,7 +44,7 @@ export default {
     onClickCheckbox() {
       this.isIcon = !this.isIcon;
       this.$emit("update:modelValue", this.isIcon);
-      this.$emit("clickOnCheckbox", this.isIcon);
+      this.$emit("clickOnCheckbox", this.isIcon,this.indexPermission);
     },
   },
   data() {

@@ -176,7 +176,7 @@ export default {
 @import url(@/css/base.css);
 .dialog {
   /* display: none; */
-  z-index: 2;
+  z-index: 99 !important;
 }
 
 .dialog__overlay {

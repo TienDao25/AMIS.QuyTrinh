@@ -317,6 +317,7 @@ export default {
             if (this.listCheckbox[subSystemIndex][permissionsIndex] == true) {
               this.listSubSystemID.push(subSystem.SubSystemID);
               this.listPermissionID.push(permission.PermissionID);
+              // this.roleDetail.listSubsytemAndPermission.list
             }
           }
         });
@@ -326,11 +327,14 @@ export default {
       console.log("listSubSystemID: " + this.listSubSystemID);
       console.log("listPremissionID: " + this.listPermissionID);
 
+      this.handlerData();
+
       //Validate
       if (this.validateData() == true) {
-        this.callAPI();
+        // this.callAPI();
         // return;
       } else {
+        this.$refs.roleName.validateFalse();
         //Thông báo lỗi
         // this.$emit("");
         // return;
@@ -424,6 +428,72 @@ export default {
     isShowLoading() {
       this.isLoading = !this.isLoading;
     },
+
+    /**
+     * Xử lý data cho đầu vào api
+     * Author: TienDao (04/01/20220)
+     */
+    handlerData() {
+      alert("Xử lý data!!!");
+      this.newList = [];
+      this.newListSubsytemAndPermission = [...this.listSubsytemAndPermission];
+      //Chuyển mảng checkbox thành danh sách phân quyền mới => các quyền mặc định thêm state là 1 (thêm)
+      this.listSubsytemAndPermission.forEach((subSystem, subSystemIndex) => {
+        this.$refs["subSystem" + subSystemIndex][0].clickOnBtnSave();
+        subSystem.ListPermissions.forEach((permission, permissionsIndex) => {
+          if (this.listCheckbox[subSystemIndex]) {
+            if (this.listCheckbox[subSystemIndex][permissionsIndex] == true) {
+              this.newListSubsytemAndPermission[subSystemIndex].ListPermissions[
+                permissionsIndex
+              ].state = Enum.State.Add;
+              // this.roleDetail.listSubsytemAndPermission.list
+              this.newList.push({
+                SubSystemID: subSystem.SubSystemID,
+                SubSystemCode: subSystem.SubSystemCode,
+                PermissionID: permission.PermissionID,
+                PermissionCode: permission.PermissionCode,
+                State: Enum.State.Add,
+              });
+            }
+          }
+        });
+      });
+      if (this.modeForm == Enum.ModeForm.Update) {
+        //Lấy ra id có trong vai trò cũ và vai trò mới => state = 0
+        this.newList.forEach((item) => {
+          this.roleDetail.ListSubsytemAndPermission.forEach((subSystem) => {
+            if (item.SubSystemID == subSystem.SubSystemID) {
+              subSystem.ListPermissions.forEach((permission) => {
+                if (item.PermissionID == permission.PermissionID) {
+                  item.State = Enum.State.None;
+                }
+              });
+            }
+          });
+        });
+        //Lấy ra id có trong vai trò cũ, không có trong vai trò mới => state = 2 (Xóa)
+        this.roleDetail.ListSubsytemAndPermission.forEach((subSystem) => {
+          // var isHas = false;
+          this.newList.forEach((item) => {
+            if (item.SubSystemID == subSystem.SubSystemID) {
+              subSystem.ListPermissions.forEach((permission) => {
+                if (item.PermissionID == permission.PermissionID) {
+                  // isHas = true;
+                } else {
+                  this.newList.push({
+                    SubSystemID: subSystem.SubSystemID,
+                    SubSystemCode: subSystem.SubSystemCode,
+                    PermissionID: permission.PermissionID,
+                    PermissionCode: permission.PermissionCode,
+                    State: Enum.State.Detele,
+                  });
+                }
+              });
+            }
+          });
+        });
+      }
+    },
   },
   data() {
     return {
@@ -431,7 +501,7 @@ export default {
       Resource,
       //Chi tiết vai trò
       roleDetail: {
-        RoleName: "",
+        RoleName: null,
         RoleDescription: "",
       },
 
@@ -457,6 +527,9 @@ export default {
 
       //Danh sách quyền tương ứng
       listPermissionID: [],
+
+      //Danh sách phân quyền (đã thêm state)
+      newListSubsytemAndPermission: [],
     };
   },
 };

@@ -56,12 +56,26 @@
       <div>
         <div
           class="flex items-center w-full m-b-8"
+          v-if="subSystem.ListPermissions.length > 1"
+        >
+          <MsCheckboxVue
+            v-model="checkAllBox"
+            @clickOnCheckbox="clickOnCheckAll"
+          />
+          <div class="m-r-4 cursor-pointer text-over">
+            <span>Tất cả</span>
+          </div>
+        </div>
+        <div
+          class="flex items-center w-full m-b-8"
           v-for="(item, index) in subSystem.ListPermissions"
           :key="index"
         >
           <MsCheckboxVue
             v-model="checkbox[index]"
             :isDisabled="checkValueCheckbox(item, index)"
+            @clickOnCheckbox="clickOnPermissionsCheck"
+            :indexPermission="index"
           />
           <div class="m-r-4 cursor-pointer text-over">
             <span>{{ item.PermissionName }}</span>
@@ -98,7 +112,7 @@ export default {
     isRow: String,
 
     //indexList
-    indexList:Number
+    indexList: Number,
   },
   watch: {
     subSystemDetail: {
@@ -108,17 +122,17 @@ export default {
        * Author: TienDao (30/12/2022)
        */
       handler() {
-        console.log(this.subSystem.ListPermissions.length);
+        // console.log(this.subSystem.ListPermissions.length);
         if (
           Object.keys(this.subSystemDetail).length == 0 &&
           this.subSystemDetail.constructor == Object
         ) {
-          console.log("rong");
+          // console.log("rong");
           this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
             false
           );
         } else {
-          console.log("ton tai");
+          // console.log("ton tai");
           this.subSystem.ListPermissions.forEach((permission, index) => {
             let temp = true;
             this.subSystemDetail.ListPermissions.forEach((item) => {
@@ -144,17 +158,33 @@ export default {
        */
       handler() {
         // console.log(this.subSystem.length);
+
+        //xử lý ô click chọn quyền
         if (this.checkbox.filter((value) => value == true).length > 0) {
           this.checkboxAll = true;
         } else {
           this.checkboxAll = false;
         }
+
+        //Xử lý ô chọn tất cả
+        if (
+          this.checkbox.filter((value) => value == true).length ==
+          this.subSystem.ListPermissions.length
+        ) {
+          this.checkAllBox = true;
+        } else {
+          this.checkAllBox = false;
+        }
       },
       deep: true,
     },
   },
-  created() {},
-  mounted() {},
+  created() {
+    this.indexPermissionView();
+  },
+  mounted() {
+    this.indexPermissionView();
+  },
   computed: {
     /**
      * Text hiển thị các quyền
@@ -215,7 +245,7 @@ export default {
      * @param {Boolean} value giá trị ô checkbox toàn bộ
      */
     clickOnCheckbox(value) {
-      if (value==true) {
+      if (value == true) {
         this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
           true
         );
@@ -230,9 +260,54 @@ export default {
      * Click nút Lưu trên form
      * Author: TienDao (02/01/2023)
      */
-    clickOnBtnSave(){
-      this.$emit("valueCheckbox", this.checkbox,this.indexList);
-    }
+    clickOnBtnSave() {
+      this.$emit("valueCheckbox", this.checkbox, this.indexList);
+    },
+
+    /**
+     * Sk click vào ô tất cả
+     * @param {*} value
+     * Author: TienDao (03/01/2023)
+     */
+    clickOnCheckAll(value) {
+      if (value == true) {
+        this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
+          true
+        );
+      } else {
+        this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
+          false
+        );
+      }
+    },
+
+    /**
+     * Lấy index của quyền xem
+     * Author: TienDao (03/01/2023)
+     */
+    indexPermissionView() {
+      this.subSystem.ListPermissions.forEach((item, index) => {
+        if (item.PermissionCode == "View") {
+          this.indexView = index;
+        }
+      });
+    },
+
+    /**
+     * Xử lý sk click chọn quyền
+     * Author: TienDao (03/01/2023)
+     */
+    clickOnPermissionsCheck(value,index) {
+      //Xử lý click quyền xem
+      if(index == this.indexView && value==false){
+        this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
+          false
+        );
+      }
+      if(index != this.indexView && value==true){
+        this.checkbox[this.indexView]=true
+      }
+    },
   },
   data() {
     return {
@@ -241,6 +316,8 @@ export default {
 
       //Giá trị mảng chọn
       checkbox: [],
+
+      checkAllBox: Boolean,
 
       //Check box toàn bộ
       checkboxAll: false,
@@ -268,6 +345,9 @@ export default {
           to: 0,
         },
       },
+
+      //index quyền xem
+      indexView: 0,
     };
   },
 };

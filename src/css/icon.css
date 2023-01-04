@@ -461,3 +461,35 @@
     mask-repeat: no-repeat;
     background-color: var(--primary)!important;
 }
+.svg-icon-process {
+    mask-image: url(@/assets/img/Icon_process.0a0cc28b.svg);
+    -webkit-mask-image: url(@/assets/img/Icon_process.0a0cc28b.svg);
+    -moz-mask-image: url(@/assets/img/Icon_process.0a0cc28b.svg);
+    -ms-mask-image: url(@/assets/img/Icon_process.0a0cc28b.svg);
+    -o-mask-image: url(@/assets/img/Icon_process.0a0cc28b.svg);
+    mask-repeat: no-repeat;
+    -webkit-mask-repeat: no-repeat;
+    -moz-mask-repeat: no-repeat;
+    -ms-mask-repeat: no-repeat;
+  }
+  .dx-dropdowneditor-icon {
+    width: 24px;
+    height: 24px;
+    -webkit-mask-position: -144px -24px;
+    -moz-mask-position: -144px -24px;
+    -ms-mask-position: -144px -24px;
+    -o-mask-position: -144px -24px;
+    mask-position: -144px -24px;
+    margin-right: 0;
+    -webkit-mask-image: url(@/assets/img/IconControl.9280241f.svg)!important;
+    -moz-mask-image: url(@/assets/img/IconControl.9280241f.svg)!important;
+    -ms-mask-image: url(@/assets/img/IconControl.9280241f.svg)!important;
+    -o-mask-image: url(@/assets/img/IconControl.9280241f.svg)!important;
+    mask-image: url(@/assets/img/IconControl.9280241f.svg)!important;
+    -webkit-mask-repeat: no-repeat;
+    -moz-mask-repeat: no-repeat;
+    -ms-mask-repeat: no-repeat;
+    -o-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    background-color: #666!important;
+}

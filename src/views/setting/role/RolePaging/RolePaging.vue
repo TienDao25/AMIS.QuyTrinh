@@ -6,7 +6,7 @@
       bản ghi
     </div>
     <div class="page-size-selector flex items-center">
-      <div style="width: 80px">
+      <div style="width: 75px">
         <MsComboBoxVue
           :Value="'Value'"
           :Text="'Text'"
@@ -18,7 +18,10 @@
       </div>
       <div class="page-info">
         Từ
-        <b>{{ totalRecords==0 ? 0 : (pageCurrent - 1) * numberRecord + 1 }}</b> đến
+        <b>{{
+          totalRecords == 0 ? 0 : (pageCurrent - 1) * numberRecord + 1
+        }}</b>
+        đến
         <b>{{
           pageCurrent * numberRecord > totalRecords
             ? totalRecords
@@ -37,6 +40,9 @@
             ms-icon-
             btn-icon-1
           "
+          :class="{
+            'none-mouse ': pageCurrent <= 1,
+          }"
         >
           <MsButtonIconVue
             :classIcon="'mi-chevron-left'"
@@ -53,6 +59,9 @@
             ms-icon-
             btn-icon-1
           "
+          :class="{
+            'none-mouse ': pageCurrent == totalPages,
+          }"
         >
           <MsButtonIconVue
             :classIcon="'mi-chevron-right'"
@@ -173,5 +182,9 @@ export default {
   /* height: 48px; */
   display: flex;
   margin-right: 16px;
+}
+.none-mouse {
+  pointer-events: none;
+  opacity: 0.3;
 }
 </style>

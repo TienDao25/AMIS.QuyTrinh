@@ -1,7 +1,7 @@
 <template>
   <div id="process-permission" style="height: 100%; width: calc(100%)">
     <div
-      v-if="!isRoleDetail"
+      v-show="!isRoleDetail"
       class="h-full container body-custom"
       style="padding: 16px 24px"
     >
@@ -25,20 +25,33 @@
         <div class="h-full w-full">
           <div class="flex items-center w-full bg-white" style="height: 60px">
             <div class="m-l-12">
-              <div style="height: 36px; width: 240px">
+              <div>
+                <!-- style="height: 36px; width: 240px" -->
                 <MsInputSreach
                   :placeholderText="'Tìm kiếm vai trò'"
                   :iconPre="'mi-search'"
                   v-model="keyword"
+                  :maxLength="255"
                 />
               </div>
             </div>
+            <MsBoxVue
+              wrapperClass="mgr-8 mgl-8"
+              placeholder="Lọc theo trạng thái"
+              icon-class="svg-icon-process icon-role-setting-user role-icon"
+              display-expr="StatusName"
+              valueExpr="Value"
+              :data-source="roleStatus"
+              selection-mode="single"
+              @valueChanged="clickOnSeletedStatus"
+            />
           </div>
 
-          <div class="w-full grid-no-paging bg-white">
+          <div class="w-full grid-no-paging bg-white" style="overflow: hidden">
             <div class="grid-container" style="height: calc(100% - 48px)">
               <div class="h-full">
                 <RoleTable
+                  :fixedColumn="!isDialog"
                   :listRole="listRole"
                   @onClickBtnEdit="onClickBtnEdit"
                   @onClickBtnDulicate="onClickBtnDulicate"
@@ -72,7 +85,7 @@
       @closeFormAndAddSuccess="closeFormAndAddSuccess"
     />
     <RoleDialog
-      v-if="isDialog"
+      v-show="isDialog"
       :roleID="roleID"
       :modeDialog="modeDialog"
       :descriptionDialog="descriptionDialog"
@@ -96,6 +109,7 @@ import MsButtonVue from "@/components/base/MsButton/MsButton.vue";
 import MsInputSreach from "@/components/base/MsInput/MsInputSreach.vue";
 import MsLoadingVue from "@/components/base/MsLoading/MsLoading.vue";
 import MsNotificationVue from "@/components/base/MsNotification/MsNotification.vue";
+import MsBoxVue from "@/components/base/MsComboBox/MsBox.vue";
 
 import RoleTable from "../RoleTable/RoleTable.vue";
 import RoleDetail from "../RoleDetail/RoleDetail.vue";
@@ -112,6 +126,7 @@ export default {
     MsButtonVue,
     MsInputSreach,
     MsNotificationVue,
+    MsBoxVue,
     RoleTable,
     RoleDetail,
     RolePaging,
@@ -195,7 +210,8 @@ export default {
         this.numberRecord,
         (this.pageCurrent - 1) * this.numberRecord,
         this.fieldSort,
-        this.typeSort
+        this.typeSort,
+        this.statusSeleted
       )
         .then((response) => {
           this.isShowLoading();
@@ -385,9 +401,23 @@ export default {
       setTimeout(() => (this.isNotification = false), 3000);
       // icon-success
     },
+
+    /**
+     * Lọc theo trạng thái
+     * @param {*} value Giá trị trạng thái
+     * Author: TienDao (03/01/2023)
+     */
+    clickOnSeletedStatus(value) {
+      console.log(value);
+      this.statusSeleted = value;
+      this.getListRoleBFindPaging();
+    },
   },
   data() {
     return {
+      //Trạng thái vai trò lọc
+      statusSeleted: null,
+
       //Hiển thị form chi tiết
       isRoleDetail: false,
 
@@ -453,6 +483,22 @@ export default {
 
       //Toàn bộ Danh sách phân quyền và quyền
       listSubsytemAndPermission: [],
+
+      //
+      roleStatus: [
+        {
+          Value: Enum.Role.RoleStatus.All,
+          StatusName: Resource.Status.Role.All,
+        },
+        {
+          Value: Enum.Role.RoleStatus.Active,
+          StatusName: Resource.Status.Role.Active,
+        },
+        {
+          Value: Enum.Role.RoleStatus.Deleted,
+          StatusName: Resource.Status.Role.Deleted,
+        },
+      ],
     };
   },
 };

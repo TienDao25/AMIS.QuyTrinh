@@ -6,15 +6,16 @@
         <div class="nav-logo flex-c-m">Quy trình</div>
         <div class="top-menu-container flex-1 check-license-expired">
           <div class="flex-m">
-            <router-link
+            <div
               class="menu-item"
               v-for="(item, index) in header"
               :key="index"
               :to="item.route"
-              @click="active = index"
               @mouseenter="indexClick = index"
               @mouseleave="indexClick = -1"
             >
+            <!-- @click="active = index" -->
+
               <div
                 class="menu-item-name"
                 :class="{ 'cl-blue': active == index }"
@@ -26,7 +27,7 @@
                   'menu-item-active': indexClick == index || active == index,
                 }"
               ></div>
-            </router-link>
+            </div>
             <button type="button" class="ms-con-dropdown parent-dropdown">
               <div class="button-comand-wrap btn-more m-r-20">
                 <div class="mi-threedot"></div>
@@ -119,6 +120,9 @@ export default {
 
       //index click
       indexClick: -1,
+
+      //Chỉ mục đặt màu 
+      active:-1,
     };
   },
 };

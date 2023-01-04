@@ -73,6 +73,7 @@ export default {
           this.showError = false;
         }
       }
+      console.log('---------------------------------------');
     },
 
     /**
@@ -89,7 +90,20 @@ export default {
         }
       }
     },
+
+    /**
+     * Lỗi validate
+     * Author: TienDao (04/01/2023)
+     */
+    validateFalse(){
+      this.showError = true;
+    }
   },
+  data(){
+    return {
+      showError:false,
+    }
+  }
 };
 </script>
 

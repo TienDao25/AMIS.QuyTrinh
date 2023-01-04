@@ -8,6 +8,7 @@ import UserList from '@/views/setting/user/UserList.vue'
 import RoleList from '@/views/setting/role/RoleList/RoleList.vue'
 import GroupUserList from '@/views/setting/groupUser/GroupUserList.vue'
 import ConnectList from '@/views/setting/connect/ConnectList.vue'
+
 //Router
 //Định nghĩa router
 const routers = [
@@ -21,9 +22,9 @@ const router = createRouter({
     history:createWebHistory(),
     routes:routers,
 })
-
 const app = createApp(App)
 app.use(router)
 app.mount('#app')
+
 //
 // app.component("abc",abc);

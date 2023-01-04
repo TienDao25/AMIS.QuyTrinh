@@ -1,5 +1,9 @@
+#process-permission{
+  max-width: calc(100%);
+}
+
 #process-permission .body-custom {
-  width: 100%;
+  width: 100% !important;
   overflow: auto;
 }
 
