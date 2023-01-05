@@ -74,7 +74,8 @@ export default {
     Notification: {
         Body: {
             DeleteSuccess: "Xóa thành công",
-            AddSuccess:"Thêm thành công"
+            InsertSuccess: "Thêm thành công",
+            UpdateSuccess: "Cập nhật thành công",
         },
         Title: {
             Success: "Thành công",

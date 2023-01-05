@@ -67,13 +67,14 @@
 
 * {
     box-sizing: border-box;
-    margin: 0 ;
+    margin: 0;
     padding: 0;
     font-size: 13px;
     color: #2c3e50;
-    font-family: Roboto,Helvetica,Arial,sans-serif !important;
+    font-family: Roboto, Helvetica, Arial, sans-serif !important;
     box-sizing: border-box;
 }
+
 body {
     margin: 0 !important;
     padding: 0 !important;
@@ -342,7 +343,8 @@ h2 {
 ::placeholder {
     opacity: 0.8 !important;
 }
-.m-l-12{
+
+.m-l-12 {
     margin-left: 12px !important;
 }
 
@@ -445,7 +447,7 @@ span.required {
 
 .c1 {
     accent-color: var(--primary-color);
-    outline:none;
+    outline: none;
     width: 18px;
     height: 18px;
 }
@@ -470,7 +472,7 @@ span.required {
     font-weight: 700;
 }
 
-.err-message{
+.err-message {
     color: var(--error-color);
     font-size: 12px;
 }
@@ -479,7 +481,7 @@ span.required {
     color: var(--error-color)
 }
 
-.bold{
+.bold {
     font-weight: 700;
 }
 
@@ -527,11 +529,11 @@ span.required {
     margin-right: 12px;
 }
 
-.h-64{
+.h-64 {
     height: 64px;
 }
 
-.h-70{
+.h-70 {
     height: 70px;
 }
 
@@ -588,7 +590,7 @@ span.required {
     margin-right: 4px;
 }
 
-.mgb-4{
+.mgb-4 {
     margin-bottom: 4px;
 }
 
@@ -704,11 +706,11 @@ span.required {
     background-color: white;
 }
 
-.cur-point{
+.cur-point {
     cursor: pointer;
 }
 
-.scale-0\.5{
+.scale-0\.5 {
     transform: scale(0.5);
 }
 
@@ -743,4 +745,8 @@ span.required {
 
 ::-webkit-scrollbar-track {
     background: #f1f1f1 !important;
+}
+
+.dx-placeholder {
+    opacity: 0.8 !important;
 }

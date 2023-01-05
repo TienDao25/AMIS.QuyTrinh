@@ -82,7 +82,7 @@
       :listSubsytemAndPermission="listSubsytemAndPermission"
       @closeFormDetail="closeFormDetail"
       @showDialogError="showDialogError"
-      @closeFormAndAddSuccess="closeFormAndAddSuccess"
+      @closeFormAndInsertUpdateSuccess="closeFormAndInsertUpdateSuccess"
     />
     <RoleDialog
       v-show="isDialog"
@@ -142,7 +142,8 @@ export default {
      */
     keyword: function () {
       this.pageCurrent = 1;
-      this.getListRoleBFindPaging();
+      clearTimeout(this.timeOutKeyword);
+      this.timeOutKeyword=setTimeout(()=>this.getListRoleBFindPaging(),500);
     },
   },
   methods: {
@@ -381,18 +382,26 @@ export default {
      * Đóng form và thông báo thêm thành công
      * Author: TienDao (02/01/2023)
      */
-    closeFormAndAddSuccess() {
+    closeFormAndInsertUpdateSuccess() {
       this.closeFormDetail();
-      this.showAddSuccess();
+      this.showSuccess();
       this.getListRoleBFindPaging();
     },
 
     /**
-     * Thông báo thêm thành công
+     * Thông báo thêm/sửa thành công
      * Author: TienDao (02/01/2022)
      */
-    showAddSuccess() {
-      this.bodyTextNotification = Resource.Notification.Body.AddSuccess;
+    showSuccess() {
+      if (
+        this.modeForm == Enum.ModeForm.Add ||
+        this.modeForm == Enum.ModeForm.Dulicate
+      ) {
+        this.bodyTextNotification = Resource.Notification.Body.InsertSuccess;
+      }
+      if (this.modeForm == Enum.ModeForm.Update) {
+        this.bodyTextNotification = Resource.Notification.Body.UpdateSuccess;
+      }
       this.tittleNotification = Resource.Notification.Title.Success;
       this.classNotification = "tittle-successful";
       this.iconNotification = "icon-success";
@@ -415,6 +424,9 @@ export default {
   },
   data() {
     return {
+      //TimeOut của tìm kiếm
+      timeOutKeyword:null,
+
       //Trạng thái vai trò lọc
       statusSeleted: null,
 

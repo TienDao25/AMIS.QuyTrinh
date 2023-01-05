@@ -73,7 +73,6 @@ export default {
           this.showError = false;
         }
       }
-      console.log('---------------------------------------');
     },
 
     /**

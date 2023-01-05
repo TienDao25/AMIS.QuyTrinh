@@ -1,5 +1,5 @@
 <template>
-  <div class="body-custom">
+  <div class="body-custom" style="position: relative;">
     <div class="h-full container" style="padding: 16px 24px">
       <div class="content-header p-b-16">
         <div class="flex justify-between items-center">
@@ -93,7 +93,7 @@
                       :placeholderText="'Nhập mô tả'"
                       :maxLength="225"
                       :isRequired="false"
-                      v-model="roleDetail.RoleDescribe"
+                      v-model="roleDetail.RoleDescription"
                     />
                   </div>
                 </div>
@@ -236,13 +236,16 @@ export default {
      * Author: TienDao (26/12/2022)
      */
     getRoleDetail() {
+      this.isShowLoading();
       RoleAPI.getRoleDetailByID(this.roleID)
         .then((response) => {
+          this.isShowLoading();
           console.log(response);
           // this.roleDetail = response.data;
           this.bindingData(response.data);
         })
         .catch((error) => {
+          this.isShowLoading();
           if (error.response) {
             switch (error.response.status) {
               case Enum.StatusCode.BadRequest:
@@ -308,30 +311,30 @@ export default {
       console.log(this.$refs);
       console.log(this.listSubsytemAndPermission);
       console.log(this.listCheckbox);
-      this.listSubSystemID = [];
-      this.listPermissionID = [];
-      this.listSubsytemAndPermission.forEach((subSystem, subSystemIndex) => {
-        this.$refs["subSystem" + subSystemIndex][0].clickOnBtnSave();
-        subSystem.ListPermissions.forEach((permission, permissionsIndex) => {
-          if (this.listCheckbox[subSystemIndex]) {
-            if (this.listCheckbox[subSystemIndex][permissionsIndex] == true) {
-              this.listSubSystemID.push(subSystem.SubSystemID);
-              this.listPermissionID.push(permission.PermissionID);
-              // this.roleDetail.listSubsytemAndPermission.list
-            }
-          }
-        });
-      });
+      // this.listSubSystemID = [];
+      // this.listPermissionID = [];
+      // this.listSubsytemAndPermission.forEach((subSystem, subSystemIndex) => {
+      //   this.$refs["subSystem" + subSystemIndex][0].clickOnBtnSave();
+      //   subSystem.ListPermissions.forEach((permission, permissionsIndex) => {
+      //     if (this.listCheckbox[subSystemIndex]) {
+      //       if (this.listCheckbox[subSystemIndex][permissionsIndex] == true) {
+      //         this.listSubSystemID.push(subSystem.SubSystemID);
+      //         this.listPermissionID.push(permission.PermissionID);
+      //         // this.roleDetail.listSubsytemAndPermission.list
+      //       }
+      //     }
+      //   });
+      // });
       console.log(this.modeForm);
       console.log(this.roleDetail);
-      console.log("listSubSystemID: " + this.listSubSystemID);
-      console.log("listPremissionID: " + this.listPermissionID);
+      // console.log("listSubSystemID: " + this.listSubSystemID);
+      // console.log("listPremissionID: " + this.listPermissionID);
 
       this.handlerData();
 
       //Validate
       if (this.validateData() == true) {
-        // this.callAPI();
+        this.callAPI();
         // return;
       } else {
         this.$refs.roleName.validateFalse();
@@ -358,33 +361,40 @@ export default {
 
     //Gọi API
     callAPI() {
-      if (
-        this.modeForm == Enum.ModeForm.Add ||
-        this.modeForm == Enum.ModeForm.Dulicate
-      ) {
-        this.addRole();
-      }
-      if (this.modeForm == Enum.ModeForm.Update) {
-        //
-      }
+      // if (
+      //   this.modeForm == Enum.ModeForm.Add ||
+      //   this.modeForm == Enum.ModeForm.Dulicate
+      // ) {
+      //   this.insertUpdateRole();
+      // }
+      // if (this.modeForm == Enum.ModeForm.Update) {
+      //   this.insertUpdateRole();
+      //   //
+      // }
+      this.insertUpdateRole();
     },
 
     /**
      * Gọi API thêm mới vai trò
      * Author: TienDao (02/01/2023)
      */
-    addRole() {
+    insertUpdateRole() {
+      var requestClient = {
+        ModeForm: this.modeForm,
+        RoleID: this.roleDetail.RoleID ? this.roleDetail.RoleID : "",
+        RoleCode: this.roleDetail.RoleCode ? this.roleDetail.RoleCode : "",
+        RoleName: this.roleDetail.RoleName ? this.roleDetail.RoleName : "",
+        RoleDescription: this.roleDetail.RoleDescription
+          ? this.roleDetail.RoleDescriptio
+          : "",
+        Permissions: this.newList,
+      };
       this.isShowLoading();
-      RoleAPI.addRole(
-        this.modeForm,
-        this.roleDetail,
-        this.listSubSystemID,
-        this.listPermissionID
-      )
+      RoleAPI.insertUpdateRole(requestClient)
         .then((response) => {
           this.isShowLoading();
           console.log(response);
-          this.$emit("closeFormAndAddSuccess");
+          this.$emit("closeFormAndInsertUpdateSuccess");
         })
         .catch((error) => {
           this.isShowLoading();
@@ -434,7 +444,7 @@ export default {
      * Author: TienDao (04/01/20220)
      */
     handlerData() {
-      alert("Xử lý data!!!");
+      // alert("Xử lý data!!!");
       this.newList = [];
       this.newListSubsytemAndPermission = [...this.listSubsytemAndPermission];
       //Chuyển mảng checkbox thành danh sách phân quyền mới => các quyền mặc định thêm state là 1 (thêm)
@@ -461,38 +471,44 @@ export default {
       if (this.modeForm == Enum.ModeForm.Update) {
         //Lấy ra id có trong vai trò cũ và vai trò mới => state = 0
         this.newList.forEach((item) => {
-          this.roleDetail.ListSubsytemAndPermission.forEach((subSystem) => {
-            if (item.SubSystemID == subSystem.SubSystemID) {
-              subSystem.ListPermissions.forEach((permission) => {
-                if (item.PermissionID == permission.PermissionID) {
-                  item.State = Enum.State.None;
-                }
-              });
-            }
-          });
+          if (this.roleDetail.ListSubsytemAndPermission) {
+            this.roleDetail.ListSubsytemAndPermission.forEach((subSystem) => {
+              if (item.SubSystemID == subSystem.SubSystemID) {
+                subSystem.ListPermissions.forEach((permission) => {
+                  if (item.PermissionID == permission.PermissionID) {
+                    item.State = Enum.State.None;
+                  }
+                });
+              }
+            });
+          }
         });
         //Lấy ra id có trong vai trò cũ, không có trong vai trò mới => state = 2 (Xóa)
-        this.roleDetail.ListSubsytemAndPermission.forEach((subSystem) => {
-          // var isHas = false;
-          this.newList.forEach((item) => {
-            if (item.SubSystemID == subSystem.SubSystemID) {
-              subSystem.ListPermissions.forEach((permission) => {
-                if (item.PermissionID == permission.PermissionID) {
-                  // isHas = true;
-                } else {
-                  this.newList.push({
-                    SubSystemID: subSystem.SubSystemID,
-                    SubSystemCode: subSystem.SubSystemCode,
-                    PermissionID: permission.PermissionID,
-                    PermissionCode: permission.PermissionCode,
-                    State: Enum.State.Detele,
-                  });
+        if (this.roleDetail.ListSubsytemAndPermission) {
+          this.roleDetail.ListSubsytemAndPermission.forEach((subSystem) => {
+            subSystem.ListPermissions.forEach((permission) => {
+              var isHas = false;
+              this.newList.forEach((item) => {
+                if (item.SubSystemID == subSystem.SubSystemID) {
+                  if (item.PermissionID == permission.PermissionID) {
+                    isHas = true;
+                  }
                 }
               });
-            }
+              if (!isHas) {
+                this.newList.push({
+                  SubSystemID: subSystem.SubSystemID,
+                  SubSystemCode: subSystem.SubSystemCode,
+                  PermissionID: permission.PermissionID,
+                  PermissionCode: permission.PermissionCode,
+                  State: Enum.State.Detele,
+                });
+              }
+            });
           });
-        });
+        }
       }
+      console.log(this.newList);
     },
   },
   data() {

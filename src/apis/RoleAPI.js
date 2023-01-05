@@ -49,20 +49,11 @@ class EmployeeAPI {
 
     /**
      * Thêm mới vai trò
-     * @param {Number} modeForm Kiểu form
-     * @param {Object} role Vai trò
-     * @param {Array} listSubSystemID Danh sách ID phân quyền
-     * @param {Array} listPermissionID Danh sách ID quyền tương ứng
-     * Author: TienDao (02/12/2023)
+     * @param {Object} requestClient requestClient
+     * Author: TienDao (05/01/2023)
      */
-    addRole(modeForm, role, listSubSystemID, listPermissionID) {
-        var data = {
-            ModeForm: modeForm,
-            Role: role,
-            ListSubSystemID: listSubSystemID,
-            ListPermissionID: listPermissionID,
-        }
-        return BaseAPIConfig.post(`${this.controller}`,data)
+    insertUpdateRole(requestClient) {
+        return BaseAPIConfig.post(`${this.controller}`,requestClient)
     }
 }
 

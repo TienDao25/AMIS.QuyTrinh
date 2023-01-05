@@ -365,4 +365,18 @@ export default {
     pointer-events: none;
     overflow: hidden;
 } */
+.dx-datagrid-nodata {
+    width: 155px!important;
+    background: url(@/assets/img/EmptyRC1.3c8bf4c8.svg) -692px 16px no-repeat!important;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    height: 200px;
+    
+}
+.grid-container .dx-datagrid-nodata {
+    color: #999;
+    font-size: 15px;
+    white-space: nowrap;
+}
 </style>
