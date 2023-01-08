@@ -52,8 +52,17 @@ class EmployeeAPI {
      * @param {Object} requestClient requestClient
      * Author: TienDao (05/01/2023)
      */
-    insertUpdateRole(requestClient) {
+    insertRole(requestClient) {
         return BaseAPIConfig.post(`${this.controller}`,requestClient)
+    }
+
+    /**
+     * Sửa vai trò
+     * @param {Object} requestClient requestClient
+     * Author: TienDao (05/01/2023)
+     */
+    updateRole(requestClient) {
+        return BaseAPIConfig.put(`${this.controller}`,requestClient)
     }
 }
 

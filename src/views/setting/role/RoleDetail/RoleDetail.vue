@@ -1,5 +1,5 @@
 <template>
-  <div class="body-custom" style="position: relative;">
+  <div class="body-custom" style="position: relative">
     <div class="h-full container" style="padding: 16px 24px">
       <div class="content-header p-b-16">
         <div class="flex justify-between items-center">
@@ -308,28 +308,6 @@ export default {
      * Author: TienDao (31/12/2022)
      */
     onClickBtnSave() {
-      console.log(this.$refs);
-      console.log(this.listSubsytemAndPermission);
-      console.log(this.listCheckbox);
-      // this.listSubSystemID = [];
-      // this.listPermissionID = [];
-      // this.listSubsytemAndPermission.forEach((subSystem, subSystemIndex) => {
-      //   this.$refs["subSystem" + subSystemIndex][0].clickOnBtnSave();
-      //   subSystem.ListPermissions.forEach((permission, permissionsIndex) => {
-      //     if (this.listCheckbox[subSystemIndex]) {
-      //       if (this.listCheckbox[subSystemIndex][permissionsIndex] == true) {
-      //         this.listSubSystemID.push(subSystem.SubSystemID);
-      //         this.listPermissionID.push(permission.PermissionID);
-      //         // this.roleDetail.listSubsytemAndPermission.list
-      //       }
-      //     }
-      //   });
-      // });
-      console.log(this.modeForm);
-      console.log(this.roleDetail);
-      // console.log("listSubSystemID: " + this.listSubSystemID);
-      // console.log("listPremissionID: " + this.listPermissionID);
-
       this.handlerData();
 
       //Validate
@@ -361,27 +339,27 @@ export default {
 
     //Gọi API
     callAPI() {
-      // if (
-      //   this.modeForm == Enum.ModeForm.Add ||
-      //   this.modeForm == Enum.ModeForm.Dulicate
-      // ) {
-      //   this.insertUpdateRole();
-      // }
-      // if (this.modeForm == Enum.ModeForm.Update) {
-      //   this.insertUpdateRole();
-      //   //
-      // }
-      this.insertUpdateRole();
+      if (
+        this.modeForm == Enum.ModeForm.Add ||
+        this.modeForm == Enum.ModeForm.Dulicate
+      ) {
+        this.insertRole();
+      }
+      if (this.modeForm == Enum.ModeForm.Update) {
+        this.updateRole();
+        //
+      }
     },
 
     /**
      * Gọi API thêm mới vai trò
      * Author: TienDao (02/01/2023)
      */
-    insertUpdateRole() {
+    insertRole() {
       var requestClient = {
         ModeForm: this.modeForm,
-        RoleID: this.roleDetail.RoleID ? this.roleDetail.RoleID : "",
+        // RoleID: "00000000-0000-0000-0000-000000000000",
+        RoleID: null,
         RoleCode: this.roleDetail.RoleCode ? this.roleDetail.RoleCode : "",
         RoleName: this.roleDetail.RoleName ? this.roleDetail.RoleName : "",
         RoleDescription: this.roleDetail.RoleDescription
@@ -390,7 +368,7 @@ export default {
         Permissions: this.newList,
       };
       this.isShowLoading();
-      RoleAPI.insertUpdateRole(requestClient)
+      RoleAPI.insertRole(requestClient)
         .then((response) => {
           this.isShowLoading();
           console.log(response);
@@ -407,7 +385,46 @@ export default {
               case Enum.StatusCode.InternalServerError:
                 this.$emit("showDialogError", error.response.data.UserMsg);
                 break;
-              case Enum.StatusCode.NotFound:
+              default:
+                this.$emit("showDialogError", Resource.Dialog.TextError);
+            }
+          } else {
+            this.$emit("showDialogError", Resource.Dialog.TextError);
+          }
+        });
+    },
+
+    /**
+     * Gọi API thêm mới vai trò
+     * Author: TienDao (02/01/2023)
+     */
+    updateRole() {
+      var requestClient = {
+        ModeForm: this.modeForm,
+        RoleID: this.roleDetail.RoleID,
+        RoleCode: this.roleDetail.RoleCode ? this.roleDetail.RoleCode : "",
+        RoleName: this.roleDetail.RoleName ? this.roleDetail.RoleName : "",
+        RoleDescription: this.roleDetail.RoleDescription
+          ? this.roleDetail.RoleDescriptio
+          : "",
+        Permissions: this.newList,
+      };
+      this.isShowLoading();
+      RoleAPI.updateRole(requestClient)
+        .then((response) => {
+          this.isShowLoading();
+          console.log(response);
+          this.$emit("closeFormAndInsertUpdateSuccess");
+        })
+        .catch((error) => {
+          this.isShowLoading();
+          console.log(error);
+          if (error.response) {
+            switch (error.response.status) {
+              case Enum.StatusCode.BadRequest:
+                this.$emit("showDialogError", error.response.data.MoreInfo);
+                break;
+              case Enum.StatusCode.InternalServerError:
                 this.$emit("showDialogError", error.response.data.UserMsg);
                 break;
               default:
