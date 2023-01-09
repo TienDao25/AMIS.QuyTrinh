@@ -66,7 +66,7 @@ export default {
         },
         Role: {
             RoleName: "Tên vai trò",
-            RoleDescribe: "Mô tả",
+            RoleDescription: "Mô tả",
             RoleStatus: "Trạng thái",
 
         }

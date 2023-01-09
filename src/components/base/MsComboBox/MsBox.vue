@@ -57,7 +57,7 @@ export default {
     //Bắt buộc
     isRequired: Boolean,
 
-    //class tiêu đề 
+    //class tiêu đề
     labelClass: String,
 
     //Chú thích
@@ -87,9 +87,13 @@ export default {
      * Author: TienDao (03/01/2023)
      */
     valueChanged(e) {
-      this.selectedValue = e.value;
-      this.isValid = true;
-      this.$emit("valueChanged", e.value);
+      try {
+        this.selectedValue = e.value;
+        this.isValid = true;
+        this.$emit("valueChanged", e.value);
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -98,12 +102,16 @@ export default {
      * @param {*} event
      */
     checkRequired(message) {
-      let value = this.selectedValue;
-      if (value) {
-        return true;
+      try {
+        let value = this.selectedValue;
+        if (value) {
+          return true;
+        }
+        this.errorMessage = message;
+        return false;
+      } catch (error) {
+        console.log(error);
       }
-      this.errorMessage = message;
-      return false;
     },
   },
 };

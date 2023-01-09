@@ -122,30 +122,37 @@ export default {
        * Author: TienDao (30/12/2022)
        */
       handler() {
-        // console.log(this.subSystem.ListPermissions.length);
-        if (
-          Object.keys(this.subSystemDetail).length == 0 &&
-          this.subSystemDetail.constructor == Object
-        ) {
-          // console.log("rong");
-          this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
-            false
-          );
-        } else {
-          // console.log("ton tai");
-          this.subSystem.ListPermissions.forEach((permission, index) => {
-            let temp = true;
-            this.subSystemDetail.ListPermissions.forEach((item) => {
-              if (temp) {
-                if (permission.PermissionCode == item.PermissionCode) {
-                  this.checkbox[index] = true;
-                  temp = false;
-                } else {
-                  this.checkbox[index] = false;
+        try {
+          //Kiểm tra Mảng phân quyền rỗng hay không (để thực hiện foreach)
+          //Rỗng
+          if (
+            Object.keys(this.subSystemDetail).length == 0 &&
+            this.subSystemDetail.constructor == Object
+          ) {
+            this.checkbox = new Array(
+              this.subSystem.ListPermissions.length
+            ).fill(false);
+          }
+          //Không rỗng
+          else {
+            //Gán giá trị các quyền tương ứng cho checkbox (binding dữ liệu)
+            this.subSystem.ListPermissions.forEach((permission, index) => {
+              //Sau khi gặp giá trị quyền tướng ứng thì k lặp lại việc gắn giá trị
+              let temp = true;
+              this.subSystemDetail.ListPermissions.forEach((item) => {
+                if (temp) {
+                  if (permission.PermissionCode == item.PermissionCode) {
+                    this.checkbox[index] = true;
+                    temp = false;
+                  } else {
+                    this.checkbox[index] = false;
+                  }
                 }
-              }
+              });
             });
-          });
+          }
+        } catch (error) {
+          console.log(error);
         }
       },
       deep: true,
@@ -157,33 +164,43 @@ export default {
        * Author: TienDao (30/12/2022)
        */
       handler() {
-        // console.log(this.subSystem.length);
+        try {
+          //xử lý ô click chọn quyền (ngoài màn hình)
+          if (this.checkbox.filter((value) => value == true).length > 0) {
+            this.checkboxAll = true;
+          } else {
+            this.checkboxAll = false;
+          }
 
-        //xử lý ô click chọn quyền
-        if (this.checkbox.filter((value) => value == true).length > 0) {
-          this.checkboxAll = true;
-        } else {
-          this.checkboxAll = false;
-        }
-
-        //Xử lý ô chọn tất cả
-        if (
-          this.checkbox.filter((value) => value == true).length ==
-          this.subSystem.ListPermissions.length
-        ) {
-          this.checkAllBox = true;
-        } else {
-          this.checkAllBox = false;
+          //Xử lý ô chọn tất cả (trong mennu context)
+          if (
+            this.checkbox.filter((value) => value == true).length ==
+            this.subSystem.ListPermissions.length
+          ) {
+            this.checkAllBox = true;
+          } else {
+            this.checkAllBox = false;
+          }
+        } catch (error) {
+          console.log(error);
         }
       },
       deep: true,
     },
   },
   created() {
-    this.indexPermissionView();
+    try {
+      this.indexPermissionView();
+    } catch (error) {
+      console.log(error);
+    }
   },
   mounted() {
-    this.indexPermissionView();
+    try {
+      this.indexPermissionView();
+    } catch (error) {
+      console.log(error);
+    }
   },
   computed: {
     /**
@@ -192,6 +209,7 @@ export default {
      */
     textDisplay() {
       let arr = [];
+      //for lần lượt => đẩy giá trị tương ứng vào mảng hiện thị
       this.checkbox.forEach((item, index) => {
         if (item == true) {
           arr.push(this.subSystem.ListPermissions[index].PermissionName);
@@ -215,20 +233,28 @@ export default {
      * Author: TienDao (31/12/2022)
      */
     checkValueCheckbox(permission, index) {
-      if (
-        this.subSystem.SubSystemCode == "Dashboard" &&
-        permission.PermissionCode == "FullPermission"
-      ) {
-        this.checkbox[index] = true;
-        return true;
-        // FullPermission
-      }
-      if (
-        this.subSystem.SubSystemCode == "Process" &&
-        permission.PermissionCode == "MyProcess"
-      ) {
-        this.checkbox[index] = true;
-        return true;
+      try {
+        //Gán giá trị true cho các quyền mặc định
+
+        //Tổng quan - toàn quyền
+        if (
+          this.subSystem.SubSystemCode == "Dashboard" &&
+          permission.PermissionCode == "FullPermission"
+        ) {
+          this.checkbox[index] = true;
+          return true;
+        }
+
+        //Lượt chạy - lượt chạy của tôi
+        if (
+          this.subSystem.SubSystemCode == "Process" &&
+          permission.PermissionCode == "MyProcess"
+        ) {
+          this.checkbox[index] = true;
+          return true;
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
 
@@ -245,14 +271,19 @@ export default {
      * @param {Boolean} value giá trị ô checkbox toàn bộ
      */
     clickOnCheckbox(value) {
-      if (value == true) {
-        this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
-          true
-        );
-      } else {
-        this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
-          false
-        );
+      try {
+        // Kiểm tra và gán lại giá trị tương ứng cho mảng checkbox
+        if (value == true) {
+          this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
+            true
+          );
+        } else {
+          this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
+            false
+          );
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
 
@@ -261,7 +292,11 @@ export default {
      * Author: TienDao (02/01/2023)
      */
     clickOnBtnSave() {
-      this.$emit("valueCheckbox", this.checkbox, this.indexList);
+      try {
+        this.$emit("valueCheckbox", this.checkbox, this.indexList);
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -270,14 +305,19 @@ export default {
      * Author: TienDao (03/01/2023)
      */
     clickOnCheckAll(value) {
-      if (value == true) {
-        this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
-          true
-        );
-      } else {
-        this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
-          false
-        );
+      try {
+        // Kiểm tra và gán lại giá trị tương ứng cho mảng checkbox
+        if (value == true) {
+          this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
+            true
+          );
+        } else {
+          this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
+            false
+          );
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
 
@@ -286,26 +326,34 @@ export default {
      * Author: TienDao (03/01/2023)
      */
     indexPermissionView() {
-      this.subSystem.ListPermissions.forEach((item, index) => {
-        if (item.PermissionCode == "View") {
-          this.indexView = index;
-        }
-      });
+      try {
+        this.subSystem.ListPermissions.forEach((item, index) => {
+          if (item.PermissionCode == "View") {
+            this.indexView = index;
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
      * Xử lý sk click chọn quyền
      * Author: TienDao (03/01/2023)
      */
-    clickOnPermissionsCheck(value,index) {
-      //Xử lý click quyền xem
-      if(index == this.indexView && value==false){
-        this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
-          false
-        );
-      }
-      if(index != this.indexView && value==true){
-        this.checkbox[this.indexView]=true
+    clickOnPermissionsCheck(value, index) {
+      try {
+        //Xử lý click quyền xem
+        if (index == this.indexView && value == false) {
+          this.checkbox = new Array(this.subSystem.ListPermissions.length).fill(
+            false
+          );
+        }
+        if (index != this.indexView && value == true) {
+          this.checkbox[this.indexView] = true;
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
   },

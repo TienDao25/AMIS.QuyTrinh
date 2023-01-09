@@ -57,7 +57,11 @@ export default {
      * Author: TienDao (28/12/2022)
      */
     focusInput() {
-      this.$refs.input.focus();
+      try {
+        this.$refs.input.focus();
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -65,13 +69,17 @@ export default {
      * Author: TienDao (01/01/2023)
      */
     keyOnInput(value) {
-      this.$emit("update:modelValue", value);
-      if (this.isRequired) {
-        if (!value) {
-          this.showError = true;
-        } else {
-          this.showError = false;
+      try {
+        this.$emit("update:modelValue", value);
+        if (this.isRequired) {
+          if (!value) {
+            this.showError = true;
+          } else {
+            this.showError = false;
+          }
         }
+      } catch (error) {
+        console.log(error);
       }
     },
 
@@ -80,13 +88,16 @@ export default {
      * Author: TienDao (02/01/2023)
      */
     focusOutInput(value) {
-      // console.log(value);
-      if (this.isRequired) {
-        if (!value) {
-          this.showError = true;
-        } else {
-          this.showError = false;
+      try {
+        if (this.isRequired) {
+          if (!value) {
+            this.showError = true;
+          } else {
+            this.showError = false;
+          }
         }
+      } catch (error) {
+        console.log(error);
       }
     },
 
@@ -94,15 +105,19 @@ export default {
      * Lỗi validate
      * Author: TienDao (04/01/2023)
      */
-    validateFalse(){
-      this.showError = true;
-    }
+    validateFalse() {
+      try {
+        this.showError = true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
-  data(){
+  data() {
     return {
-      showError:false,
-    }
-  }
+      showError: false,
+    };
+  },
 };
 </script>
 

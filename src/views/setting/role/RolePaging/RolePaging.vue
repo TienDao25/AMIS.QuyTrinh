@@ -109,14 +109,22 @@ export default {
      * Author: TienDao (26/12/2022)
      */
     onClickPrePage() {
-      this.$emit("onClickPrePage");
+      try {
+        this.$emit("onClickPrePage");
+      } catch (error) {
+        console.log(error);
+      }
     },
     /**
      * Click trang trước
      * Author: TienDao (26/12/2022)
      */
     onClickNextPage() {
-      this.$emit("onClickNextPage");
+      try {
+        this.$emit("onClickNextPage");
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   data() {
@@ -126,23 +134,23 @@ export default {
       //Danh sách số bản ghi
       listPaging: [
         {
-          Text: 10,
+          Text: "10",
           Value: 10,
         },
         {
-          Text: 20,
+          Text: "20",
           Value: 20,
         },
         {
-          Text: 30,
+          Text: "30",
           Value: 30,
         },
         {
-          Text: 50,
+          Text: "50",
           Value: 50,
         },
         {
-          Text: 100,
+          Text: "100",
           Value: 100,
         },
       ],

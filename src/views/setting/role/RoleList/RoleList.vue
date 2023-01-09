@@ -56,6 +56,7 @@
                   @onClickBtnEdit="onClickBtnEdit"
                   @onClickBtnDulicate="onClickBtnDulicate"
                   @onClickBtnDelete="onClickBtnDelete"
+                  @onClickHeaderTable="onClickHeaderTable"
                 />
                 <MsLoadingVue v-show="isLoading" />
               </div>
@@ -83,6 +84,7 @@
       @closeFormDetail="closeFormDetail"
       @showDialogError="showDialogError"
       @closeFormAndInsertUpdateSuccess="closeFormAndInsertUpdateSuccess"
+      ref="roleDetail"
     />
     <RoleDialog
       v-show="isDialog"
@@ -141,9 +143,16 @@ export default {
      * Sự kiện khi nhập ô tìm kiếm
      */
     keyword: function () {
-      this.pageCurrent = 1;
-      clearTimeout(this.timeOutKeyword);
-      this.timeOutKeyword=setTimeout(()=>this.getListRoleBFindPaging(),500);
+      try {
+        this.pageCurrent = 1;
+        clearTimeout(this.timeOutKeyword);
+        this.timeOutKeyword = setTimeout(
+          () => this.getListRoleBFindPaging(),
+          500
+        );
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   methods: {
@@ -152,8 +161,12 @@ export default {
      * Author: TienDao (26/12/2022)
      */
     onClickBtnAdd() {
-      this.modeForm = Enum.ModeForm.Add;
-      this.isRoleDetail = true;
+      try {
+        this.modeForm = Enum.ModeForm.Add;
+        this.isRoleDetail = true;
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -162,9 +175,13 @@ export default {
      * Author: TienDao (25/12/2022)
      */
     onClickBtnEdit(role) {
-      this.modeForm = Enum.ModeForm.Update;
-      this.roleID = role.RoleID;
-      this.isRoleDetail = true;
+      try {
+        this.modeForm = Enum.ModeForm.Update;
+        this.roleID = role.RoleID;
+        this.isRoleDetail = true;
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -173,9 +190,13 @@ export default {
      * Author: TienDao (25/12/2022)
      */
     onClickBtnDulicate(role) {
-      this.modeForm = Enum.ModeForm.Dulicate;
-      this.roleID = role.RoleID;
-      this.isRoleDetail = true;
+      try {
+        this.modeForm = Enum.ModeForm.Dulicate;
+        this.roleID = role.RoleID;
+        this.isRoleDetail = true;
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -184,12 +205,15 @@ export default {
      * Author: TienDao (25/12/2022)
      */
     onClickBtnDelete(role) {
-      console.log(role.RoleID);
-      this.roleID = role.RoleID;
-      this.modeDialog = Enum.ModeDialog.Delete;
-      this.descriptionDialog = Resource.Dialog.Description.Role.Delete;
-      this.titleDialog = Resource.Dialog.Title.Role.Delete;
-      this.isDialog = true;
+      try {
+        this.roleID = role.RoleID;
+        this.modeDialog = Enum.ModeDialog.Delete;
+        this.descriptionDialog = Resource.Dialog.Description.Role.Delete;
+        this.titleDialog = Resource.Dialog.Title.Role.Delete;
+        this.isDialog = true;
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -197,7 +221,11 @@ export default {
      * Author: TienDao (26/12/2022)
      */
     closeFormDetail() {
-      this.isRoleDetail = false;
+      try {
+        this.isRoleDetail = false;
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -205,53 +233,56 @@ export default {
      * Author: TienDao (26/12/2022)
      */
     getListRoleBFindPaging() {
-      this.isShowLoading();
-      RoleAPI.getListRolesByFilterPaging(
-        this.keyword,
-        this.numberRecord,
-        (this.pageCurrent - 1) * this.numberRecord,
-        this.fieldSort,
-        this.typeSort,
-        this.statusSeleted
-      )
-        .then((response) => {
-          this.isShowLoading();
-          console.log(response);
-          this.listRole = response.data.ListData;
-          this.totalRecords = response.data.TotalRecords;
-          if (this.totalRecords == 0) {
-            this.totalPages = 1;
-          } else {
-            var n = this.totalRecords / this.numberRecord;
-            if (n > Math.floor(n)) {
-              this.totalPages = Math.floor(n) + 1;
+      try {
+        this.isShowLoading();
+        RoleAPI.getListRolesByFilterPaging(
+          this.keyword,
+          this.numberRecord,
+          (this.pageCurrent - 1) * this.numberRecord,
+          this.fieldSort,
+          this.typeSort,
+          this.statusSeleted
+        )
+          .then((response) => {
+            this.isShowLoading();
+            this.listRole = response.data.ListData;
+            this.totalRecords = response.data.TotalRecords;
+            if (this.totalRecords == 0) {
+              this.totalPages = 1;
             } else {
-              this.totalPages = n;
+              var n = this.totalRecords / this.numberRecord;
+              if (n > Math.floor(n)) {
+                this.totalPages = Math.floor(n) + 1;
+              } else {
+                this.totalPages = n;
+              }
             }
-          }
 
-          // this.loader();
-        })
-        .catch((error) => {
-          this.isShowLoading();
-          if (error.response) {
-            switch (error.response.status) {
-              case Enum.StatusCode.BadRequest:
-                this.showDialogError(error.response.data.UserMsg);
-                break;
-              case Enum.StatusCode.InternalServerError:
-                this.showDialogError(error.response.data.UserMsg);
-                break;
-              default:
-                this.showDialogError(Resource.Dialog.TextError);
+            // this.loader();
+          })
+          .catch((error) => {
+            this.isShowLoading();
+            if (error.response) {
+              switch (error.response.status) {
+                case Enum.StatusCode.BadRequest:
+                  this.showDialogError(error.response.data.UserMsg);
+                  break;
+                case Enum.StatusCode.InternalServerError:
+                  this.showDialogError(error.response.data.UserMsg);
+                  break;
+                default:
+                  this.showDialogError(Resource.Dialog.TextError);
+              }
+            } else {
+              this.showDialogError(Resource.Dialog.TextError);
             }
-          } else {
-            this.showDialogError(Resource.Dialog.TextError);
-          }
-        })
-        .finally(() => {
-          // this.isShowLoading();
-        });
+          })
+          .finally(() => {
+            // this.isShowLoading();
+          });
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -260,9 +291,13 @@ export default {
      * Author: TienDao (26/12/2022)
      */
     changeNumberRecord(numberRecord) {
-      this.numberRecord = numberRecord;
-      this.pageCurrent = 1;
-      this.getListRoleBFindPaging();
+      try {
+        this.numberRecord = numberRecord;
+        this.pageCurrent = 1;
+        this.getListRoleBFindPaging();
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -278,18 +313,26 @@ export default {
      * Author: TienDao (26/12/2022)
      */
     onClickPrePage() {
-      if (this.pageCurrent > 1) {
-        this.pageCurrent--;
-        this.getListRoleBFindPaging();
+      try {
+        if (this.pageCurrent > 1) {
+          this.pageCurrent--;
+          this.getListRoleBFindPaging();
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
     /**
      * Nhận sự kiện click nút trang sau
      * Author: TienDao (26/12/2022)
      */ onClickNextPage() {
-      if (this.pageCurrent < this.totalPages) {
-        this.pageCurrent++;
-        this.getListRoleBFindPaging();
+      try {
+        if (this.pageCurrent < this.totalPages) {
+          this.pageCurrent++;
+          this.getListRoleBFindPaging();
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
 
@@ -298,7 +341,14 @@ export default {
      * Author: TienDao (27/12/2022)
      */
     closeDialog() {
-      this.isDialog = false;
+      try {
+        this.isDialog = false;
+        if (this.isRoleDetail) {
+          this.$refs.roleDetail.focusInputRoleName();
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
     /**
      * Đóng Dialog và thông báo xóa thành công
@@ -314,14 +364,18 @@ export default {
      * Author: TienDao (27/12/2022)
      */
     showNotificationDeleteSuccess() {
-      this.bodyTextNotification = Resource.Notification.Body.DeleteSuccess;
-      this.tittleNotification = Resource.Notification.Title.Success;
-      this.classNotification = "tittle-successful";
-      this.iconNotification = "icon-success";
-      this.isNotification = true;
-      this.getListRoleBFindPaging();
-      setTimeout(() => (this.isNotification = false), 3000);
-      // icon-success
+      try {
+        this.bodyTextNotification = Resource.Notification.Body.DeleteSuccess;
+        this.tittleNotification = Resource.Notification.Title.Success;
+        this.classNotification = "tittle-successful";
+        this.iconNotification = "icon-success";
+        this.isNotification = true;
+        this.getListRoleBFindPaging();
+        setTimeout(() => (this.isNotification = false), 3000);
+        // icon-success
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -330,18 +384,22 @@ export default {
      * Author: TienDao (27/12/2022)
      */
     showDialogError(message) {
-      this.closeDialog();
-      this.modeDialog = Enum.ModeDialog.Error;
-      this.titleDialog = Resource.Dialog.TitleError;
-      if (typeof message == "string") {
-        this.descriptionDialog = message;
-      } else {
-        this.descriptionDialog = "";
-        for (const item of message) {
-          this.descriptionDialog += item + "</>";
+      try {
+        this.closeDialog();
+        this.modeDialog = Enum.ModeDialog.Error;
+        this.titleDialog = Resource.Dialog.TitleError;
+        if (typeof message == "string") {
+          this.descriptionDialog = message;
+        } else {
+          this.descriptionDialog = "";
+          for (const item of message) {
+            this.descriptionDialog += item + "</>";
+          }
         }
+        this.isDialog = true;
+      } catch (error) {
+        console.log(error);
       }
-      this.isDialog = true;
     },
 
     /**
@@ -349,33 +407,37 @@ export default {
      * Author: TienDao (28/12/2022)
      */
     getListSubSystem() {
-      this.isShowLoading();
-      SusSystemAPI.getListSubSystem()
-        .then((response) => {
-          this.isShowLoading();
-          this.listSubsytemAndPermission = response.data;
-          // this.loader();
-        })
-        .catch((error) => {
-          this.isShowLoading();
-          if (error.response) {
-            switch (error.response.status) {
-              case Enum.StatusCode.BadRequest:
-                this.showDialogError(error.response.data.UserMsg);
-                break;
-              case Enum.StatusCode.InternalServerError:
-                this.showDialogError(error.response.data.UserMsg);
-                break;
-              default:
-                this.showDialogError(Resource.Dialog.TextError);
+      try {
+        this.isShowLoading();
+        SusSystemAPI.getListSubSystem()
+          .then((response) => {
+            this.isShowLoading();
+            this.listSubsytemAndPermission = response.data;
+            // this.loader();
+          })
+          .catch((error) => {
+            this.isShowLoading();
+            if (error.response) {
+              switch (error.response.status) {
+                case Enum.StatusCode.BadRequest:
+                  this.showDialogError(error.response.data.UserMsg);
+                  break;
+                case Enum.StatusCode.InternalServerError:
+                  this.showDialogError(error.response.data.UserMsg);
+                  break;
+                default:
+                  this.showDialogError(Resource.Dialog.TextError);
+              }
+            } else {
+              this.showDialogError(Resource.Dialog.TextError);
             }
-          } else {
-            this.showDialogError(Resource.Dialog.TextError);
-          }
-        })
-        .finally(() => {
-          // this.isShowLoading();
-        });
+          })
+          .finally(() => {
+            // this.isShowLoading();
+          });
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -393,22 +455,26 @@ export default {
      * Author: TienDao (02/01/2022)
      */
     showSuccess() {
-      if (
-        this.modeForm == Enum.ModeForm.Add ||
-        this.modeForm == Enum.ModeForm.Dulicate
-      ) {
-        this.bodyTextNotification = Resource.Notification.Body.InsertSuccess;
+      try {
+        if (
+          this.modeForm == Enum.ModeForm.Add ||
+          this.modeForm == Enum.ModeForm.Dulicate
+        ) {
+          this.bodyTextNotification = Resource.Notification.Body.InsertSuccess;
+        }
+        if (this.modeForm == Enum.ModeForm.Update) {
+          this.bodyTextNotification = Resource.Notification.Body.UpdateSuccess;
+        }
+        this.tittleNotification = Resource.Notification.Title.Success;
+        this.classNotification = "tittle-successful";
+        this.iconNotification = "icon-success";
+        this.isNotification = true;
+        this.getListRoleBFindPaging();
+        setTimeout(() => (this.isNotification = false), 3000);
+        // icon-success
+      } catch (error) {
+        console.log(error);
       }
-      if (this.modeForm == Enum.ModeForm.Update) {
-        this.bodyTextNotification = Resource.Notification.Body.UpdateSuccess;
-      }
-      this.tittleNotification = Resource.Notification.Title.Success;
-      this.classNotification = "tittle-successful";
-      this.iconNotification = "icon-success";
-      this.isNotification = true;
-      this.getListRoleBFindPaging();
-      setTimeout(() => (this.isNotification = false), 3000);
-      // icon-success
     },
 
     /**
@@ -417,15 +483,39 @@ export default {
      * Author: TienDao (03/01/2023)
      */
     clickOnSeletedStatus(value) {
-      console.log(value);
-      this.statusSeleted = value;
+      try {
+        console.log(value);
+        this.statusSeleted = value;
+        this.getListRoleBFindPaging();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    /**
+     * Click header table
+     * @param {String} headerTable Tên cột
+     * Author: TienDao (09/01/2023)
+     */
+    onClickHeaderTable(headerTable) {
+      this.listRole = [];
+      this.fieldSort = headerTable;
+      if (this.typeSort == Enum.TypeSort.None) {
+        this.typeSort = Enum.TypeSort.ASC;
+      } else {
+        this.typeSort =
+          this.typeSort == Enum.TypeSort.ASC
+            ? Enum.TypeSort.DESC
+            : Enum.TypeSort.ASC;
+      }
+
       this.getListRoleBFindPaging();
     },
   },
   data() {
     return {
       //TimeOut của tìm kiếm
-      timeOutKeyword:null,
+      timeOutKeyword: null,
 
       //Trạng thái vai trò lọc
       statusSeleted: null,
@@ -458,7 +548,7 @@ export default {
       keyword: "",
 
       //Trường sắp xếp
-      fieldSort: "",
+      fieldSort: Enum.TypeSort.None,
 
       //Kiểu sắp xếp
       typeSort: "",
@@ -518,5 +608,56 @@ export default {
   
   <style>
 @import url(@/css/base.css);
-@import url(./RoleList.css);
+#process-permission {
+  max-width: calc(100%);
+}
+
+#process-permission .body-custom {
+  width: 100% !important;
+  overflow: auto;
+}
+
+#process-permission .header-custom {
+  margin: 0;
+}
+
+.content-main {
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.bg-white {
+  background: #fff;
+}
+
+#process-permission .body-custom .grid-no-paging {
+  height: calc(100% - 60px);
+}
+
+.grid-container .dx-widget.dx-visibility-change-handler {
+  max-width: none !important;
+}
+
+.grid-container {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  text-indent: 0;
+  border: none;
+}
+
+.grid-container .paging {
+  border-top: none;
+  padding: 10px 0 !important;
+  height: 56px;
+  z-index: 8;
+  position: relative;
+  margin: 0 10px 8px 10px;
+  background-color: #f9fafc !important;
+}
 </style>

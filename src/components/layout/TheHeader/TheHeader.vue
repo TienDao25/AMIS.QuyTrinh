@@ -86,6 +86,7 @@ export default {
   },
   data() {
     return {
+      //Header
       header: [
         {
           Text: Resource.Header.Process,
@@ -104,6 +105,8 @@ export default {
           route: "/report",
         },
       ],
+
+      //Menu context
       subHeader: [
         {
           Text: Resource.Header.Brief,

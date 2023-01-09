@@ -21,7 +21,7 @@ class EmployeeAPI {
      * @param {Number} roleStatus trạng thái
      * Author: TienDao (27/12/2022)
      */
-    getListRolesByFilterPaging(keyword, limit, offset, fieldSort, typeSort,roleStatus) {
+    getListRolesByFilterPaging(keyword, limit, offset, fieldSort, typeSort, roleStatus) {
         // var query = new URL("");
         var params = {
             keyword: keyword,
@@ -29,7 +29,7 @@ class EmployeeAPI {
             offset: offset,
             fieldSort: fieldSort,
             typeSort: typeSort,
-            roleStatus:roleStatus
+            roleStatus: roleStatus
         };
         return BaseAPIConfig.get(`${this.controller}/filter/`, {
             params: params
@@ -53,7 +53,7 @@ class EmployeeAPI {
      * Author: TienDao (05/01/2023)
      */
     insertRole(requestClient) {
-        return BaseAPIConfig.post(`${this.controller}`,requestClient)
+        return BaseAPIConfig.post(`${this.controller}`, requestClient)
     }
 
     /**
@@ -62,7 +62,7 @@ class EmployeeAPI {
      * Author: TienDao (05/01/2023)
      */
     updateRole(requestClient) {
-        return BaseAPIConfig.put(`${this.controller}`,requestClient)
+        return BaseAPIConfig.put(`${this.controller}`, requestClient)
     }
 }
 

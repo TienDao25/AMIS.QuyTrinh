@@ -22,7 +22,10 @@ import Resource from "@/js/resource/resource";
 export default {
   data() {
     return {
+      //Index hiển thị màu sidebar
       indexZ: -1,
+
+      //Item trên sidebar
       tabItems: [
         {
           icon: "icon-employee",

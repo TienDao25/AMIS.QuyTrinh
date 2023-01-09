@@ -210,16 +210,20 @@ export default {
      * Author: TienDao (26/12/2022)
      */
     init() {
-      switch (this.modeForm) {
-        case Enum.ModeForm.Add:
-          this.bindingData({});
-          break;
-        case Enum.ModeForm.Update:
-          this.getRoleDetail();
-          break;
-        case Enum.ModeForm.Dulicate:
-          this.getRoleDetail();
-          break;
+      try {
+        switch (this.modeForm) {
+          case Enum.ModeForm.Add:
+            this.bindingData({});
+            break;
+          case Enum.ModeForm.Update:
+            this.getRoleDetail();
+            break;
+          case Enum.ModeForm.Dulicate:
+            this.getRoleDetail();
+            break;
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
 
@@ -228,7 +232,11 @@ export default {
      * Author: TienDao (25/12/2022)
      */
     onClickReturnViewMain() {
-      this.$emit("closeFormDetail");
+      try {
+        this.$emit("closeFormDetail");
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -236,34 +244,37 @@ export default {
      * Author: TienDao (26/12/2022)
      */
     getRoleDetail() {
-      this.isShowLoading();
-      RoleAPI.getRoleDetailByID(this.roleID)
-        .then((response) => {
-          this.isShowLoading();
-          console.log(response);
-          // this.roleDetail = response.data;
-          this.bindingData(response.data);
-        })
-        .catch((error) => {
-          this.isShowLoading();
-          if (error.response) {
-            switch (error.response.status) {
-              case Enum.StatusCode.BadRequest:
-                this.$emit("showDialogError", error.response.data.UerMsg);
-                break;
-              case Enum.StatusCode.InternalServerError:
-                this.$emit("showDialogError", error.response.data.UserMsg);
-                break;
-              default:
-                this.$emit("showDialogError", Resource.Dialog.TextError);
+      try {
+        this.isShowLoading();
+        RoleAPI.getRoleDetailByID(this.roleID)
+          .then((response) => {
+            this.isShowLoading();
+            // this.roleDetail = response.data;
+            this.bindingData(response.data);
+          })
+          .catch((error) => {
+            this.isShowLoading();
+            if (error.response) {
+              switch (error.response.status) {
+                case Enum.StatusCode.BadRequest:
+                  this.$emit("showDialogError", error.response.data.UerMsg);
+                  break;
+                case Enum.StatusCode.InternalServerError:
+                  this.$emit("showDialogError", error.response.data.UserMsg);
+                  break;
+                default:
+                  this.$emit("showDialogError", Resource.Dialog.TextError);
+              }
+            } else {
+              this.$emit("showDialogError", Resource.Dialog.TextError);
             }
-          } else {
-            this.$emit("showDialogError", Resource.Dialog.TextError);
-          }
-        })
-        .finally(() => {
-          // this.isShowLoading();
-        });
+          })
+          .finally(() => {
+            // this.isShowLoading();
+          });
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -271,20 +282,26 @@ export default {
      * Author: TienDao (28/12/2022)
      */
     focusInputRoleName() {
-      this.$refs.roleName.focusInput();
+      try {
+        this.$refs.roleName.focusInput();
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
      * Truyền dữ liệu vào form
      */
     bindingData(data) {
-      this.roleDetail = data;
-      this.titleForm = this.roleDetail.RoleName;
-      if (this.modeForm == Enum.ModeForm.Dulicate) {
-        this.roleDetail.RoleName += " - Copy";
+      try {
+        this.roleDetail = data;
+        this.titleForm = this.roleDetail.RoleName;
+        if (this.modeForm == Enum.ModeForm.Dulicate) {
+          this.roleDetail.RoleName += " - Copy";
+        }
+      } catch (error) {
+        console.log(error);
       }
-      console.log(this.roleDetail);
-      console.log(this.listSubsytemAndPermission);
     },
 
     /**
@@ -292,15 +309,18 @@ export default {
      * Author: TienDao 30/12/2022
      */
     getSubSystemInObj(subSystemCode) {
-      var subSystem = {};
-      this.roleDetail.ListSubsytemAndPermission?.forEach((item) => {
-        if (item.SubSystemCode == subSystemCode) {
-          subSystem = item;
-          return false;
-        }
-      });
-      // console.log(subSystem);
-      return subSystem;
+      try {
+        var subSystem = {};
+        this.roleDetail.ListSubsytemAndPermission?.forEach((item) => {
+          if (item.SubSystemCode == subSystemCode) {
+            subSystem = item;
+            return false;
+          }
+        });
+        return subSystem;
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -308,17 +328,22 @@ export default {
      * Author: TienDao (31/12/2022)
      */
     onClickBtnSave() {
-      this.handlerData();
+      try {
+        this.handlerData();
 
-      //Validate
-      if (this.validateData() == true) {
-        this.callAPI();
-        // return;
-      } else {
-        this.$refs.roleName.validateFalse();
-        //Thông báo lỗi
-        // this.$emit("");
-        // return;
+        //Validate
+        if (this.validateData() == true) {
+          this.callAPI();
+          // return;
+        } else {
+          this.$refs.roleName.validateFalse();
+          this.focusInputRoleName();
+          //Thông báo lỗi
+          // this.$emit("");
+          // return;
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
 
@@ -327,27 +352,35 @@ export default {
      * Author: TienDao (01/01/2023)
      */
     validateData() {
-      let isValid = true;
-      if (!this.roleDetail.RoleName) {
-        this.error.RoleName = "Tên vai trò không được để trống";
-        isValid = false;
-      } else {
-        this.error.RoleName = "";
+      try {
+        let isValid = true;
+        if (!this.roleDetail.RoleName) {
+          this.error.RoleName = "Tên vai trò không được để trống";
+          isValid = false;
+        } else {
+          this.error.RoleName = "";
+        }
+        return isValid;
+      } catch (error) {
+        console.log(error);
       }
-      return isValid;
     },
 
     //Gọi API
     callAPI() {
-      if (
-        this.modeForm == Enum.ModeForm.Add ||
-        this.modeForm == Enum.ModeForm.Dulicate
-      ) {
-        this.insertRole();
-      }
-      if (this.modeForm == Enum.ModeForm.Update) {
-        this.updateRole();
-        //
+      try {
+        if (
+          this.modeForm == Enum.ModeForm.Add ||
+          this.modeForm == Enum.ModeForm.Dulicate
+        ) {
+          this.insertRole();
+        }
+        if (this.modeForm == Enum.ModeForm.Update) {
+          this.updateRole();
+          //
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
 
@@ -356,42 +389,47 @@ export default {
      * Author: TienDao (02/01/2023)
      */
     insertRole() {
-      var requestClient = {
-        ModeForm: this.modeForm,
-        // RoleID: "00000000-0000-0000-0000-000000000000",
-        RoleID: null,
-        RoleCode: this.roleDetail.RoleCode ? this.roleDetail.RoleCode : "",
-        RoleName: this.roleDetail.RoleName ? this.roleDetail.RoleName : "",
-        RoleDescription: this.roleDetail.RoleDescription
-          ? this.roleDetail.RoleDescriptio
-          : "",
-        Permissions: this.newList,
-      };
-      this.isShowLoading();
-      RoleAPI.insertRole(requestClient)
-        .then((response) => {
-          this.isShowLoading();
-          console.log(response);
-          this.$emit("closeFormAndInsertUpdateSuccess");
-        })
-        .catch((error) => {
-          this.isShowLoading();
-          console.log(error);
-          if (error.response) {
-            switch (error.response.status) {
-              case Enum.StatusCode.BadRequest:
-                this.$emit("showDialogError", error.response.data.MoreInfo);
-                break;
-              case Enum.StatusCode.InternalServerError:
-                this.$emit("showDialogError", error.response.data.UserMsg);
-                break;
-              default:
-                this.$emit("showDialogError", Resource.Dialog.TextError);
+      try {
+        var requestClient = {
+          ModeForm: this.modeForm,
+          RoleID: null,
+          RoleCode: this.roleDetail.RoleCode ? this.roleDetail.RoleCode : "",
+          RoleName: this.roleDetail.RoleName ? this.roleDetail.RoleName : "",
+          RoleDescription: this.roleDetail.RoleDescription
+            ? this.roleDetail.RoleDescriptio
+            : "",
+          Permissions: this.newList,
+        };
+        this.isShowLoading();
+        RoleAPI.insertRole(requestClient)
+          .then((response) => {
+            console.log(response);
+            this.isShowLoading();
+            this.$emit("closeFormAndInsertUpdateSuccess");
+          })
+          .catch((error) => {
+            this.isShowLoading();
+            console.log(error);
+            if (error.response) {
+              switch (error.response.status) {
+                case Enum.StatusCode.BadRequest:
+                  this.error.RoleName = error.response.data.MoreInfo[0];
+                  this.$refs.roleName.validateFalse();
+                  this.$emit("showDialogError", error.response.data.MoreInfo);
+                  break;
+                case Enum.StatusCode.InternalServerError:
+                  this.$emit("showDialogError", error.response.data.UserMsg);
+                  break;
+                default:
+                  this.$emit("showDialogError", Resource.Dialog.TextError);
+              }
+            } else {
+              this.$emit("showDialogError", Resource.Dialog.TextError);
             }
-          } else {
-            this.$emit("showDialogError", Resource.Dialog.TextError);
-          }
-        });
+          });
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -399,41 +437,47 @@ export default {
      * Author: TienDao (02/01/2023)
      */
     updateRole() {
-      var requestClient = {
-        ModeForm: this.modeForm,
-        RoleID: this.roleDetail.RoleID,
-        RoleCode: this.roleDetail.RoleCode ? this.roleDetail.RoleCode : "",
-        RoleName: this.roleDetail.RoleName ? this.roleDetail.RoleName : "",
-        RoleDescription: this.roleDetail.RoleDescription
-          ? this.roleDetail.RoleDescriptio
-          : "",
-        Permissions: this.newList,
-      };
-      this.isShowLoading();
-      RoleAPI.updateRole(requestClient)
-        .then((response) => {
-          this.isShowLoading();
-          console.log(response);
-          this.$emit("closeFormAndInsertUpdateSuccess");
-        })
-        .catch((error) => {
-          this.isShowLoading();
-          console.log(error);
-          if (error.response) {
-            switch (error.response.status) {
-              case Enum.StatusCode.BadRequest:
-                this.$emit("showDialogError", error.response.data.MoreInfo);
-                break;
-              case Enum.StatusCode.InternalServerError:
-                this.$emit("showDialogError", error.response.data.UserMsg);
-                break;
-              default:
-                this.$emit("showDialogError", Resource.Dialog.TextError);
+      try {
+        var requestClient = {
+          ModeForm: this.modeForm,
+          RoleID: this.roleDetail.RoleID,
+          RoleCode: this.roleDetail.RoleCode ? this.roleDetail.RoleCode : "",
+          RoleName: this.roleDetail.RoleName ? this.roleDetail.RoleName : "",
+          RoleDescription: this.roleDetail.RoleDescription
+            ? this.roleDetail.RoleDescriptio
+            : "",
+          Permissions: this.newList,
+        };
+        this.isShowLoading();
+        RoleAPI.updateRole(requestClient)
+          .then((response) => {
+            console.log(response);
+            this.isShowLoading();
+            this.$emit("closeFormAndInsertUpdateSuccess");
+          })
+          .catch((error) => {
+            this.isShowLoading();
+            console.log(error);
+            if (error.response) {
+              switch (error.response.status) {
+                case Enum.StatusCode.BadRequest:
+                  this.error.RoleName = error.response.data.MoreInfo[0];
+                  this.$refs.roleName.validateFalse();
+                  this.$emit("showDialogError", error.response.data.MoreInfo);
+                  break;
+                case Enum.StatusCode.InternalServerError:
+                  this.$emit("showDialogError", error.response.data.UserMsg);
+                  break;
+                default:
+                  this.$emit("showDialogError", Resource.Dialog.TextError);
+              }
+            } else {
+              this.$emit("showDialogError", Resource.Dialog.TextError);
             }
-          } else {
-            this.$emit("showDialogError", Resource.Dialog.TextError);
-          }
-        });
+          });
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -443,9 +487,11 @@ export default {
      * Author: TienDao (02/01/2023)
      */
     takeValueCheckbox(value, index) {
-      console.log("index: " + index);
-      console.log("value: " + value);
-      this.listCheckbox[index] = value;
+      try {
+        this.listCheckbox[index] = value;
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -461,71 +507,73 @@ export default {
      * Author: TienDao (04/01/20220)
      */
     handlerData() {
-      // alert("Xử lý data!!!");
-      this.newList = [];
-      this.newListSubsytemAndPermission = [...this.listSubsytemAndPermission];
-      //Chuyển mảng checkbox thành danh sách phân quyền mới => các quyền mặc định thêm state là 1 (thêm)
-      this.listSubsytemAndPermission.forEach((subSystem, subSystemIndex) => {
-        this.$refs["subSystem" + subSystemIndex][0].clickOnBtnSave();
-        subSystem.ListPermissions.forEach((permission, permissionsIndex) => {
-          if (this.listCheckbox[subSystemIndex]) {
-            if (this.listCheckbox[subSystemIndex][permissionsIndex] == true) {
-              this.newListSubsytemAndPermission[subSystemIndex].ListPermissions[
-                permissionsIndex
-              ].state = Enum.State.Add;
-              // this.roleDetail.listSubsytemAndPermission.list
-              this.newList.push({
-                SubSystemID: subSystem.SubSystemID,
-                SubSystemCode: subSystem.SubSystemCode,
-                PermissionID: permission.PermissionID,
-                PermissionCode: permission.PermissionCode,
-                State: Enum.State.Add,
-              });
-            }
-          }
-        });
-      });
-      if (this.modeForm == Enum.ModeForm.Update) {
-        //Lấy ra id có trong vai trò cũ và vai trò mới => state = 0
-        this.newList.forEach((item) => {
-          if (this.roleDetail.ListSubsytemAndPermission) {
-            this.roleDetail.ListSubsytemAndPermission.forEach((subSystem) => {
-              if (item.SubSystemID == subSystem.SubSystemID) {
-                subSystem.ListPermissions.forEach((permission) => {
-                  if (item.PermissionID == permission.PermissionID) {
-                    item.State = Enum.State.None;
-                  }
-                });
-              }
-            });
-          }
-        });
-        //Lấy ra id có trong vai trò cũ, không có trong vai trò mới => state = 2 (Xóa)
-        if (this.roleDetail.ListSubsytemAndPermission) {
-          this.roleDetail.ListSubsytemAndPermission.forEach((subSystem) => {
-            subSystem.ListPermissions.forEach((permission) => {
-              var isHas = false;
-              this.newList.forEach((item) => {
-                if (item.SubSystemID == subSystem.SubSystemID) {
-                  if (item.PermissionID == permission.PermissionID) {
-                    isHas = true;
-                  }
-                }
-              });
-              if (!isHas) {
+      try {
+        this.newList = [];
+        this.newListSubsytemAndPermission = [...this.listSubsytemAndPermission];
+        //Chuyển mảng checkbox thành danh sách phân quyền mới => các quyền mặc định thêm state là 1 (thêm)
+        this.listSubsytemAndPermission.forEach((subSystem, subSystemIndex) => {
+          //Lấy giá trị các checkbox
+          this.$refs["subSystem" + subSystemIndex][0].clickOnBtnSave();
+          subSystem.ListPermissions.forEach((permission, permissionsIndex) => {
+            if (this.listCheckbox[subSystemIndex]) {
+              if (this.listCheckbox[subSystemIndex][permissionsIndex] == true) {
+                this.newListSubsytemAndPermission[
+                  subSystemIndex
+                ].ListPermissions[permissionsIndex].state = Enum.State.Add;
                 this.newList.push({
                   SubSystemID: subSystem.SubSystemID,
                   SubSystemCode: subSystem.SubSystemCode,
                   PermissionID: permission.PermissionID,
                   PermissionCode: permission.PermissionCode,
-                  State: Enum.State.Detele,
+                  State: Enum.State.Add,
                 });
               }
-            });
+            }
           });
+        });
+        if (this.modeForm == Enum.ModeForm.Update) {
+          //Lấy ra id có trong vai trò cũ và vai trò mới => state = 0
+          this.newList.forEach((item) => {
+            if (this.roleDetail.ListSubsytemAndPermission) {
+              this.roleDetail.ListSubsytemAndPermission.forEach((subSystem) => {
+                if (item.SubSystemID == subSystem.SubSystemID) {
+                  subSystem.ListPermissions.forEach((permission) => {
+                    if (item.PermissionID == permission.PermissionID) {
+                      item.State = Enum.State.None;
+                    }
+                  });
+                }
+              });
+            }
+          });
+          //Lấy ra id có trong vai trò cũ, không có trong vai trò mới => state = 2 (Xóa)
+          if (this.roleDetail.ListSubsytemAndPermission) {
+            this.roleDetail.ListSubsytemAndPermission.forEach((subSystem) => {
+              subSystem.ListPermissions.forEach((permission) => {
+                var isHas = false;
+                this.newList.forEach((item) => {
+                  if (item.SubSystemID == subSystem.SubSystemID) {
+                    if (item.PermissionID == permission.PermissionID) {
+                      isHas = true;
+                    }
+                  }
+                });
+                if (!isHas) {
+                  this.newList.push({
+                    SubSystemID: subSystem.SubSystemID,
+                    SubSystemCode: subSystem.SubSystemCode,
+                    PermissionID: permission.PermissionID,
+                    PermissionCode: permission.PermissionCode,
+                    State: Enum.State.Detele,
+                  });
+                }
+              });
+            });
+          }
         }
+      } catch (error) {
+        console.log(error);
       }
-      console.log(this.newList);
     },
   },
   data() {

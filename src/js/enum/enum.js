@@ -1,26 +1,3 @@
-// const ModeForm = {
-//     None: 0,
-//     Add: 1, //Form thêm
-//     Update: 2, //Form sửa
-//     Delete: 3, //Form xóa
-//     Dulicate: 4 //Form nhân bản
-// }
-
-// const RoleStatus = {
-//     Active: 0, //Đang hoạt động
-//     Deleted: 1 //Đã xóa
-// }
-
-// const ModeDialog = {
-//     None: 0,
-//     Delete: 1,
-// }
-// export {
-//     ModeForm,
-//     RoleStatus,
-//     ModeDialog
-// };
-
 export default {
     ModeForm: {
         None: 0,
@@ -40,6 +17,12 @@ export default {
         None: 0,
         Add: 1,
         Detele: 2,
+    },
+    TypeSort: {
+        None: -1, // Không sắp xếp
+        ASC: 0, // Tăng dần
+        DESC: 1, // GIảm dần
+
     },
     ModeDialog: {
         None: 0,

@@ -26,15 +26,15 @@ export default {
     isDisabled: Boolean,
 
     //Giá trị checkbox
-    modelValue:Boolean,
+    modelValue: Boolean,
 
     //index
-    indexPermission:Number,
+    indexPermission: Number,
   },
-  watch:{
-    modelValue:function(){
+  watch: {
+    modelValue: function () {
       this.isIcon = this.modelValue;
-    }
+    },
   },
   methods: {
     /**
@@ -42,9 +42,13 @@ export default {
      * Author:TienDao(28/12/2022)
      */
     onClickCheckbox() {
-      this.isIcon = !this.isIcon;
-      this.$emit("update:modelValue", this.isIcon);
-      this.$emit("clickOnCheckbox", this.isIcon,this.indexPermission);
+      try {
+        this.isIcon = !this.isIcon;
+        this.$emit("update:modelValue", this.isIcon);
+        this.$emit("clickOnCheckbox", this.isIcon, this.indexPermission);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   data() {

@@ -67,7 +67,4 @@ export default {
   margin-right: 0px;
   margin-left: 0px;
 }
-/* .grid-container .btn-more:hover {
-  background-color: #dadce3;
-} */
 </style>

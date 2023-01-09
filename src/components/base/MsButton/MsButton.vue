@@ -62,7 +62,11 @@ export default {
      * Author: TienDao (08/12/2022)
      */
     focusBtn() {
-      this.$refs.btn.focus();
+      try {
+        this.$refs.btn.focus();
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   props: {
@@ -271,9 +275,9 @@ button {
   float: 0;
 }
 
-.ms-button {
+/* .ms-button {
   margin-right: 12px;
-}
+} */
 
 .ms-button:last-child {
   margin: 0;

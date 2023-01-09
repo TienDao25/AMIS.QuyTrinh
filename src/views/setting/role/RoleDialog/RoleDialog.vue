@@ -80,7 +80,11 @@ export default {
      * Author: TienDao (27/12/2022)
      */
     closeDialog() {
-      this.$emit("closeDialog");
+      try {
+        this.$emit("closeDialog");
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     /**
@@ -88,10 +92,14 @@ export default {
      * Author: TienDao (27/12/2022)
      */
     onClickBtnDanger() {
-      switch (this.modeDialog) {
-        case Enum.ModeDialog.Delete:
-          this.deleteRoleById();
-          break;
+      try {
+        switch (this.modeDialog) {
+          case Enum.ModeDialog.Delete:
+            this.deleteRoleById();
+            break;
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
 
@@ -100,10 +108,14 @@ export default {
      * Author: TienDao (27/12/2022)
      */
     onClickBtnSecondary() {
-      switch (this.modeDialog) {
-        case Enum.ModeDialog.Delete:
-          this.$emit("closeDialog");
-          break;
+      try {
+        switch (this.modeDialog) {
+          case Enum.ModeDialog.Delete:
+            this.$emit("closeDialog");
+            break;
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
 
@@ -111,10 +123,14 @@ export default {
      * Sự kiện click nút Primary
      */
     onClickBtnPrimary() {
-      switch (this.modeDialog) {
-        case Enum.ModeDialog.Error:
-          this.$emit("closeDialog");
-          break;
+      try {
+        switch (this.modeDialog) {
+          case Enum.ModeDialog.Error:
+            this.$emit("closeDialog");
+            break;
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
     /**
@@ -130,34 +146,38 @@ export default {
      * Author: TienDao (27/12/2022)
      */
     deleteRoleById() {
-      this.isShowLoading();
-      RoleAPI.deleteRoleByID(this.roleID)
-        .then((response) => {
-          console.log(response);
-          this.isShowLoading();
-          this.$emit("closeDialogAndDeleteSuccess");
-        })
-        .catch((error) => {
-          this.isShowLoading();
-          console.log(error);
-          if (error.response) {
-            switch (error.response.status) {
-              case Enum.StatusCode.BadRequest:
-                this.$emit("showDialogError", error.response.data.MoreInfo);
-                break;
-              case Enum.StatusCode.InternalServerError:
-                this.$emit("showDialogError", error.response.data.UserMsg);
-                break;
-              case Enum.StatusCode.NotFound:
-                this.$emit("showDialogError", error.response.data.UserMsg);
-                break;
-              default:
-                this.$emit("showDialogError", Resource.Dialog.TextError);
+      try {
+        this.isShowLoading();
+        RoleAPI.deleteRoleByID(this.roleID)
+          .then((response) => {
+            console.log(response);
+            this.isShowLoading();
+            this.$emit("closeDialogAndDeleteSuccess");
+          })
+          .catch((error) => {
+            this.isShowLoading();
+            console.log(error);
+            if (error.response) {
+              switch (error.response.status) {
+                case Enum.StatusCode.BadRequest:
+                  this.$emit("showDialogError", error.response.data.MoreInfo);
+                  break;
+                case Enum.StatusCode.InternalServerError:
+                  this.$emit("showDialogError", error.response.data.UserMsg);
+                  break;
+                case Enum.StatusCode.NotFound:
+                  this.$emit("showDialogError", error.response.data.UserMsg);
+                  break;
+                default:
+                  this.$emit("showDialogError", Resource.Dialog.TextError);
+              }
+            } else {
+              this.$emit("showDialogError", Resource.Dialog.TextError);
             }
-          } else {
-            this.$emit("showDialogError", Resource.Dialog.TextError);
-          }
-        });
+          });
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   data() {
@@ -206,8 +226,11 @@ export default {
 }
 
 .dialog__title {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: bold;
+}
+.dialog__button .ms-button:first-child {
+  margin-right: 0 !important ;
 }
 .dialog__content {
   display: flex;
