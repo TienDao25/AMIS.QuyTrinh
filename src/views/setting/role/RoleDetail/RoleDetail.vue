@@ -511,26 +511,7 @@ export default {
         this.newList = [];
         this.newListSubsytemAndPermission = [...this.listSubsytemAndPermission];
         //Chuyển mảng checkbox thành danh sách phân quyền mới => các quyền mặc định thêm state là 1 (thêm)
-        this.listSubsytemAndPermission.forEach((subSystem, subSystemIndex) => {
-          //Lấy giá trị các checkbox
-          this.$refs["subSystem" + subSystemIndex][0].clickOnBtnSave();
-          subSystem.ListPermissions.forEach((permission, permissionsIndex) => {
-            if (this.listCheckbox[subSystemIndex]) {
-              if (this.listCheckbox[subSystemIndex][permissionsIndex] == true) {
-                this.newListSubsytemAndPermission[
-                  subSystemIndex
-                ].ListPermissions[permissionsIndex].state = Enum.State.Add;
-                this.newList.push({
-                  SubSystemID: subSystem.SubSystemID,
-                  SubSystemCode: subSystem.SubSystemCode,
-                  PermissionID: permission.PermissionID,
-                  PermissionCode: permission.PermissionCode,
-                  State: Enum.State.Add,
-                });
-              }
-            }
-          });
-        });
+        
         if (this.modeForm == Enum.ModeForm.Update) {
           //Lấy ra id có trong vai trò cũ và vai trò mới => state = 0
           this.newList.forEach((item) => {
@@ -575,6 +556,31 @@ export default {
         console.log(error);
       }
     },
+
+    setPermissionStateAdd(){
+      this.listSubsytemAndPermission.forEach((subSystem, subSystemIndex) => {
+          //Lấy giá trị các checkbox
+          this.$refs["subSystem" + subSystemIndex][0].clickOnBtnSave();
+          subSystem.ListPermissions.forEach((permission, permissionsIndex) => {
+            if (this.listCheckbox[subSystemIndex]) {
+              if (this.listCheckbox[subSystemIndex][permissionsIndex] == true) {
+                this.newListSubsytemAndPermission[
+                  subSystemIndex
+                ].ListPermissions[permissionsIndex].state = Enum.State.Add;
+                this.newList.push({
+                  SubSystemID: subSystem.SubSystemID,
+                  SubSystemCode: subSystem.SubSystemCode,
+                  PermissionID: permission.PermissionID,
+                  PermissionCode: permission.PermissionCode,
+                  State: Enum.State.Add,
+                });
+              }
+            }
+          });
+        });
+    },
+    function2(){},
+    function3(){},
   },
   data() {
     return {

@@ -38,6 +38,7 @@
       :allow-fixing="true"
       :min-width="item.minWidth"
       :width="item.width"
+      :allow-sorting="false"
     />
     <!-- -->
     <!-- :min-width="item.minWidth" -->
@@ -296,7 +297,7 @@ export default {
      * Author: TienDao (09/01/2023)
      */
     onCellClick(e) {
-      if (e.rowType == "header") {
+      if (e.rowType == "header" && e.columnIndex < this.columns.length) {
         console.log(e);
         console.log(this.columns[e.columnIndex].field);
         this.$emit("onClickHeaderTable",this.columns[e.columnIndex].field);
@@ -506,5 +507,10 @@ export default {
   > td:first-child,
 .grid-container .dx-datagrid .dx-datagrid-headers .dx-header-row > td {
   border-left: none !important;
+}
+.dx-datagrid-text-content{
+    font-weight: 700;
+    letter-spacing: .14px;
+    color: #171b2a;
 }
 </style>

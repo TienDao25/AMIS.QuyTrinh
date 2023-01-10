@@ -498,7 +498,7 @@ export default {
      * Author: TienDao (09/01/2023)
      */
     onClickHeaderTable(headerTable) {
-      this.listRole = [];
+      // this.listRole = [];
       this.fieldSort = headerTable;
       if (this.typeSort == Enum.TypeSort.None) {
         this.typeSort = Enum.TypeSort.ASC;
@@ -508,7 +508,6 @@ export default {
             ? Enum.TypeSort.DESC
             : Enum.TypeSort.ASC;
       }
-
       this.getListRoleBFindPaging();
     },
   },
