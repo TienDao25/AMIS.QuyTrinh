@@ -750,3 +750,11 @@ span.required {
 .dx-placeholder {
     opacity: 0.8 !important;
 }
+
+.dx-popup-content {
+    padding: 8px !important;
+}
+
+.m-l-4 {
+    margin-left: 4px !important;
+}

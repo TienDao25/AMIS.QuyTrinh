@@ -7,10 +7,10 @@
     >
       <div class="content-header p-b-16">
         <div class="flex justify-between items-center header-custom">
-          <div class="font-20 bold">Vai trò</div>
+          <div class="font-20 bold">{{ Resource.Entity.Role.Role }}</div>
           <MsButtonVue
             :isPrimary="true"
-            :title="'Thêm mới'"
+            :title="Resource.Button.Add"
             :includeIcon="true"
             :iconButton="'mi-plus-white'"
             @click="onClickBtnAdd"
@@ -28,7 +28,7 @@
               <div>
                 <!-- style="height: 36px; width: 240px" -->
                 <MsInputSreach
-                  :placeholderText="'Tìm kiếm vai trò'"
+                  :placeholderText="Resource.Text.FindRole"
                   :iconPre="'mi-search'"
                   v-model="keyword"
                   :maxLength="255"
@@ -37,7 +37,7 @@
             </div>
             <MsBoxVue
               wrapperClass="mgr-8 mgl-8"
-              placeholder="Lọc theo trạng thái"
+              :placeholder="Resource.Text.FilterByStatus"
               icon-class="svg-icon-process icon-role-setting-user role-icon"
               display-expr="StatusName"
               valueExpr="Value"
@@ -230,18 +230,54 @@ export default {
 
     /**
      * API Lấy danh sách vai trò theo tìm kiếm / phân trang
-     * Author: TienDao (26/12/2022)
+     * Author: TienDao (12/01/2022)
      */
     getListRoleBFindPaging() {
       try {
+        var filter = [];
+        //Xử lý phần tìm kiếm bằng input
+        if (this.keyword) {
+          filter.push({
+            Relationship: "AND",
+            Column: "",
+            Operator: "",
+            Value: "",
+            SubQuery: {
+              Operator: "AND",
+              Detail: [],
+            },
+          });
+          this.roleField.forEach((field) => {
+            filter[0].SubQuery.Detail.push({
+              Relationship: "OR",
+              Column: field,
+              Operator: "Like",
+              Value: this.keyword,
+              SubQuery: null,
+            });
+          });
+        }
+
+        //Xử lý phần lọc theo trạng thái
+        if(this.statusSeleted!=Enum.Role.RoleStatus.All){
+          filter.push({
+            Relationship: "AND",
+            Column: "RoleStatus",
+            Operator: "=",
+            Value: `${this.statusSeleted}`,
+            SubQuery: null,
+          });
+        }
+        var sort = {
+          Selector: this.fieldSort,
+          TypeSort: this.typeSort,
+        };
         this.isShowLoading();
-        RoleAPI.getListRolesByFilterPaging(
-          this.keyword,
+        RoleAPI.filterAndPaging(
+          filter,
           this.numberRecord,
           (this.pageCurrent - 1) * this.numberRecord,
-          this.fieldSort,
-          this.typeSort,
-          this.statusSeleted
+          sort
         )
           .then((response) => {
             this.isShowLoading();
@@ -469,7 +505,6 @@ export default {
         this.classNotification = "tittle-successful";
         this.iconNotification = "icon-success";
         this.isNotification = true;
-        this.getListRoleBFindPaging();
         setTimeout(() => (this.isNotification = false), 3000);
         // icon-success
       } catch (error) {
@@ -485,6 +520,7 @@ export default {
     clickOnSeletedStatus(value) {
       try {
         console.log(value);
+        this.pageCurrent=1;
         this.statusSeleted = value;
         this.getListRoleBFindPaging();
       } catch (error) {
@@ -497,27 +533,24 @@ export default {
      * @param {String} headerTable Tên cột
      * Author: TienDao (09/01/2023)
      */
-    onClickHeaderTable(headerTable) {
+    onClickHeaderTable(headerTable, typeSort) {
       // this.listRole = [];
+      console.log(headerTable);
+      console.log(typeSort);
       this.fieldSort = headerTable;
-      if (this.typeSort == Enum.TypeSort.None) {
-        this.typeSort = Enum.TypeSort.ASC;
-      } else {
-        this.typeSort =
-          this.typeSort == Enum.TypeSort.ASC
-            ? Enum.TypeSort.DESC
-            : Enum.TypeSort.ASC;
-      }
+      this.typeSort = typeSort;
       this.getListRoleBFindPaging();
     },
   },
   data() {
     return {
+      Resource,
+
       //TimeOut của tìm kiếm
       timeOutKeyword: null,
 
       //Trạng thái vai trò lọc
-      statusSeleted: null,
+      statusSeleted: Enum.Role.RoleStatus.All,
 
       //Hiển thị form chi tiết
       isRoleDetail: false,
@@ -547,10 +580,10 @@ export default {
       keyword: "",
 
       //Trường sắp xếp
-      fieldSort: Enum.TypeSort.None,
+      fieldSort: "",
 
       //Kiểu sắp xếp
-      typeSort: "",
+      typeSort: Enum.TypeSort.None,
 
       //Trang hiện tại
       pageCurrent: 1,
@@ -599,6 +632,16 @@ export default {
           Value: Enum.Role.RoleStatus.Deleted,
           StatusName: Resource.Status.Role.Deleted,
         },
+      ],
+
+      roleField: [
+        "RoleName",
+        "RoleDescription",
+        "RoleStatus",
+        "CreatedBy",
+        "CreatedDate",
+        "ModifiedBy",
+        "ModifiedDate",
       ],
     };
   },

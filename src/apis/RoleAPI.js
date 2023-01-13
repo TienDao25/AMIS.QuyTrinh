@@ -12,32 +12,6 @@ class EmployeeAPI {
     }
 
     /**
-     * Lấy danh sách vai trò theo bộ lọc, phân trang
-     * @param {String} keyword Từ khóa tìm kiếm
-     * @param {Number} limit Giới hạn bản ghi
-     * @param {Number} offset Thứ tự bản ghi bắt đầu
-     * @param {String} fieldSort Trường sắp xếp 
-     * @param {String} typeSort Kiểu sắp xếp
-     * @param {Number} roleStatus trạng thái
-     * Author: TienDao (27/12/2022)
-     */
-    getListRolesByFilterPaging(keyword, limit, offset, fieldSort, typeSort, roleStatus) {
-        // var query = new URL("");
-        var params = {
-            keyword: keyword,
-            limit: limit,
-            offset: offset,
-            fieldSort: fieldSort,
-            typeSort: typeSort,
-            roleStatus: roleStatus
-        };
-        return BaseAPIConfig.get(`${this.controller}/filter/`, {
-            params: params
-        })
-
-    }
-
-    /**
      * Xóa vai trò theo ID
      * @param {String} roleID ID vai trò muốn xóa
      * @returns 
@@ -63,6 +37,24 @@ class EmployeeAPI {
      */
     updateRole(requestClient) {
         return BaseAPIConfig.put(`${this.controller}`, requestClient)
+    }
+
+    /**
+     * Lấy danh sách theo bộ lọc/phân trang
+     * @param {Object} filter bộ lọc
+     * @param {Number} limit số lượng bản ghi/1 trang
+     * @param {Number} offset bản ghi bắt đầu
+     * @param {Object} sort cách sắp xếp
+     * Author: TienDao (12/01/2023) 
+     */
+    filterAndPaging(filter, limit, offset, sort) {
+        var body = {
+            Filter: filter,
+            Limit: limit,
+            Offset: offset,
+            Sort: sort
+        };
+        return BaseAPIConfig.post(`${this.controller}/BaseFilter/`,body)
     }
 }
 

@@ -39,7 +39,9 @@ export default {
         NoThing: "Không",
         NoSave: "Không lưu",
         None: "",
-        Edit: "Sửa"
+        Edit: "Sửa",
+        Add:"Thêm mới",
+        Dulicate:"Nhân bản"
     },
     Action: {
         Undo: "Hoàn tác"
@@ -61,10 +63,11 @@ export default {
         Base: {
             CreatedDate: "Ngày tạo",
             CreatedBy: "Người tạo",
-            ModifiedDate: "Ngày chỉnh sửa cuối cùng",
-            ModifiedBy: "Người chỉnh sửa cuối cùng",
+            ModifiedDate: "Ngày sửa cuối cùng",
+            ModifiedBy: "Người sửa cuối cùng",
         },
         Role: {
+            Role:"Vai trò",
             RoleName: "Tên vai trò",
             RoleDescription: "Mô tả",
             RoleStatus: "Trạng thái",
@@ -85,5 +88,21 @@ export default {
         None: "",
         Subjects: "Phân quyền phân hệ", //Phân hệ
         Establish: "Phân quyền thiết lập", //Thiết lập
+    },
+    Text:{
+        Sreach:"Tìm kiếm",
+        RunProcess:"Chạy quy trình",
+        SelectPermission:"Chọn quyền",
+        NotNull: "không được để trống",
+        InputDescription:"Nhập mô tả",
+        InputRoleName:"Nhập tên vai trò",
+        FilterByStatus:"Lọc theo trạng thái",
+        FindRole:"Tìm kiếm vai trò",
+    },
+    Form:{
+        Add:"Thêm mới"
+    },
+    Title:{
+        Return:"Quay lại"
     }
 }

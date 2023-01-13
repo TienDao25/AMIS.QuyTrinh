@@ -35,6 +35,7 @@
       :wordWrapEnabled="true"
       :cellHintEnabled="false"
       :cell-template="item.cellTemplate"
+      :header-cell-template="item.cellHeader"
       :allow-fixing="true"
       :min-width="item.minWidth"
       :width="item.width"
@@ -54,13 +55,11 @@
       :min-width="140"
       alignment="left"
       :allow-resizing="false"
-      css-class="row-action"
       :fixed="fixedColumn"
       fixed-position="right"
       :showBorders="false"
     />
-    <!-- :fixed="true"
-      fixed-position="right" -->
+
     <template #cellButton="{ data }">
       <div
         class="flex justify-flexend m-x-8 template-cell"
@@ -69,18 +68,18 @@
       >
         <MsButtonIconVue
           :classIcon="'icon-copy'"
-          :titleIcon="'Nhân bản'"
+          :titleIcon="Resource.Button.Dulicate"
           @click.stop="onClickBtnDulicate(data)"
         />
         <MsButtonIconVue
           :classIcon="'mi-pencil'"
-          :titleIcon="'Sửa'"
+          :titleIcon="Resource.Button.Edit"
           @click.stop="onClickBtnEdit(data)"
         />
         <MsButtonIconVue
           v-show="data.data.RoleStatus != Enum.Role.RoleStatus.Deleted"
           :classIcon="'icon-delete-custom'"
-          :titleIcon="'Xóa'"
+          :titleIcon="Resource.Button.Delete"
           @click.stop="onClickBtnDelete(data)"
         />
       </div>
@@ -96,7 +95,6 @@
       <div v-else style="color: red" :title="formatStatus(data.value)">
         {{ formatStatus(data.value) }}
       </div>
-      <!-- <div>{{ formatStatus(data.value) }}</div> -->
     </template>
     <template #Date="{ data }">
       <div
@@ -111,18 +109,28 @@
         {{ formatString(data.value) }}
       </div>
     </template>
+    <template #cellHeader="{ data }">
+      <div class="flex">
+        <div>{{ columns[data.columnIndex].caption }}</div>
+        <div
+          v-if="data.columnIndex == showDown"
+          class="m-l-4 icon-arrow-down"
+        ></div>
+        <div
+          v-if="data.columnIndex == showUp"
+          class="m-l-4 icon-arrow-up"
+        ></div>
+      </div>
+    </template>
   </DxDataGrid>
-  <!-- <DxButton text="Click me" @click="sayHelloWorld" /> -->
 </template>
 
 <script>
-// import DxButton from 'devextreme-vue/button';
 import {
   DxDataGrid,
   DxColumn,
   DxPager,
   DxPaging,
-  // DxButton
 } from "devextreme-vue/data-grid";
 import MsButtonIconVue from "@/components/base/MsButton/MsButtonIcon.vue";
 
@@ -298,9 +306,34 @@ export default {
      */
     onCellClick(e) {
       if (e.rowType == "header" && e.columnIndex < this.columns.length) {
-        console.log(e);
-        console.log(this.columns[e.columnIndex].field);
-        this.$emit("onClickHeaderTable",this.columns[e.columnIndex].field);
+        this.showIcon(e);
+        this.$emit(
+          "onClickHeaderTable",
+          this.columns[e.columnIndex].field,
+          this.showUp > -1 ? Enum.TypeSort.ASC : Enum.TypeSort.DESC
+        );
+      }
+    },
+
+    /**
+     * Hiện thị mũi tên
+     * Author: TienDao (11/01/2023)
+     */
+    showIcon(e) {
+      if (this.showDown != e.columnIndex && this.showUp != e.columnIndex) {
+        this.showDown = -1;
+        this.showUp = e.columnIndex;
+      } else {
+        if (this.showDown > -1) {
+          this.showDown = -1;
+          this.showUp = e.columnIndex;
+          return;
+        }
+        if (this.showUp > -1) {
+          this.showUp = -1;
+          this.showDown = e.columnIndex;
+          return;
+        }
       }
     },
   },
@@ -316,6 +349,7 @@ export default {
           type: "text",
           minWidth: 100,
           cellTemplate: "Text",
+          cellHeader: "cellHeader",
         },
         {
           field: "RoleDescription",
@@ -324,14 +358,16 @@ export default {
           type: "text",
           minWidth: 100,
           cellTemplate: "Text",
+          cellHeader: "cellHeader",
         },
         {
           field: "RoleStatus",
-          width: 150,
+          width: 140,
           caption: Resource.Entity.Role.RoleStatus,
           type: "text",
           minWidth: 100,
           cellTemplate: "RoleStatus",
+          cellHeader: "cellHeader",
         },
         {
           field: "CreatedDate",
@@ -340,6 +376,7 @@ export default {
           type: "date",
           minWidth: 100,
           cellTemplate: "Date",
+          cellHeader: "cellHeader",
         },
         {
           field: "CreatedBy",
@@ -348,25 +385,34 @@ export default {
           type: "text",
           minWidth: 100,
           cellTemplate: "Text",
+          cellHeader: "cellHeader",
         },
         {
           field: "ModifiedDate",
-          width: 200,
+          width: 160,
           caption: Resource.Entity.Base.ModifiedDate,
           type: "date",
           minWidth: 100,
           cellTemplate: "Date",
+          cellHeader: "cellHeader",
         },
         {
           field: "ModifiedBy",
-          width: 200,
+          width: 170,
           caption: Resource.Entity.Base.ModifiedBy,
           type: "text",
           minWidth: 100,
           cellTemplate: "Text",
+          cellHeader: "cellHeader",
         },
       ],
+
+      //Hiện nút chức năng
       isShowButtons: -1,
+
+      //Cột hiện thị nút
+      showDown: -1,
+      showUp: -1,
     };
   },
 };
@@ -473,7 +519,7 @@ export default {
 }
 
 .grid-container .dx-datagrid-headers .dx-datagrid-table .dx-row > td {
-  border-bottom: none !important;
+  /* border-bottom: none !important */
 }
 
 .grid-container .dx-datagrid-headers .dx-datagrid-table .dx-row > td {
@@ -508,9 +554,15 @@ export default {
 .grid-container .dx-datagrid .dx-datagrid-headers .dx-header-row > td {
   border-left: none !important;
 }
-.dx-datagrid-text-content{
-    font-weight: 700;
-    letter-spacing: .14px;
-    color: #171b2a;
+.dx-datagrid-text-content {
+  font-weight: 700;
+  letter-spacing: 0.14px;
+  color: #171b2a;
+}
+.dx-datagrid-content .dx-datagrid-table {
+    border-collapse: inherit !important;
+    border-spacing: 0;
+    margin: 0;
+    max-width: 10px;
 }
 </style>

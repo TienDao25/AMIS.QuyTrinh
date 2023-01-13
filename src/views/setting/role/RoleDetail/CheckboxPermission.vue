@@ -89,6 +89,7 @@
 <script>
 import { DxPopover } from "devextreme-vue/popover";
 import MsCheckboxVue from "@/components/base/MsInput/MsCheckbox.vue";
+import Resource from "@/js/resource/resource";
 export default {
   name: "MsCheckBox",
   components: {
@@ -215,7 +216,7 @@ export default {
           arr.push(this.subSystem.ListPermissions[index].PermissionName);
         }
       });
-      return arr.length > 0 ? arr.join(", ") : "Chọn quyền";
+      return arr.length > 0 ? arr.join(", ") : Resource.Text.SelectPermission;
     },
 
     /**
@@ -359,6 +360,8 @@ export default {
   },
   data() {
     return {
+      Resource,
+
       //Danh sách phân quyền-quyền mới
       newSubSystem: {},
 

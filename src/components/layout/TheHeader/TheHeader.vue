@@ -36,7 +36,7 @@
             <div class="btn-run-process">
               <MsButtonVue
                 :isPrimary="true"
-                :title="'Chạy quy trình'"
+                :title="Resource.Text.RunProcess"
                 :includeIcon="true"
                 :iconButton="'icon-run-process'"
               />
@@ -48,7 +48,7 @@
       <div class="flex-m">
         <div class="check-license-expired">
           <MsInputSreach
-            :placeholderText="'Tìm kiếm'"
+            :placeholderText="Resource.Text.Sreach"
             :iconPre="'mi-search'"
             :isGlobal="true"
             v-model="sreachGlobal"
@@ -86,6 +86,7 @@ export default {
   },
   data() {
     return {
+      Resource,
       //Header
       header: [
         {

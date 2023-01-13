@@ -14,7 +14,7 @@
                 ms-icon-
                 btn-icon-1
               "
-              title="Quay lại"
+              :title=Resource.Title.Return
               @click="onClickReturnViewMain"
             >
               <div class="tooltip-container">
@@ -24,7 +24,7 @@
               </div>
             </div>
             <span class="font-20 bold">{{
-              modeForm == Enum.ModeForm.Add ? "Thêm mới" : titleForm
+              modeForm == Enum.ModeForm.Add ? Resource.Form.Add : titleForm
             }}</span>
           </div>
           <div class="flex" v-if="modeForm == Enum.ModeForm.None">
@@ -71,8 +71,8 @@
                     style="margin-left: 0%; width: 48.3333%"
                   >
                     <MsInputVue
-                      :label="'Tên vai trò'"
-                      :placeholderText="'Nhập tên vai trò'"
+                      :label="Resource.Entity.Role.RoleName"
+                      :placeholderText="Resource.Text.InputRoleName"
                       :maxLength="225"
                       :errorText="error.RoleName"
                       :isRequired="true"
@@ -89,8 +89,8 @@
                     style="margin-left: 0%; width: 48.3333%"
                   >
                     <MsInputVue
-                      :label="'Mô tả'"
-                      :placeholderText="'Nhập mô tả'"
+                      :label="Resource.Entity.Role.RoleDescription"
+                      :placeholderText="Resource.Text.InputDescription"
                       :maxLength="225"
                       :isRequired="false"
                       v-model="roleDetail.RoleDescription"
@@ -355,7 +355,7 @@ export default {
       try {
         let isValid = true;
         if (!this.roleDetail.RoleName) {
-          this.error.RoleName = "Tên vai trò không được để trống";
+          this.error.RoleName = Resource.Entity.Role.RoleName + " " + Resource.Text.NotNull;
           isValid = false;
         } else {
           this.error.RoleName = "";
@@ -510,77 +510,95 @@ export default {
       try {
         this.newList = [];
         this.newListSubsytemAndPermission = [...this.listSubsytemAndPermission];
-        //Chuyển mảng checkbox thành danh sách phân quyền mới => các quyền mặc định thêm state là 1 (thêm)
-        
+        this.setPermissionStateAdd();
         if (this.modeForm == Enum.ModeForm.Update) {
-          //Lấy ra id có trong vai trò cũ và vai trò mới => state = 0
-          this.newList.forEach((item) => {
-            if (this.roleDetail.ListSubsytemAndPermission) {
-              this.roleDetail.ListSubsytemAndPermission.forEach((subSystem) => {
-                if (item.SubSystemID == subSystem.SubSystemID) {
-                  subSystem.ListPermissions.forEach((permission) => {
-                    if (item.PermissionID == permission.PermissionID) {
-                      item.State = Enum.State.None;
-                    }
-                  });
-                }
-              });
-            }
-          });
-          //Lấy ra id có trong vai trò cũ, không có trong vai trò mới => state = 2 (Xóa)
-          if (this.roleDetail.ListSubsytemAndPermission) {
-            this.roleDetail.ListSubsytemAndPermission.forEach((subSystem) => {
-              subSystem.ListPermissions.forEach((permission) => {
-                var isHas = false;
-                this.newList.forEach((item) => {
-                  if (item.SubSystemID == subSystem.SubSystemID) {
-                    if (item.PermissionID == permission.PermissionID) {
-                      isHas = true;
-                    }
-                  }
-                });
-                if (!isHas) {
-                  this.newList.push({
-                    SubSystemID: subSystem.SubSystemID,
-                    SubSystemCode: subSystem.SubSystemCode,
-                    PermissionID: permission.PermissionID,
-                    PermissionCode: permission.PermissionCode,
-                    State: Enum.State.Detele,
-                  });
-                }
-              });
-            });
-          }
+          this.setPermissionStateNone();
+          this.setPermissionStateDelete();
         }
       } catch (error) {
         console.log(error);
       }
     },
 
-    setPermissionStateAdd(){
+    /**
+     * Chuyển mảng checkbox thành danh sách phân quyền mới
+     * => các quyền mặc định thêm state là 1 (thêm)
+     * Author: TienDao (10/01/2023)
+     */
+    setPermissionStateAdd() {
       this.listSubsytemAndPermission.forEach((subSystem, subSystemIndex) => {
-          //Lấy giá trị các checkbox
-          this.$refs["subSystem" + subSystemIndex][0].clickOnBtnSave();
-          subSystem.ListPermissions.forEach((permission, permissionsIndex) => {
-            if (this.listCheckbox[subSystemIndex]) {
-              if (this.listCheckbox[subSystemIndex][permissionsIndex] == true) {
-                this.newListSubsytemAndPermission[
-                  subSystemIndex
-                ].ListPermissions[permissionsIndex].state = Enum.State.Add;
-                this.newList.push({
-                  SubSystemID: subSystem.SubSystemID,
-                  SubSystemCode: subSystem.SubSystemCode,
-                  PermissionID: permission.PermissionID,
-                  PermissionCode: permission.PermissionCode,
-                  State: Enum.State.Add,
-                });
+        //Lấy giá trị các checkbox
+        this.$refs["subSystem" + subSystemIndex][0].clickOnBtnSave();
+        subSystem.ListPermissions.forEach((permission, permissionsIndex) => {
+          if (this.listCheckbox[subSystemIndex]) {
+            if (this.listCheckbox[subSystemIndex][permissionsIndex] == true) {
+              this.newListSubsytemAndPermission[subSystemIndex].ListPermissions[
+                permissionsIndex
+              ].state = Enum.State.Add;
+              this.newList.push({
+                SubSystemID: subSystem.SubSystemID,
+                SubSystemCode: subSystem.SubSystemCode,
+                PermissionID: permission.PermissionID,
+                PermissionCode: permission.PermissionCode,
+                State: Enum.State.Add,
+              });
+            }
+          }
+        });
+      });
+    },
+
+    /**
+     * Lấy ra id có cả trong vai trò cũ && vai trò mới
+     * .gán => state = 0
+     * Author: TienDao (10/01/2023)
+     */
+    setPermissionStateNone() {
+      this.newList.forEach((item) => {
+        if (this.roleDetail.ListSubsytemAndPermission) {
+          this.roleDetail.ListSubsytemAndPermission.forEach((subSystem) => {
+            if (item.SubSystemID == subSystem.SubSystemID) {
+              subSystem.ListPermissions.forEach((permission) => {
+                if (item.PermissionID == permission.PermissionID) {
+                  item.State = Enum.State.None;
+                }
+              });
+            }
+          });
+        }
+      });
+    },
+
+    /**
+     * Lấy ra id có trong vai trò cũ && không có trong vai trò mới.
+     * gán => state = 2 (Xóa)
+     * Author: Tiến Đạo (10/01/2023)
+     */
+    setPermissionStateDelete() {
+      if (this.roleDetail.ListSubsytemAndPermission) {
+        this.roleDetail.ListSubsytemAndPermission.forEach((subSystem) => {
+          subSystem.ListPermissions.forEach((permission) => {
+            var isHas = false;
+            this.newList.forEach((item) => {
+              if (item.SubSystemID == subSystem.SubSystemID) {
+                if (item.PermissionID == permission.PermissionID) {
+                  isHas = true;
+                }
               }
+            });
+            if (!isHas) {
+              this.newList.push({
+                SubSystemID: subSystem.SubSystemID,
+                SubSystemCode: subSystem.SubSystemCode,
+                PermissionID: permission.PermissionID,
+                PermissionCode: permission.PermissionCode,
+                State: Enum.State.Detele,
+              });
             }
           });
         });
+      }
     },
-    function2(){},
-    function3(){},
   },
   data() {
     return {
@@ -606,7 +624,7 @@ export default {
 
       //Lỗi
       error: {
-        RoleName: "Tên vai trò không được để trống",
+        RoleName: Resource.Entity.Role.RoleName + " " + Resource.Text.NotNull,
       },
 
       //Danh sách ID phân quyền

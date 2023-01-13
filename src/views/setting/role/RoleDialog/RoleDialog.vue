@@ -34,7 +34,7 @@
         <div class="dialog__exit">
           <MsButtonIconVue
             :classIcon="'mi-close-2'"
-            :titleIcon="'Đóng'"
+            :titleIcon="Resource.Button.Close"
             @click="closeDialog"
           />
         </div>
