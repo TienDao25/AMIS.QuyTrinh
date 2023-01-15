@@ -5,7 +5,7 @@
     height="100%"
     :data-source="listRole"
     key-expr="RoleID"
-    :allow-column-resizing="true"
+    :allow-column-resizing="false"
     :show-column-lines="false"
     :show-row-lines="true"
     :show-borders="false"
@@ -19,6 +19,8 @@
     :onCellHoverChanged="onCellHoverChanged"
     :column-resizing-mode="'widget'"
     :onCellClick="onCellClick"
+    @cell-prepared="onCellPrepared"
+      @row-prepared="onRowPrepared"
   >
     <DxPager :enabled="false" />
     <DxPaging :enabled="true" :page-size="100" />
@@ -53,19 +55,22 @@
       :allow-sorting="false"
       cell-template="cellButton"
       :min-width="140"
+      :showBorders="false"
+      cssClass="row-action"
       alignment="left"
       :allow-resizing="false"
       :fixed="fixedColumn"
       fixed-position="right"
-      :showBorders="false"
     />
 
     <template #cellButton="{ data }">
       <div
-        class="flex justify-flexend m-x-8 template-cell"
-        style="width: max-content !important; height: 100%"
+        class="flex justify-flexend m-x-8 button-group row-action"
+        style="width: max-content !important; height: 100%" 
         v-show="isShowButtons == data.rowIndex"
       >
+        <!-- -->
+
         <MsButtonIconVue
           :classIcon="'icon-copy'"
           :titleIcon="Resource.Button.Dulicate"
@@ -280,8 +285,16 @@ export default {
       try {
         if (data.eventType == "mouseover") {
           this.isShowButtons = data.rowIndex;
+          // if (data.rowType === "header") {
+          //   data.cellElement.classList.add("table-header");
+          // }
+          // data.cellElement.classList.add("custom-cell");
+          // if (data.columnIndex === data?.row?.cells?.length - 1) {
+          //   data.cellElement.classList.add("row-action");
+          // }
         } else {
           this.isShowButtons = -1;
+          // data.rowElement.classList.add("custom-row");
         }
       } catch (error) {
         console.log(error);
@@ -420,11 +433,6 @@ export default {
 
 <style>
 @import url(@/css/base.css);
-
-/* .row-action {
-  padding-right: 8px;
-  z-index: 2;
-} */
 .dx-pointer-events-none.dx-first-cell {
   border-right: none !important;
 }
@@ -560,9 +568,9 @@ export default {
   color: #171b2a;
 }
 .dx-datagrid-content .dx-datagrid-table {
-    border-collapse: inherit !important;
-    border-spacing: 0;
-    margin: 0;
-    max-width: 10px;
+  border-collapse: inherit !important;
+  border-spacing: 0;
+  margin: 0;
+  max-width: 10px;
 }
 </style>

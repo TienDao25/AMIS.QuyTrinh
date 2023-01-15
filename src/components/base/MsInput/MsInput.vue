@@ -152,7 +152,7 @@ span.required {
 }
 
 .isValid {
-  border: 1px solid #e61d1d !important;
+  border: 1px solid #f7453b !important;
 }
 
 .ms-input .ms-input-item {

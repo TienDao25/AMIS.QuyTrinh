@@ -14,7 +14,7 @@
                 ms-icon-
                 btn-icon-1
               "
-              :title=Resource.Title.Return
+              :title="Resource.Title.Return"
               @click="onClickReturnViewMain"
             >
               <div class="tooltip-container">
@@ -200,6 +200,12 @@ export default {
   created() {
     this.init();
   },
+  watch: {
+    "roleDetail.RoleName": function () {
+      this.error.RoleName =
+        Resource.Entity.Role.RoleName + " " + Resource.Text.NotNull;
+    },
+  },
   mounted() {
     this.focusInputRoleName();
   },
@@ -355,7 +361,8 @@ export default {
       try {
         let isValid = true;
         if (!this.roleDetail.RoleName) {
-          this.error.RoleName = Resource.Entity.Role.RoleName + " " + Resource.Text.NotNull;
+          this.error.RoleName =
+            Resource.Entity.Role.RoleName + " " + Resource.Text.NotNull;
           isValid = false;
         } else {
           this.error.RoleName = "";
@@ -390,16 +397,18 @@ export default {
      */
     insertRole() {
       try {
-        var requestClient = {
-          ModeForm: this.modeForm,
-          RoleID: null,
-          RoleCode: this.roleDetail.RoleCode ? this.roleDetail.RoleCode : "",
-          RoleName: this.roleDetail.RoleName ? this.roleDetail.RoleName : "",
-          RoleDescription: this.roleDetail.RoleDescription
-            ? this.roleDetail.RoleDescriptio
-            : "",
-          Permissions: this.newList,
-        };
+        var requestClient = [
+          {
+            ModeForm: this.modeForm,
+            RoleID: null,
+            RoleCode: this.roleDetail.RoleCode ? this.roleDetail.RoleCode : "",
+            RoleName: this.roleDetail.RoleName ? this.roleDetail.RoleName : "",
+            RoleDescription: this.roleDetail.RoleDescription
+              ? this.roleDetail.RoleDescriptio
+              : "",
+            Permissions: this.newList,
+          },
+        ];
         this.isShowLoading();
         RoleAPI.insertRole(requestClient)
           .then((response) => {
@@ -608,6 +617,7 @@ export default {
       roleDetail: {
         RoleName: null,
         RoleDescription: "",
+        RoleStatus: Enum.Role.RoleStatus.Active,
       },
 
       //Danh sách xử lý so sánh 2 mảng phân quyền
