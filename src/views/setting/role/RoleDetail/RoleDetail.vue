@@ -407,6 +407,8 @@ export default {
               ? this.roleDetail.RoleDescriptio
               : "",
             Permissions: this.newList,
+            CreatedBy:"Tiến Đạo",
+            ModifiedBy:"Tiến Đạo"
           },
         ];
         this.isShowLoading();
@@ -550,6 +552,7 @@ export default {
                 PermissionID: permission.PermissionID,
                 PermissionCode: permission.PermissionCode,
                 State: Enum.State.Add,
+                CreatedBy:"Tiến Đạo"
               });
             }
           }

@@ -259,7 +259,7 @@ export default {
         }
 
         //Xử lý phần lọc theo trạng thái
-        if(this.statusSeleted!=Enum.Role.RoleStatus.All){
+        if (this.statusSeleted != Enum.Role.RoleStatus.All) {
           filter.push({
             Relationship: "AND",
             Column: "RoleStatus",
@@ -268,6 +268,24 @@ export default {
             SubQuery: null,
           });
         }
+
+        // Thêm phân tìm kiếm theo ngày
+        if (this.keyword) {
+          var datearray = this.keyword.split(/[|.,/:\s]/);
+          for (var i = 0; i < datearray.length; i++) {
+            datearray[i]= datearray[i].length <2 ? `0${datearray[i]}` : datearray[i];
+          }
+          var newdate = datearray.reverse().join("-");
+          filter[0].SubQuery.Detail.push({
+            Relationship: "OR",
+            Column: "CONCAT(CAST(CreatedDate AS date)) ",
+            // Column: "CreatedDate",
+            Operator: "like",
+            Value: newdate,
+            SubQuery: null,
+          });
+        }
+
         var sort = {
           Selector: this.fieldSort,
           TypeSort: this.typeSort,
@@ -520,7 +538,7 @@ export default {
     clickOnSeletedStatus(value) {
       try {
         console.log(value);
-        this.pageCurrent=1;
+        this.pageCurrent = 1;
         this.statusSeleted = value;
         this.getListRoleBFindPaging();
       } catch (error) {
@@ -580,10 +598,10 @@ export default {
       keyword: "",
 
       //Trường sắp xếp
-      fieldSort: "",
+      fieldSort: "ModifiedDate",
 
       //Kiểu sắp xếp
-      typeSort: Enum.TypeSort.None,
+      typeSort: Enum.TypeSort.DESC,
 
       //Trang hiện tại
       pageCurrent: 1,
@@ -634,15 +652,7 @@ export default {
         },
       ],
 
-      roleField: [
-        "RoleName",
-        "RoleDescription",
-        "RoleStatus",
-        "CreatedBy",
-        "CreatedDate",
-        "ModifiedBy",
-        "ModifiedDate",
-      ],
+      roleField: ["RoleName", "RoleDescription", "CreatedBy", "ModifiedBy"],
     };
   },
 };
